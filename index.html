@@ -754,14 +754,14 @@
                 .insert([{
                     customer_name: name,
                     customer_phone: phone,
-                    delivery_address: address,
+                    customer_address: address,
                     product_id: currentProductId,
                     product_name: modalProductName.value,
                     quantity: quantity,
-                    total_amount: totalAmount,
+                    total_price: totalAmount,
                     payment_method: paymentMethod,
                     payment_screenshot_url: screenshotUrl,
-                    status: 'Pending'
+                    order_status: 'Pending'
                 }]);
 
             if (orderError) {
