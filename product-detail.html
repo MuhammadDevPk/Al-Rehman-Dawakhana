@@ -126,8 +126,8 @@
                 <!-- Right: Content -->
                 <div class="space-y-8">
                     <div>
-                        <span id="product-category" class="bg-gold/10 text-gold text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-gold/20">Category</span>
-                        <h1 id="product-name" class="text-5xl md:text-6xl font-serif font-bold text-primary mt-6 mb-4 leading-tight">Loading...</h1>
+                        <span id="product-category" class="bg-gold/10 text-gold text-[10px] sm:text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-gold/20">Category</span>
+                        <h1 id="product-name" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-primary mt-6 mb-4 leading-tight">Loading...</h1>
                         
                         <!-- Ratings -->
                         <div class="flex items-center space-x-4 mb-8">
@@ -142,18 +142,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100">
-                        <div class="flex items-baseline space-x-2 mb-6">
-                            <span class="text-stone-400 text-sm font-bold uppercase tracking-widest">Price:</span>
-                            <span id="product-price" class="text-4xl font-serif font-bold text-primary">Rs. 0</span>
+                    <div class="bg-white p-6 sm:p-8 rounded-[2rem] shadow-sm border border-stone-100">
+                        <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2 mb-6">
+                            <span class="text-stone-400 text-[10px] sm:text-sm font-bold uppercase tracking-widest mb-1 sm:mb-0">Price:</span>
+                            <span id="product-price" class="text-3xl sm:text-4xl font-serif font-bold text-primary break-words">Rs. 0</span>
                         </div>
                         
-                        <p id="product-description" class="text-stone-500 leading-relaxed text-lg mb-10">
+                        <p id="product-description" class="text-stone-500 leading-relaxed text-base sm:text-lg mb-8 sm:mb-10">
                             Loading product details...
                         </p>
 
-                        <button onclick="openOrderModalFromDetail()" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-xl uppercase tracking-widest">
-                            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                        <button onclick="openOrderModalFromDetail()" class="w-full py-4 sm:py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg sm:text-xl uppercase tracking-widest">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 sm:w-6 h-6"></i>
                             <span>Secure Order Now</span>
                         </button>
                     </div>
@@ -202,7 +202,7 @@
                     <div class="space-y-6">
                         <div class="p-8 bg-cream rounded-[2rem] border border-stone-100 italic text-stone-600 relative">
                             <i data-lucide="quote" class="absolute -top-4 -left-4 w-12 h-12 text-gold/20"></i>
-                            "I have been using this medicine for 3 months now. The results are truly miraculous. I feel more energetic and my health issues have significantly reduced. Truly thankful to Hakeem Rehman."
+                            "I have been using this medicine for 3 months now. The results are truly miraculous. I feel more energetic and my health issues have significantly reduced. Truly thankful to Hakeem Usman."
                             <p class="mt-4 font-bold text-primary not-italic text-sm">— Ahmed Siddiqui, Lahore</p>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
                 <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Tracking ID</p>
                 <p id="display-order-number" class="text-xl font-bold text-primary tracking-wider"></p>
             </div>
-            <p class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Rehman will verify your order and contact you shortly.</p>
+            <p class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Usman will verify your order and contact you shortly.</p>
             <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl">Back to Healing</button>
         </div>
     </div>
@@ -334,7 +334,15 @@
             document.getElementById('breadcrumb-name').innerText = data.name;
             document.getElementById('product-name').innerText = data.name;
             document.getElementById('product-category').innerText = data.category || data.sub_category || 'Herbal Remedy';
-            document.getElementById('product-price').innerText = `Rs. ${data.price.toLocaleString()}`;
+            const priceEl = document.getElementById('product-price');
+            const priceStr = `Rs. ${data.price.toLocaleString()}`;
+            priceEl.innerText = priceStr;
+            
+            if (priceStr.length > 12) {
+                priceEl.classList.remove('text-3xl', 'sm:text-4xl');
+                priceEl.classList.add('text-2xl', 'sm:text-3xl');
+            }
+            
             document.getElementById('product-description').innerText = data.description;
             document.getElementById('product-image').src = data.image_url;
 
