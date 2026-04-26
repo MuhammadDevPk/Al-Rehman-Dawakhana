@@ -188,7 +188,7 @@
                         <i data-lucide="bell" class="w-5 h-5"></i>
                         <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
                     </button>
-                    <button class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold flex items-center space-x-2 shadow-lg shadow-primary/20">
+                    <button id="add-product-btn" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold flex items-center space-x-2 shadow-lg shadow-primary/20">
                         <i data-lucide="plus" class="w-5 h-5"></i>
                         <span>Add Product</span>
                     </button>
@@ -207,14 +207,14 @@
 
                             <div class="flex flex-col md:flex-row gap-10">
                                 <div class="w-full md:w-64 h-64 bg-stone-100 rounded-3xl overflow-hidden border border-stone-200">
-                                    <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover">
+                                    <img id="active-edit-img" src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1">
-                                    <h3 class="text-3xl font-serif font-bold text-primary mb-2">Majoon-e-Khas (Vitality Tonic)</h3>
-                                    <p class="text-stone-500 mb-8 leading-relaxed">A premium herbal formulation designed for deep cellular restoration, hormonal balance, and vitality. Preserved from the 14th-century Unani scrolls.</p>
+                                    <h3 id="active-edit-title" class="text-3xl font-serif font-bold text-primary mb-2">Majoon-e-Khas (Vitality Tonic)</h3>
+                                    <p id="active-edit-desc" class="text-stone-500 mb-8 leading-relaxed">A premium herbal formulation designed for deep cellular restoration, hormonal balance, and vitality. Preserved from the 14th-century Unani scrolls.</p>
                                     
                                     <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Herbal Components</h4>
-                                    <div class="flex flex-wrap gap-3">
+                                    <div id="active-edit-components" class="flex flex-wrap gap-3">
                                         <div class="flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100">
                                             <i data-lucide="leaf" class="w-4 h-4"></i>
                                             <span>Ashwagandha Root</span>
@@ -250,19 +250,19 @@
                                 <div class="flex-1 space-y-8">
                                     <div>
                                         <p class="text-white/40 text-xs uppercase tracking-widest font-bold mb-2">Current Price</p>
-                                        <p class="text-5xl font-serif font-bold text-gold">Rs. 3,850</p>
+                                        <p id="display-current-price" class="text-5xl font-serif font-bold text-gold">Rs. 3,850</p>
                                     </div>
 
                                     <div class="space-y-4">
                                         <label class="block text-white/40 text-xs uppercase tracking-widest font-bold">Set New Price</label>
                                         <div class="relative">
                                             <span class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-serif font-bold text-gold">Rs.</span>
-                                            <input type="number" value="3850" class="w-full bg-white/10 border border-white/20 rounded-2xl py-6 pl-16 pr-6 text-2xl font-serif font-bold text-white focus:bg-white/20 transition-all outline-none">
+                                            <input type="number" id="input-new-price" value="3850" class="w-full bg-white/10 border border-white/20 rounded-2xl py-6 pl-16 pr-6 text-2xl font-serif font-bold text-white focus:bg-white/20 transition-all outline-none">
                                         </div>
                                     </div>
                                 </div>
 
-                                <button class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl transition-all transform hover:-translate-y-1 mt-8 shadow-xl shadow-black/20 flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
+                                <button id="btn-update-price" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl transition-all transform hover:-translate-y-1 mt-8 shadow-xl shadow-black/20 flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
                                     <i data-lucide="refresh-cw" class="w-5 h-5"></i>
                                     <span>Update Price</span>
                                 </button>
@@ -299,76 +299,9 @@
                                     <th class="pb-6 font-bold text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-stone-50">
-                                <!-- Row 1 -->
-                                <tr class="group hover:bg-emerald-50/30 transition-colors">
-                                    <td class="py-6 px-4">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 rounded-xl overflow-hidden border border-stone-100">
-                                                <img src="https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                                            </div>
-                                            <div>
-                                                <p class="font-bold text-primary">Safoof-e-Zayab</p>
-                                                <p class="text-xs text-stone-400">Weight Management</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="text-sm">Weight Care</span></td>
-                                    <td><span class="text-sm font-medium">142 Units</span></td>
-                                    <td><span class="text-sm font-bold text-primary">Rs. 2,450</span></td>
-                                    <td>
-                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase tracking-widest">Active</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="p-2 text-stone-400 hover:text-gold transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
-                                    </td>
-                                </tr>
-                                <!-- Row 2 -->
-                                <tr class="group hover:bg-emerald-50/30 transition-colors">
-                                    <td class="py-6 px-4">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 rounded-xl overflow-hidden border border-stone-100">
-                                                <img src="https://images.unsplash.com/photo-1628771065518-0d82f1110503?q=80&w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                                            </div>
-                                            <div>
-                                                <p class="font-bold text-primary">Kulyani Shifa</p>
-                                                <p class="text-xs text-stone-400">Kidney Stones</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="text-sm">Renal Health</span></td>
-                                    <td><span class="text-sm font-medium">89 Units</span></td>
-                                    <td><span class="text-sm font-bold text-primary">Rs. 1,950</span></td>
-                                    <td>
-                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold uppercase tracking-widest">Active</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="p-2 text-stone-400 hover:text-gold transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
-                                    </td>
-                                </tr>
-                                <!-- Row 3 -->
-                                <tr class="group bg-emerald-50/30 border-l-4 border-gold">
-                                    <td class="py-6 px-4">
-                                        <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 rounded-xl overflow-hidden border border-gold/30">
-                                                <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=100&auto=format&fit=crop" class="w-full h-full object-cover">
-                                            </div>
-                                            <div>
-                                                <p class="font-bold text-primary">Majoon-e-Khas</p>
-                                                <p class="text-xs text-stone-400">Men's Health</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><span class="text-sm">Vitality</span></td>
-                                    <td><span class="text-sm font-medium">45 Units</span></td>
-                                    <td><span class="text-sm font-bold text-primary">Rs. 3,850</span></td>
-                                    <td>
-                                        <span class="px-3 py-1 bg-gold text-primary rounded-full text-xs font-bold uppercase tracking-widest">Selected</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <button class="p-2 text-gold"><i data-lucide="check-circle" class="w-5 h-5"></i></button>
-                                    </td>
-                                </tr>
+                            <tbody id="product-inventory-body" class="divide-y divide-stone-50">
+                                <!-- Dynamic Rows Go Here -->
+                            </tbody>
                             </tbody>
                         </table>
                     </div>
@@ -377,24 +310,337 @@
         </main>
     </div>
 
+    <!-- Add Product Modal -->
+    <div id="add-product-modal" class="fixed inset-0 z-[300] bg-primary/80 backdrop-blur-sm hidden items-center justify-center p-6">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl animate-fade-in">
+            <div class="bg-primary p-8 text-white relative">
+                <div class="absolute inset-0 gold-pattern"></div>
+                <div class="relative z-10 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-serif font-bold">Add New Medicinal Product</h2>
+                        <p class="text-white/40 text-sm">Expand the Al Rehman inventory</p>
+                    </div>
+                    <button onclick="toggleModal('add-product-modal', false)" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <form id="add-product-form" onsubmit="handleProductSubmit(event)" class="p-10 space-y-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Product Name</label>
+                        <input type="text" name="name" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="e.g. Husn-e-Yousaf">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Category</label>
+                        <input type="text" name="category" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="e.g. Skin Care">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Price (Rs.)</label>
+                        <input type="number" name="price" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="2500">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Initial Stock</label>
+                        <input type="number" name="stock" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="100">
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Image URL (Optional)</label>
+                    <input type="url" name="image" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Description</label>
+                    <textarea name="description" rows="3" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="Describe the medicine's benefits..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-all flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>Register Product</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-10 right-10 z-[400] transform translate-y-20 opacity-0 transition-all duration-500">
+        <div class="bg-primary text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center space-x-4 border border-gold/20">
+            <div class="w-8 h-8 bg-gold rounded-full flex items-center justify-center text-primary">
+                <i data-lucide="check" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <p id="toast-message" class="font-bold">Price Updated Successfully</p>
+                <p class="text-xs text-white/40">Database record synchronized</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // --- State Management ---
+        let products = [];
+        let selectedProductId = null;
+
+        const initialProducts = [
+            {
+                id: 1,
+                name: "Safoof-e-Zayab",
+                category: "Weight Care",
+                subCategory: "Weight Management",
+                stock: 142,
+                price: 2450,
+                status: "Active",
+                description: "A specialized herbal powder focused on metabolic enhancement and natural weight regulation without synthetic stimulants.",
+                image: "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop",
+                components: ["Green Tea Extract", "Fennel Seeds", "Ginger Root", "Cinnamon"]
+            },
+            {
+                id: 2,
+                name: "Kulyani Shifa",
+                category: "Renal Health",
+                subCategory: "Kidney Stones",
+                stock: 89,
+                price: 1950,
+                status: "Active",
+                description: "Traditional Unani formulation designed to support renal function and assist in the natural dissolution of kidney stones.",
+                image: "https://images.unsplash.com/photo-1628771065518-0d82f1110503?q=80&w=500&auto=format&fit=crop",
+                components: ["Gokhru", "Varuna Bark", "Kulthi Dal", "Pashanbhed"]
+            },
+            {
+                id: 3,
+                name: "Majoon-e-Khas",
+                category: "Vitality",
+                subCategory: "Men's Health",
+                stock: 45,
+                price: 3850,
+                status: "Active",
+                description: "A premium herbal formulation designed for deep cellular restoration, hormonal balance, and vitality. Preserved from the 14th-century Unani scrolls.",
+                image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop",
+                components: ["Ashwagandha Root", "Pure Shilajit", "Saffron Stigmas", "Honey Base"]
+            },
+            {
+                id: 4,
+                name: "Husn-e-Yousaf",
+                category: "Dermatology",
+                subCategory: "Skin Care",
+                stock: 210,
+                price: 1200,
+                status: "Active",
+                description: "A natural glowing agent and cleanser that purifies the skin from within, removing blemishes and evening out skin tone.",
+                image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=500&auto=format&fit=crop",
+                components: ["Sandalwood", "Turmeric", "Rose Petals", "Neem Leaves"]
+            },
+            {
+                id: 5,
+                name: "Arq-e-Gulab",
+                category: "General Health",
+                subCategory: "Pure Rose Water",
+                stock: 350,
+                price: 450,
+                status: "Active",
+                description: "Triple-distilled organic rose water for cooling the eyes, refreshing the skin, and internal cleansing.",
+                image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=500&auto=format&fit=crop",
+                components: ["Damask Rose", "Spring Water"]
+            }
+        ];
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
+        });
+
+        function initApp() {
+            // Load products from localStorage or use initial seed
+            const storedProducts = localStorage.getItem('alRehmanProducts');
+            if (storedProducts) {
+                products = JSON.parse(storedProducts);
+            } else {
+                products = initialProducts;
+                saveToLocalStorage();
+            }
+
+            // Initial render
+            renderProducts();
+            
+            // Set default selected product (Majoon-e-Khas)
+            selectProduct(3);
+
+            // Initialize Lucide Icons
+            lucide.createIcons();
+
+            // Setup Add Product Button
+            document.getElementById('add-product-btn').addEventListener('click', () => {
+                toggleModal('add-product-modal', true);
+            });
+
+            // Setup Update Price Button
+            document.getElementById('btn-update-price').addEventListener('click', updatePrice);
+        }
+
+        // --- Core Functions ---
+
+        function renderProducts() {
+            const tbody = document.getElementById('product-inventory-body');
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                const isSelected = product.id === selectedProductId;
+                const row = document.createElement('tr');
+                row.className = `group hover:bg-emerald-50/30 transition-colors ${isSelected ? 'bg-emerald-50/30 border-l-4 border-gold' : ''}`;
+                
+                row.innerHTML = `
+                    <td class="py-6 px-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl overflow-hidden border ${isSelected ? 'border-gold/30' : 'border-stone-100'}">
+                                <img src="${product.image}" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <p class="font-bold text-primary">${product.name}</p>
+                                <p class="text-xs text-stone-400">${product.subCategory}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="text-sm">${product.category}</span></td>
+                    <td><span class="text-sm font-medium">${product.stock} Units</span></td>
+                    <td><span class="text-sm font-bold text-primary">Rs. ${product.price.toLocaleString()}</span></td>
+                    <td>
+                        <span class="px-3 py-1 ${isSelected ? 'bg-gold text-primary' : 'bg-green-100 text-green-700'} rounded-full text-xs font-bold uppercase tracking-widest">
+                            ${isSelected ? 'Selected' : product.status}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <button onclick="selectProduct(${product.id})" class="p-2 ${isSelected ? 'text-gold' : 'text-stone-400 hover:text-gold'} transition-colors">
+                            <i data-lucide="${isSelected ? 'check-circle' : 'edit-3'}" class="w-5 h-5"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Re-initialize icons for newly added elements
+            lucide.createIcons();
+        }
+
+        function selectProduct(id) {
+            selectedProductId = id;
+            const product = products.find(p => p.id === id);
+            
+            if (product) {
+                // Update Active Editing Card
+                document.getElementById('active-edit-img').src = product.image;
+                document.getElementById('active-edit-title').textContent = `${product.name} (${product.category})`;
+                document.getElementById('active-edit-desc').textContent = product.description;
+                
+                // Update Components
+                const compContainer = document.getElementById('active-edit-components');
+                compContainer.innerHTML = '';
+                product.components.forEach(comp => {
+                    const pill = document.createElement('div');
+                    pill.className = "flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100";
+                    pill.innerHTML = `<i data-lucide="leaf" class="w-4 h-4"></i><span>${comp}</span>`;
+                    compContainer.appendChild(pill);
+                });
+
+                // Update Price Display
+                document.getElementById('display-current-price').textContent = `Rs. ${product.price.toLocaleString()}`;
+                document.getElementById('input-new-price').value = product.price;
+
+                // Refresh Table to show "Selected" state
+                renderProducts();
+            }
+        }
+
+        function updatePrice() {
+            if (!selectedProductId) return;
+
+            const newPrice = parseInt(document.getElementById('input-new-price').value);
+            if (isNaN(newPrice) || newPrice <= 0) {
+                showToast("Please enter a valid price", "error");
+                return;
+            }
+
+            const productIndex = products.findIndex(p => p.id === selectedProductId);
+            if (productIndex !== -1) {
+                products[productIndex].price = newPrice;
+                saveToLocalStorage();
+                renderProducts();
+                selectProduct(selectedProductId); // Refresh display
+                showToast("Price Updated Successfully");
+            }
+        }
+
+        function handleProductSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            const newProduct = {
+                id: Date.now(), // Unique ID based on timestamp
+                name: formData.get('name'),
+                category: formData.get('category'),
+                subCategory: formData.get('category'), // Simple mapping for now
+                price: parseInt(formData.get('price')),
+                stock: parseInt(formData.get('stock')),
+                image: formData.get('image') || "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop",
+                description: formData.get('description') || "Newly added herbal medicine for the Al Rehman collection.",
+                status: "Active",
+                components: ["Natural Herbs", "Organic Extracts"] // Default components
+            };
+
+            products.push(newProduct);
+            saveToLocalStorage();
+            renderProducts();
+            toggleModal('add-product-modal', false);
+            e.target.reset();
+            showToast("New Product Registered");
+        }
+
+        // --- UI Helpers ---
+
+        function saveToLocalStorage() {
+            localStorage.setItem('alRehmanProducts', JSON.stringify(products));
+        }
+
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.textContent = message;
+            
+            // Animation
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3000);
+        }
 
         function handleLogin(e) {
             e.preventDefault();
             const loginScreen = document.getElementById('login-screen');
             const dashboard = document.getElementById('dashboard');
             
-            // Subtle transition effect
             loginScreen.style.opacity = '0';
             loginScreen.style.transition = 'opacity 0.5s ease-out';
             
             setTimeout(() => {
                 loginScreen.classList.add('hidden');
                 dashboard.classList.remove('hidden');
-                lucide.createIcons();
+                initApp(); // Re-initialize app state on login
             }, 500);
         }
 
