@@ -128,10 +128,13 @@
     </div>
 
     <!-- Dashboard (Hidden by Default) -->
-    <div id="dashboard" class="hidden flex h-screen overflow-hidden">
+    <div id="dashboard" class="hidden flex h-screen overflow-hidden relative">
         
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-[45] hidden lg:hidden" onclick="toggleSidebar()"></div>
+
         <!-- Sidebar -->
-        <aside class="w-72 bg-primary text-white flex flex-col border-r border-white/5 z-50">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-primary text-white flex flex-col border-r border-white/5 z-50 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 ease-in-out">
             <div class="p-8">
                 <div class="flex items-center space-x-3">
                     <div class="p-2 bg-gold rounded-lg">
@@ -179,36 +182,37 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto bg-stone-50">
+        <main class="flex-1 overflow-y-auto bg-stone-50 w-full">
             <!-- Header -->
-            <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-bottom border-stone-100 px-10 py-6 flex justify-between items-center shadow-sm">
-                <div>
-                    <h1 class="text-3xl font-serif font-bold text-primary">Manage Products & Prices</h1>
-                    <p class="text-stone-400 text-sm">Updating medicinal records for Al Rehman Dawakhana</p>
-                </div>
+            <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-100 px-6 lg:px-10 py-4 lg:py-6 flex justify-between items-center shadow-sm">
                 <div class="flex items-center space-x-4">
-                    <button class="p-2 bg-stone-100 rounded-xl text-stone-500 hover:bg-stone-200 transition-colors relative">
-                        <i data-lucide="bell" class="w-5 h-5"></i>
-                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-primary hover:bg-stone-100 rounded-xl transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
                     </button>
-                    <button id="add-product-btn" class="bg-primary text-white px-6 py-2.5 rounded-xl font-bold flex items-center space-x-2 shadow-lg shadow-primary/20">
-                        <i data-lucide="plus" class="w-5 h-5"></i>
+                    <div>
+                        <h1 class="text-xl lg:text-3xl font-serif font-bold text-primary">Products Inventory</h1>
+                        <p class="text-stone-400 text-[10px] lg:text-sm">Manage your herbal records</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 lg:space-x-4">
+                    <button id="add-product-btn" class="bg-primary text-white px-4 lg:px-6 py-2.5 rounded-xl font-bold flex items-center space-x-2 shadow-lg shadow-primary/20 text-xs lg:text-base">
+                        <i data-lucide="plus" class="w-4 h-4 lg:w-5 h-5"></i>
                         <span>Add Product</span>
                     </button>
                 </div>
             </header>
 
-            <div class="p-10 space-y-10 animate-fade-in">
+            <div class="p-6 lg:p-10 space-y-6 lg:space-y-10 animate-fade-in">
                 
                 <!-- Active Editing Section -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
                     <div class="lg:col-span-2">
-                        <div class="glass-card rounded-[2.5rem] p-10 relative overflow-hidden">
-                            <div class="absolute top-0 right-0 p-8">
-                                <span class="bg-gold/10 text-gold text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-gold/20">Active Editing</span>
+                        <div class="glass-card rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-10 relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-4 lg:p-8">
+                                <span class="bg-gold/10 text-gold text-[10px] lg:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-gold/20">Active Editing</span>
                             </div>
 
-                            <div class="flex flex-col md:flex-row gap-10">
+                            <div class="flex flex-col md:flex-row gap-6 lg:gap-10">
                                 <div class="w-full md:w-64 h-64 bg-stone-100 rounded-3xl overflow-hidden border border-stone-200">
                                     <img id="active-edit-img" src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover">
                                 </div>
@@ -275,23 +279,19 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div class="glass-card rounded-[2.5rem] p-10">
-                    <div class="flex items-center justify-between mb-10">
-                        <h3 class="text-2xl font-serif font-bold text-primary">Full Product Inventory</h3>
-                        <div class="flex space-x-4">
-                            <div class="relative">
+                <div class="glass-card rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-10">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 lg:mb-10">
+                        <h3 class="text-xl lg:text-2xl font-serif font-bold text-primary">Full Product Inventory</h3>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="relative w-full sm:w-64">
                                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"></i>
-                                <input type="text" placeholder="Search products..." class="bg-stone-50 border border-stone-100 rounded-xl py-2 pl-10 pr-4 text-sm focus:bg-white transition-all outline-none w-64">
+                                <input type="text" placeholder="Search products..." class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 pl-10 pr-4 text-sm focus:bg-white transition-all outline-none">
                             </div>
-                            <button class="flex items-center space-x-2 bg-stone-50 border border-stone-100 px-4 py-2 rounded-xl text-sm font-medium hover:bg-stone-100 transition-colors">
-                                <i data-lucide="filter" class="w-4 h-4"></i>
-                                <span>Filter</span>
-                            </button>
                         </div>
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left min-w-[800px]">
                             <thead>
                                 <tr class="text-stone-400 text-xs uppercase tracking-widest border-b border-stone-100">
                                     <th class="pb-6 font-bold px-4">Product Details</th>
@@ -399,6 +399,21 @@
         // --- State Management ---
         let products = [];
         let selectedProductId = null;
+        let isSidebarOpen = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            isSidebarOpen = !isSidebarOpen;
+            
+            if (isSidebarOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
 
         // --- Initialization & Route Guard ---
         window.addEventListener('DOMContentLoaded', async () => {

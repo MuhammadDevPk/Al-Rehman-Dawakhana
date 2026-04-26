@@ -67,123 +67,135 @@
         </div>
     </div>
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="w-80 bg-primary text-white flex flex-col h-screen sticky top-0 hidden">
-        <div class="p-8 border-b border-white/5">
-            <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 bg-gold rounded-2xl flex items-center justify-center shadow-lg rotate-3">
-                    <i data-lucide="scroll" class="text-primary w-7 h-7"></i>
-                </div>
-                <div>
-                    <span class="text-xl font-serif font-bold tracking-tight block">Al Rehman</span>
-                    <span class="text-[10px] uppercase tracking-widest text-gold/60">Admin Portal</span>
-                </div>
-            </div>
-        </div>
+    <!-- Dashboard (Hidden by Default) -->
+    <div id="dashboard" class="hidden flex h-screen overflow-hidden relative w-full">
+        
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-[45] hidden lg:hidden" onclick="toggleSidebar()"></div>
 
-        <nav class="flex-1 px-4 space-y-2 py-8">
-            <a href="admin.html" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
-                <i data-lucide="package" class="w-5 h-5"></i>
-                <span class="font-medium text-sm">Products Inventory</span>
-            </a>
-            <a href="orders.html" class="sidebar-item active flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                <span class="font-medium text-sm">Customer Orders</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
-                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-                <span class="font-medium text-sm">Performance</span>
-            </a>
-            <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-                <span class="font-medium text-sm">Settings</span>
-            </a>
-        </nav>
-
-        <div class="p-6 border-t border-white/5">
-            <div class="bg-white/5 rounded-2xl p-4 flex items-center space-x-4">
-                <div class="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center text-gold font-bold">HR</div>
-                <div class="flex-1 min-w-0">
-                    <p class="text-sm font-bold truncate">Hakeem Rehman</p>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest">Administrator</p>
-                </div>
-                <button onclick="logout()" class="text-white/40 hover:text-white transition-colors">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main id="dashboard" class="flex-1 overflow-y-auto bg-stone-50 hidden">
-        <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200 px-10 py-6 flex justify-between items-center shadow-sm">
-            <div>
-                <h1 class="text-3xl font-serif font-bold text-primary">Customer Orders</h1>
-                <p class="text-stone-400 text-sm">Track and manage medicinal shipments</p>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button onclick="fetchOrders()" class="p-3 bg-stone-100 rounded-xl text-stone-500 hover:bg-stone-200 transition-colors">
-                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                </button>
-            </div>
-        </header>
-
-        <div class="p-10 space-y-8 animate-fade-in">
-            <!-- Stats Row -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
-                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Total Orders</p>
-                    <h2 id="stat-total" class="text-3xl font-bold text-primary">0</h2>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
-                    <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-2">Pending</p>
-                    <h2 id="stat-pending" class="text-3xl font-bold text-amber-600">0</h2>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
-                    <p class="text-xs font-bold text-green-500 uppercase tracking-widest mb-2">Shipped</p>
-                    <h2 id="stat-shipped" class="text-3xl font-bold text-green-600">0</h2>
-                </div>
-                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
-                    <p class="text-xs font-bold text-primary uppercase tracking-widest mb-2">Revenue</p>
-                    <h2 id="stat-revenue" class="text-3xl font-bold text-primary">Rs. 0</h2>
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 w-80 bg-primary text-white flex flex-col h-screen z-50 transform -translate-x-full lg:translate-x-0 lg:static transition-transform duration-300 ease-in-out">
+            <div class="p-8 border-b border-white/5">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gold rounded-2xl flex items-center justify-center shadow-lg rotate-3">
+                        <i data-lucide="scroll" class="text-primary w-7 h-7"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-serif font-bold tracking-tight block">Al Rehman</span>
+                        <span class="text-[10px] uppercase tracking-widest text-gold/60">Admin Portal</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Orders Table -->
-            <div class="bg-white rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-stone-50/50">
-                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Order ID</th>
-                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Product Info</th>
-                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Customer</th>
-                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Total</th>
-                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Payment</th>
-                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-center">Status</th>
-                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orders-tbody" class="divide-y divide-stone-100">
-                            <!-- Orders will be injected here -->
-                        </tbody>
-                    </table>
+            <nav class="flex-1 px-4 space-y-2 py-8">
+                <a href="admin.html" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">Products Inventory</span>
+                </a>
+                <a href="orders.html" class="sidebar-item active flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">Customer Orders</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">Performance</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    <span class="font-medium text-sm">Settings</span>
+                </a>
+            </nav>
+
+            <div class="p-6 border-t border-white/5">
+                <div class="bg-white/5 rounded-2xl p-4 flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center text-gold font-bold">HR</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-bold truncate">Hakeem Rehman</p>
+                        <p class="text-[10px] text-white/40 uppercase tracking-widest">Administrator</p>
+                    </div>
+                    <button onclick="logout()" class="text-white/40 hover:text-white transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
                 </div>
             </div>
-        </div>
-    </main>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-stone-50 w-full">
+            <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200 px-6 lg:px-10 py-4 lg:py-6 flex justify-between items-center shadow-sm">
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 text-primary hover:bg-stone-100 rounded-xl transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-xl lg:text-3xl font-serif font-bold text-primary">Customer Orders</h1>
+                        <p class="text-stone-400 text-[10px] lg:text-sm">Manage medicinal shipments</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="fetchOrders()" class="p-2 lg:p-3 bg-stone-100 rounded-xl text-stone-500 hover:bg-stone-200 transition-colors">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 lg:w-5 h-5"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-4 lg:p-10 space-y-6 lg:space-y-8 animate-fade-in">
+                <!-- Stats Row -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                    <div class="bg-white p-4 lg:p-8 rounded-2xl lg:rounded-3xl border border-stone-100 shadow-sm">
+                        <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-1 lg:mb-2">Total</p>
+                        <h2 id="stat-total" class="text-xl lg:text-3xl font-bold text-primary">0</h2>
+                    </div>
+                    <div class="bg-white p-4 lg:p-8 rounded-2xl lg:rounded-3xl border border-stone-100 shadow-sm">
+                        <p class="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-1 lg:mb-2">Pending</p>
+                        <h2 id="stat-pending" class="text-xl lg:text-3xl font-bold text-amber-600">0</h2>
+                    </div>
+                    <div class="bg-white p-4 lg:p-8 rounded-2xl lg:rounded-3xl border border-stone-100 shadow-sm">
+                        <p class="text-[10px] font-bold text-green-500 uppercase tracking-widest mb-1 lg:mb-2">Shipped</p>
+                        <h2 id="stat-shipped" class="text-xl lg:text-3xl font-bold text-green-600">0</h2>
+                    </div>
+                    <div class="bg-white p-4 lg:p-8 rounded-2xl lg:rounded-3xl border border-stone-100 shadow-sm">
+                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1 lg:mb-2">Revenue</p>
+                        <h2 id="stat-revenue" class="text-xl lg:text-3xl font-bold text-primary">Rs. 0</h2>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="bg-white rounded-3xl lg:rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead>
+                                <tr class="bg-stone-50/50">
+                                    <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Order ID</th>
+                                    <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Product Info</th>
+                                    <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Customer</th>
+                                    <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Total</th>
+                                    <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Payment</th>
+                                    <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-center">Status</th>
+                                    <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody" class="divide-y divide-stone-100">
+                                <!-- Orders will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <!-- Proof Modal -->
-    <div id="proof-modal" class="fixed inset-0 z-[600] hidden flex items-center justify-center p-6 bg-primary/90 backdrop-blur-md">
-        <div class="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden relative animate-fade-in">
-            <div class="p-8 border-b flex justify-between items-center">
-                <h3 class="text-2xl font-serif font-bold text-primary">Payment Proof</h3>
+    <div id="proof-modal" class="fixed inset-0 z-[600] hidden flex items-center justify-center p-4 bg-primary/90 backdrop-blur-md">
+        <div class="bg-white rounded-[2rem] lg:rounded-[3rem] w-full max-w-2xl overflow-hidden relative animate-fade-in">
+            <div class="p-6 lg:p-8 border-b flex justify-between items-center">
+                <h3 class="text-xl lg:text-2xl font-serif font-bold text-primary">Payment Proof</h3>
                 <button onclick="closeProofModal()" class="p-2 hover:bg-stone-100 rounded-full">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="p-8 bg-stone-100 flex items-center justify-center min-h-[400px]">
-                <img id="proof-img" src="" class="max-w-full max-h-[70vh] rounded-2xl shadow-2xl">
+            <div class="p-4 lg:p-8 bg-stone-100 flex items-center justify-center min-h-[300px] lg:min-h-[400px]">
+                <img id="proof-img" src="" class="max-w-full max-h-[60vh] lg:max-h-[70vh] rounded-xl lg:rounded-2xl shadow-2xl">
             </div>
         </div>
     </div>
@@ -196,6 +208,21 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let orders = [];
+        let isSidebarOpen = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            isSidebarOpen = !isSidebarOpen;
+            
+            if (isSidebarOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
 
         // --- Initialization & Route Guard ---
         window.addEventListener('DOMContentLoaded', async () => {

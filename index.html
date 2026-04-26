@@ -432,19 +432,19 @@
     <!-- Order Modal -->
     <div id="order-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeOrderModal()"></div>
-        <div class="bg-white rounded-[2.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl animate-fade-in-up">
-            <div class="bg-primary p-8 text-white flex justify-between items-center relative">
+        <div class="bg-white rounded-3xl lg:rounded-[2.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl animate-fade-in-up mx-2 lg:mx-0">
+            <div class="bg-primary p-6 lg:p-8 text-white flex justify-between items-center relative">
                 <div class="absolute inset-0 gold-pattern opacity-20"></div>
                 <div class="relative z-10">
-                    <h3 class="text-3xl font-serif font-bold">Secure Order</h3>
-                    <p class="text-white/40 text-sm">Traditional healing delivered to your door</p>
+                    <h3 class="text-2xl lg:text-3xl font-serif font-bold">Secure Order</h3>
+                    <p class="text-white/40 text-[10px] lg:text-sm">Traditional healing delivered to your door</p>
                 </div>
                 <button onclick="closeOrderModal()" class="relative z-10 hover:bg-white/10 p-2 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-6 h-6"></i>
+                    <i data-lucide="x" class="w-5 h-5 lg:w-6 h-6"></i>
                 </button>
             </div>
             
-            <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+            <div class="p-6 lg:p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
                 <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-6">
                     <!-- Product Info (Read Only) -->
                     <div class="grid grid-cols-2 gap-4 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
@@ -541,16 +541,16 @@
     <!-- Success Modal -->
     <div id="success-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-primary/90 backdrop-blur-md"></div>
-        <div class="bg-white rounded-[3rem] p-12 w-full max-w-sm relative z-10 text-center shadow-2xl animate-fade-in">
-            <div class="w-24 h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce shadow-xl shadow-gold/20">
-                <i data-lucide="check" class="text-primary w-12 h-12 stroke-[3]"></i>
+        <div class="bg-white rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 w-full max-w-sm relative z-10 text-center shadow-2xl animate-fade-in">
+            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 animate-bounce shadow-xl shadow-gold/20">
+                <i data-lucide="check" class="text-primary w-8 h-8 lg:w-12 lg:h-12 stroke-[3]"></i>
             </div>
-            <h3 class="text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <h3 class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
             <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
                 <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Your Tracking ID</p>
-                <p id="display-order-number" class="text-2xl font-bold text-primary tracking-wider"></p>
+                <p id="display-order-number" class="text-xl lg:text-2xl font-bold text-primary tracking-wider"></p>
             </div>
-            <p class="text-stone-500 mb-10 leading-relaxed text-sm">Please save this ID. You can use it to track your order status anytime from our website.</p>
+            <p class="text-stone-500 mb-8 lg:mb-10 leading-relaxed text-xs lg:text-sm">Please save this ID. You can use it to track your order status anytime from our website.</p>
             <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-colors">
                 Back to Healing
             </button>
