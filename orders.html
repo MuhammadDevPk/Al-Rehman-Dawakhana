@@ -155,7 +155,8 @@
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-stone-50/50">
-                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Order Info</th>
+                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Order ID</th>
+                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Product Info</th>
                                 <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Customer</th>
                                 <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Total</th>
                                 <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Payment</th>
@@ -250,6 +251,9 @@
                 
                 row.innerHTML = `
                     <td class="py-6 px-8">
+                        <span class="text-xs font-mono font-bold text-stone-400">${order.order_number || 'N/A'}</span>
+                    </td>
+                    <td class="py-6 px-4">
                         <div class="flex items-center space-x-4">
                             <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-primary">
                                 <i data-lucide="package" class="w-5 h-5"></i>
