@@ -1,73 +1,72 @@
 # Al Rehman Dawakhana | Hakeem's Portal Documentation
 
-This document provides a comprehensive guide to the **Admin Panel** (Hakeem's Portal) for the Al Rehman Dawakhana project.
+This document provides a comprehensive guide to the **Admin Panel** (Hakeem's Portal) for the Al Rehman Dawakhana project, now powered by **Supabase**.
 
 ## 🏛 Overview
-The Admin Panel is a secure, single-page application designed for the Hakeem (Administrator) to manage the medicinal inventory, update product pricing based on market rates, and track stock levels.
+The Admin Panel is a secure portal designed for the Hakeem to manage the medicinal inventory, update product pricing, and track stock levels in real-time.
 
 ## 🚀 Key Features
 
-### 1. Secure Authentication
-- **Login Screen**: A premium, glassmorphism-inspired login interface.
-- **Access Control**: Currently handles authentication via a client-side transition to ensure only authorized personnel access the medicinal records.
+### 1. Secure Authentication (Supabase Auth)
+- **Login Screen**: Uses Supabase Authentication to verify identity.
+- **Admin Credentials**: 
+  - **Email**: `usman@gmail.com`
+  - **Password**: `03006047058`
+- **Route Guard**: Unauthorized users are automatically redirected from `admin.html` back to the login screen if no active session is found.
 
-### 2. Product Inventory Management
-- **Dynamic Table**: A fully interactive table displaying product details, categories, stock units, prices, and status.
-- **Status Indicators**: Visual badges (Active, Selected) to indicate the current state of a product.
-- **Real-time Search**: (UI Ready) Designed to allow quick filtering of the herbal collection.
+### 2. Live Inventory Management
+- **Database Driven**: All products are fetched live from the Supabase `products` table.
+- **Dynamic Table**: Interactive rows displaying live prices, stock levels, and status.
+- **Delete Functionality**: Admins can now permanently remove products from the database using the trash icon.
 
 ### 3. Active Editing Dashboard
-- **Product Selection**: Clicking any product in the inventory updates the central dashboard with that product's specific profile.
-- **Detailed Profiles**: Displays high-quality imagery, descriptions preserved from Unani scrolls, and specific herbal components (e.g., Ashwagandha, Shilajit).
-- **Price Setting**: A dedicated module for adjusting product values.
+- **Live Sync**: Selecting a product fetches its latest data for the editing module.
+- **Price Setting**: Updates are sent via `PATCH` requests to the Supabase database and reflected instantly on the public landing page.
 
 ### 4. Dynamic Product Addition
-- **Registration Form**: A modal-based form to register new medicinal formulations into the system.
-- **Fields**: Name, Category, Initial Price, Stock, and Herbal Components.
+- **Database Insertion**: New products registered via the modal are saved directly to the cloud database.
 
 ## 🛠 Technical Implementation
 
-### State Management
-- **LocalStorage Persistence**: The application uses `localStorage` (key: `alRehmanProducts`) to store data. This allows the system to function without a backend database while maintaining data persistence across browser refreshes.
-- **Automatic Seeding**: On the first launch, the system automatically seeds itself with 5 flagship products:
-  1. **Safoof-e-Zayab** (Weight Management)
-  2. **Kulyani Shifa** (Kidney Stones)
-  3. **Majoon-e-Khas** (Vitality Tonic)
-  4. **Husn-e-Yousaf** (Skin Care)
-  5. **Arq-e-Gulab** (Pure Rose Water)
+### Database (Supabase)
+- **Table**: `public.products`
+- **Security (RLS)**: 
+  - **Public Read**: Anyone can see products on the landing page.
+  - **Admin Access**: Only authenticated users can Create, Update, or Delete products.
 
-### UI/UX Design System
-- **Framework**: Tailwind CSS for responsive and modern styling.
-- **Typography**: `Cormorant Garamond` (Serif) for a traditional feel and `Inter` (Sans) for modern legibility.
-- **Iconography**: Lucide Icons for clean, thin-stroke geometric symbols.
-- **Aesthetics**: Emerald-based color palette (`primary: #064e3b`), gold accents, and glassmorphism cards.
+### Environment Setup
+- **Supabase SDK**: Integrated via CDN.
+- **Initialization**: Requires `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
 
 ## 📖 Usage Instructions
 
-### Updating a Product Price
-1. Locate the product in the **Full Product Inventory** table.
-2. Click the **Edit** icon (pencil) in the actions column.
-3. The **Active Editing** section will update. Enter the new price in the "Set New Price" input field.
-4. Click **UPDATE PRICE**. A toast notification will appear confirming the change.
+### Running Migrations
+1. Open your Supabase Dashboard.
+2. Go to the **SQL Editor**.
+3. Copy and run the contents of `supabase_migration.sql` to set up the table and RLS policies.
 
-### Adding a New Product
-1. Click the **+ Add Product** button in the top header.
-2. Fill out the registration form in the modal.
-3. Click **Register Product**. The new entry will immediately appear in the inventory table.
+### Updating a Product Price
+1. Log in to the Admin Portal.
+2. Select the product from the inventory table.
+3. Adjust the price in the "Set New Price" field.
+4. Click **UPDATE PRICE**.
+
+### Registering a New Product
+1. Click **+ Add Product** in the header.
+2. Fill the form and submit. The product will sync to the database and appear on the landing page immediately.
 
 ## 🗄 Data Schema
-Each product object in the system follows this structure:
-```json
-{
-    "id": 123456789,
-    "name": "Product Name",
-    "category": "Main Category",
-    "subCategory": "Specific Use",
-    "stock": 100,
-    "price": 2500,
-    "status": "Active",
-    "description": "Herbal description...",
-    "image": "image_url",
-    "components": ["Herb A", "Herb B"]
-}
+```sql
+CREATE TABLE products (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    sub_category TEXT,
+    description TEXT,
+    price NUMERIC NOT NULL,
+    stock_level INT,
+    image_url TEXT,
+    components JSONB,
+    status TEXT DEFAULT 'Active'
+);
 ```
