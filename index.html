@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Rehman Dawakhana | Ancient Wisdom for Modern Healing</title>
+    <meta name="description" content="Traditional herbal healing at Al Rehman Dawakhana. Premium organic medicines and expert consultation in Sargodha.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#064e3b', // emerald-950
+                        cream: '#fafaf9',   // stone-50
+                        gold: '#f59e0b',    // amber-500
+                        'gold-dark': '#d97706',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'reveal': 'reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        reveal: {
+                            '0%': { transform: 'scaleX(0)', transformOrigin: 'left' },
+                            '100%': { transform: 'scaleX(1)', transformOrigin: 'left' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        .glass-nav {
+            background: rgba(6, 78, 59, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gold-underline::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #f59e0b;
+            transition: width .3s;
+        }
+        .gold-underline:hover::after {
+            width: 100%;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(6, 78, 59, 0.7), rgba(6, 78, 59, 0.9));
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fafaf9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #064e3b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-cream font-sans text-stone-800 antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2 group">
+                <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                </div>
+                <span class="text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="#specialties" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Specialties</a>
+                <a href="#about" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">About Hakeem</a>
+                <a href="#products" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Products</a>
+                <a href="#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Consult Now
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+                <i data-lucide="menu" id="menu-icon" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
+            <a href="#specialties" class="text-white text-xl font-serif">Specialties</a>
+            <a href="#about" class="text-white text-xl font-serif">About Hakeem</a>
+            <a href="#products" class="text-white text-xl font-serif">Products</a>
+            <a href="#contact" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=2000&auto=format&fit=crop" 
+                 alt="Traditional Herbs" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-gradient"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center text-white">
+            <h1 class="text-5xl md:text-8xl font-serif font-bold mb-6 opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;">
+                Ancient Wisdom <br>
+                <span class="text-gold italic">for Modern Healing</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-stone-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed opacity-0 animate-fade-in-up" style="animation-delay: 0.4s;">
+                Experience the pure essence of nature through our time-honored traditional remedies, crafted with heritage and scientific precision.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 opacity-0 animate-fade-in-up" style="animation-delay: 0.6s;">
+                <a href="#contact" class="px-8 py-4 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl text-lg flex items-center group">
+                    Book a Consultation
+                    <i data-lucide="arrow-right" class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <a href="#products" class="px-8 py-4 border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-medium rounded-full transition-all duration-300 text-lg">
+                    Explore Medicines
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="text-white/50 w-8 h-8"></i>
+        </div>
+    </section>
+
+    <!-- Specialties Section -->
+    <section id="specialties" class="py-24 bg-cream">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <span class="text-gold font-bold tracking-widest uppercase text-sm">Our Expertise</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Nurturing Your Health Naturally</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="wind" class="text-primary w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Respiratory Health</h3>
+                    <p class="text-stone-600 leading-relaxed">Effective herbal treatments for chronic cough, asthma, and seasonal allergies using traditional lung-cleansing tonics.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="droplets" class="text-primary w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Digestive Care</h3>
+                    <p class="text-stone-600 leading-relaxed">Restore your gut balance with our signature fermented extracts and bitter tonics designed for modern lifestyles.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
+                        <i data-lucide="sparkles" class="text-primary w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Natural Tonics</h3>
+                    <p class="text-stone-600 leading-relaxed">Revitalize your energy and immunity with our premium range of multi-herbal rejuvenators and adaptogens.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hakeem Profile Section -->
+    <section id="about" class="py-24 bg-primary relative overflow-hidden">
+        <!-- Decorative background element -->
+        <div class="absolute -right-20 -top-20 w-96 h-96 bg-gold/5 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 -bottom-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2 reveal-on-scroll">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 border-2 border-gold/30 rounded-3xl transform -rotate-3 transition-transform group-hover:rotate-0 duration-500"></div>
+                        <img src="https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Traditional Wisdom" 
+                             class="rounded-3xl shadow-2xl relative z-10 w-full h-[500px] object-cover">
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 reveal-on-scroll">
+                    <span class="text-gold font-bold tracking-widest uppercase text-sm">The Heritage</span>
+                    <h2 class="text-4xl md:text-6xl font-serif font-bold text-white mt-2 mb-8">Legacy of Healing <br><span class="italic text-gold">Hakeem Rehman</span></h2>
+                    <p class="text-stone-300 text-lg leading-relaxed mb-6">
+                        With over four decades of dedicated service, Hakeem Rehman has preserved the sacred art of traditional medicine while adapting it for contemporary health challenges.
+                    </p>
+                    <p class="text-stone-300 text-lg leading-relaxed mb-10">
+                        Our Dawakhana is built on the philosophy that every individual possesses a unique temperament (Mizaj), and true healing comes from restoring this natural equilibrium.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
+                        <div>
+                            <p class="text-3xl font-serif font-bold text-gold">40+</p>
+                            <p class="text-stone-400 text-sm uppercase tracking-wide">Years of Experience</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-serif font-bold text-gold">50k+</p>
+                            <p class="text-stone-400 text-sm uppercase tracking-wide">Healed Patients</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase -->
+    <section id="products" class="py-24 bg-stone-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal-on-scroll">
+                <div>
+                    <span class="text-gold font-bold tracking-widest uppercase text-sm">Featured Remedies</span>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Organic Formulations</h2>
+                </div>
+                <a href="#" class="mt-6 md:mt-0 text-primary font-bold flex items-center group">
+                    View Full Catalog
+                    <i data-lucide="move-right" class="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500&auto=format&fit=crop" alt="Majoon-e-Hayat" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. 1,250
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Majoon-e-Hayat</h4>
+                        <p class="text-stone-500 text-sm mb-6">A powerful restorative tonic for overall vitality and neurological strength.</p>
+                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1547859292-887f86b5d720?q=80&w=500&auto=format&fit=crop" alt="Saffron Elixir" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. 3,500
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Saffron Elixir</h4>
+                        <p class="text-stone-500 text-sm mb-6">Premium blend of pure saffron and honey for radiant health and immunity.</p>
+                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.3s;">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1628771065518-0d82f1110503?q=80&w=500&auto=format&fit=crop" alt="Herbal Digestion" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. 850
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Pachak Shifa</h4>
+                        <p class="text-stone-500 text-sm mb-6">Traditional digestive powder for instant relief from acidity and bloating.</p>
+                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.4s;">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop" alt="Natural Calmer" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. 1,100
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Aram-e-Dil</h4>
+                        <p class="text-stone-500 text-sm mb-6">A soothing herbal infusion to calm the nerves and promote restful sleep.</p>
+                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 bg-cream">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <i data-lucide="quote" class="w-12 h-12 text-gold mx-auto mb-6 opacity-30"></i>
+                <h2 class="text-4xl font-serif font-bold text-primary">Voices of Healing</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-50 reveal-on-scroll">
+                    <div class="flex text-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-stone-600 italic mb-6">"After years of struggling with respiratory issues, the customized herbal course from Al Rehman Dawakhana changed my life. I can finally breathe freely again."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center font-bold text-primary">MA</div>
+                        <div class="ml-4">
+                            <p class="font-bold text-primary">Muhammad Ali</p>
+                            <p class="text-xs text-stone-400">Verified Patient</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-primary p-8 rounded-3xl shadow-xl reveal-on-scroll" style="transition-delay: 0.1s;">
+                    <div class="flex text-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-stone-200 italic mb-6">"The Hakeem's deep knowledge and compassionate approach are truly rare. Their medicines are pure and highly effective. Highly recommended for natural care."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-bold text-white">SK</div>
+                        <div class="ml-4">
+                            <p class="font-bold text-white">Sana Khan</p>
+                            <p class="text-xs text-stone-400">Verified Patient</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-stone-50 reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="flex text-gold mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-stone-600 italic mb-6">"Authentic Unani medicine at its best. The digestive tonics worked wonders for me when modern medicine couldn't provide a lasting solution."</p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center font-bold text-primary">RZ</div>
+                        <div class="ml-4">
+                            <p class="font-bold text-primary">Raza Zafar</p>
+                            <p class="text-xs text-stone-400">Verified Patient</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-primary text-white pt-24 pb-12 border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Branding -->
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="#" class="flex items-center space-x-2 mb-8">
+                        <div class="p-2 bg-gold rounded-lg">
+                            <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-serif font-bold text-white">Al Rehman <span class="text-gold">Dawakhana</span></span>
+                    </a>
+                    <p class="text-stone-400 leading-relaxed mb-8">
+                        Preserving the wisdom of traditional healing to provide modern solutions for your wellbeing. Natural, pure, and effective.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
+                    <ul class="space-y-4 text-stone-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Specialties</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Our Products</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Consultation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">About Hakeem</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
+                    <ul class="space-y-6 text-stone-400">
+                        <li class="flex items-start">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gold mr-4 shrink-0"></i>
+                            <span>Main Road, Block 12, <br>Sargodha, Punjab, Pakistan</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="phone" class="w-5 h-5 text-gold mr-4"></i>
+                            <span>+92 48 3724XXX</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 text-gold mr-4"></i>
+                            <span>info@alrehmandawakhana.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
+                    <p class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
+                    <form class="relative">
+                        <input type="email" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
+                        <button class="absolute right-2 top-2 bottom-2 bg-gold hover:bg-gold-dark text-primary px-4 rounded-lg font-bold transition-colors">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 text-center text-stone-500 text-sm">
+                <p>&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('glass-nav', 'py-4', 'shadow-2xl');
+                navbar.classList.remove('py-6');
+            } else {
+                navbar.classList.remove('glass-nav', 'py-4', 'shadow-2xl');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('-translate-y-10', 'opacity-0');
+                }, 10);
+                menuIcon.setAttribute('data-lucide', 'x');
+            } else {
+                mobileMenu.classList.add('-translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                menuIcon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        });
+
+        // Close mobile menu on click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileMenu.classList.add('-translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+                menuIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        // Reveal on Scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
