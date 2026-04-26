@@ -684,14 +684,16 @@
                 card.style.transitionDelay = `${index * 0.1}s`;
                 
                 card.innerHTML = `
-                    <div class="h-64 overflow-hidden relative">
+                    <a href="product-detail.html?id=${product.id}" class="block h-64 overflow-hidden relative">
                         <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
                             Rs. ${product.price.toLocaleString()}
                         </div>
-                    </div>
+                    </a>
                     <div class="p-6">
-                        <h4 class="text-xl font-serif font-bold text-primary mb-2">${product.name}</h4>
+                        <a href="product-detail.html?id=${product.id}" class="hover:text-gold transition-colors">
+                            <h4 class="text-xl font-serif font-bold text-primary mb-2">${product.name}</h4>
+                        </a>
                         <p class="text-stone-500 text-sm mb-6 font-sans line-clamp-2">${product.description}</p>
                         <button onclick="openOrderModal('${product.name}', ${product.price}, '${product.id}')" class="w-full py-3 bg-gold/10 hover:bg-gold text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
                             <i data-lucide="shield-check" class="w-5 h-5"></i>

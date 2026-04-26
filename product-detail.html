@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | Al Rehman Dawakhana</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#064e3b', // emerald-950
+                        cream: '#fafaf9',   // stone-50
+                        gold: '#f59e0b',    // amber-500
+                        'gold-dark': '#d97706',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        .glass-nav {
+            background: rgba(6, 78, 59, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .gold-pattern {
+            background-image: radial-gradient(#f59e0b 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(6, 78, 59, 0.2), transparent);
+        }
+    </style>
+</head>
+<body class="bg-cream font-sans text-stone-800 antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-4 glass-nav shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                </div>
+                <span class="text-xl lg:text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="index.html" class="text-white/90 hover:text-gold font-medium transition-colors">Home</a>
+                <a href="medicines.html" class="text-white/90 hover:text-gold font-medium transition-colors">Medicines</a>
+                <a href="javascript:void(0)" onclick="openTrackModal()" class="text-white/90 hover:text-gold font-medium transition-colors">Track Order</a>
+                <a href="index.html#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Consult Now
+                </a>
+            </div>
+
+            <button onclick="toggleMenu()" class="md:hidden text-white p-2">
+                <i data-lucide="menu" id="menu-icon" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
+            <a href="index.html" class="text-white text-xl font-serif">Home</a>
+            <a href="medicines.html" class="text-white text-xl font-serif">Medicines</a>
+            <a href="javascript:void(0)" onclick="openTrackModal()" class="text-white text-xl font-serif">Track Order</a>
+            <a href="index.html#contact" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-24">
+        <div class="container mx-auto px-6">
+            
+            <!-- Breadcrumbs -->
+            <nav class="flex items-center space-x-2 text-sm text-stone-400 mb-12">
+                <a href="index.html" class="hover:text-primary transition-colors">Home</a>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                <a href="medicines.html" class="hover:text-primary transition-colors">Medicines</a>
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                <span id="breadcrumb-name" class="text-primary font-medium">Product Detail</span>
+            </nav>
+
+            <!-- Product Section -->
+            <div id="product-container" class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start animate-fade-in">
+                <!-- Left: Image -->
+                <div class="relative group">
+                    <div class="absolute -inset-4 border border-gold/20 rounded-[3rem] transform rotate-3 -z-10"></div>
+                    <div class="product-image-container rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+                        <img id="product-image" src="" alt="Product" class="w-full h-[600px] object-cover">
+                    </div>
+                </div>
+
+                <!-- Right: Content -->
+                <div class="space-y-8">
+                    <div>
+                        <span id="product-category" class="bg-gold/10 text-gold text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-gold/20">Category</span>
+                        <h1 id="product-name" class="text-5xl md:text-6xl font-serif font-bold text-primary mt-6 mb-4 leading-tight">Loading...</h1>
+                        
+                        <!-- Ratings -->
+                        <div class="flex items-center space-x-4 mb-8">
+                            <div class="flex text-gold">
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                            </div>
+                            <span class="text-stone-400 text-sm font-medium">4.9/5 (120+ Reviews)</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100">
+                        <div class="flex items-baseline space-x-2 mb-6">
+                            <span class="text-stone-400 text-sm font-bold uppercase tracking-widest">Price:</span>
+                            <span id="product-price" class="text-4xl font-serif font-bold text-primary">Rs. 0</span>
+                        </div>
+                        
+                        <p id="product-description" class="text-stone-500 leading-relaxed text-lg mb-10">
+                            Loading product details...
+                        </p>
+
+                        <button onclick="openOrderModalFromDetail()" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-xl uppercase tracking-widest">
+                            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                            <span>Secure Order Now</span>
+                        </button>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="flex items-center space-x-4 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                            <i data-lucide="shield-check" class="text-primary w-8 h-8"></i>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-tighter text-primary">100% Organic</p>
+                                <p class="text-[10px] text-stone-500">Pure Herbal Extract</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                            <i data-lucide="truck" class="text-gold w-8 h-8"></i>
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-tighter text-amber-900">Fast Delivery</p>
+                                <p class="text-[10px] text-stone-500">Within 24-48 Hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Detailed Info Section -->
+    <section class="py-24 bg-white border-t border-stone-100">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto space-y-16">
+                <div>
+                    <h3 class="text-3xl font-serif font-bold text-primary mb-8 flex items-center">
+                        <i data-lucide="flask-conical" class="mr-4 text-gold w-8 h-8"></i>
+                        Composition & Benefits
+                    </h3>
+                    <div id="product-benefits" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Dynamic Benefits -->
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-3xl font-serif font-bold text-primary mb-8 flex items-center">
+                        <i data-lucide="message-square" class="mr-4 text-gold w-8 h-8"></i>
+                        Patient Success Stories
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="p-8 bg-cream rounded-[2rem] border border-stone-100 italic text-stone-600 relative">
+                            <i data-lucide="quote" class="absolute -top-4 -left-4 w-12 h-12 text-gold/20"></i>
+                            "I have been using this medicine for 3 months now. The results are truly miraculous. I feel more energetic and my health issues have significantly reduced. Truly thankful to Hakeem Rehman."
+                            <p class="mt-4 font-bold text-primary not-italic text-sm">— Ahmed Siddiqui, Lahore</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals (Reused) -->
+    <div id="order-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeOrderModal()"></div>
+        <div class="bg-white rounded-3xl lg:rounded-[2.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl">
+            <div class="bg-primary p-6 lg:p-8 text-white flex justify-between items-center relative">
+                <div class="absolute inset-0 gold-pattern opacity-20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-2xl lg:text-3xl font-serif font-bold">Secure Order</h3>
+                    <p class="text-white/40 text-[10px] lg:text-sm">Directly from Sargodha Dawakhana</p>
+                </div>
+                <button onclick="closeOrderModal()" class="relative z-10 hover:bg-white/10 p-2 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 max-h-[70vh] overflow-y-auto">
+                <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Medicine</label>
+                            <input type="text" id="modal-product-name" readonly class="w-full bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0">
+                        </div>
+                        <div class="text-right">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Unit Price</label>
+                            <div id="modal-product-price-display" class="text-primary font-bold text-lg">Rs. 0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Quantity</label>
+                            <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Total Amount</label>
+                            <div id="modal-total" class="w-full py-4 px-2 text-gold font-bold text-2xl">Rs. 0</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-4 border-t border-stone-100">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Name</label>
+                                <input type="text" id="user-name" required placeholder="Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Phone (WhatsApp)</label>
+                                <input type="tel" id="user-phone" required placeholder="0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Delivery Address</label>
+                            <textarea id="user-address" required rows="2" placeholder="House #, Street, City..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="order-submit-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        <span>Confirm Order</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/90 backdrop-blur-md"></div>
+        <div class="bg-white rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 w-full max-w-sm relative z-10 text-center shadow-2xl">
+            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 animate-bounce">
+                <i data-lucide="check" class="text-primary w-8 h-8 lg:w-12 lg:h-12 stroke-[3]"></i>
+            </div>
+            <h3 class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
+                <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Tracking ID</p>
+                <p id="display-order-number" class="text-xl font-bold text-primary tracking-wider"></p>
+            </div>
+            <p class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Rehman will verify your order and contact you shortly.</p>
+            <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl">Back to Healing</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const SUPABASE_URL = 'https://vwjludvxxmsnkzsbalhx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3amx1ZHZ4eG1zbmt6c2JhbGh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNjkzOTIsImV4cCI6MjA5Mjc0NTM5Mn0.oRCNXXBiFoNQgAIjy70yIh2KrOmwFH7UAlRdSDXnDpk';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentProduct = null;
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                window.location.href = 'medicines.html';
+                return;
+            }
+
+            await fetchProductDetail(productId);
+            lucide.createIcons();
+        });
+
+        async function fetchProductDetail(id) {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error || !data) {
+                console.error('Error fetching product:', error);
+                alert("Medicine not found!");
+                window.location.href = 'medicines.html';
+                return;
+            }
+
+            currentProduct = data;
+            
+            // Populate UI
+            document.getElementById('breadcrumb-name').innerText = data.name;
+            document.getElementById('product-name').innerText = data.name;
+            document.getElementById('product-category').innerText = data.category || data.sub_category || 'Herbal Remedy';
+            document.getElementById('product-price').innerText = `Rs. ${data.price.toLocaleString()}`;
+            document.getElementById('product-description').innerText = data.description;
+            document.getElementById('product-image').src = data.image_url;
+
+            // Benefits
+            const benefitsContainer = document.getElementById('product-benefits');
+            const benefits = [
+                { icon: 'zap', title: 'Rapid Relief', desc: 'Fast-acting organic formula designed for quick systemic absorption.' },
+                { icon: 'heart', title: 'Heart Healthy', desc: 'Maintains cardiovascular equilibrium without chemical stressors.' },
+                { icon: 'leaf', title: '100% Organic', desc: 'Sourced from the fertile lands of Sargodha and northern Pakistan.' },
+                { icon: 'check-circle', title: 'Certified Safe', desc: 'Prepared according to traditional Unani quality standards.' }
+            ];
+
+            benefitsContainer.innerHTML = benefits.map(b => `
+                <div class="flex items-start space-x-4">
+                    <div class="p-3 bg-cream rounded-xl border border-stone-100">
+                        <i data-lucide="${b.icon}" class="text-gold w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-primary mb-1">${b.title}</h4>
+                        <p class="text-stone-400 text-sm leading-relaxed">${b.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Logic
+        function openOrderModalFromDetail() {
+            if (!currentProduct) return;
+            
+            document.getElementById('modal-product-name').value = currentProduct.name;
+            document.getElementById('modal-product-price-display').innerText = `Rs. ${currentProduct.price.toLocaleString()}`;
+            document.getElementById('modal-quantity').value = 1;
+            updateTotal();
+            document.getElementById('order-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateTotal() {
+            const qty = document.getElementById('modal-quantity').value;
+            const total = currentProduct.price * qty;
+            document.getElementById('modal-total').innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        document.getElementById('modal-quantity').addEventListener('input', updateTotal);
+
+        async function handleOrderSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('order-submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Processing...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+            const orderData = {
+                order_number: orderNumber,
+                customer_name: document.getElementById('user-name').value,
+                customer_phone: document.getElementById('user-phone').value,
+                customer_address: document.getElementById('user-address').value,
+                product_id: currentProduct.id,
+                product_name: currentProduct.name,
+                quantity: parseInt(document.getElementById('modal-quantity').value),
+                total_price: currentProduct.price * parseInt(document.getElementById('modal-quantity').value),
+                order_status: 'Pending'
+            };
+
+            const { error } = await supabaseClient.from('orders').insert([orderData]);
+
+            if (error) {
+                alert("Order failed: " + error.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+                return;
+            }
+
+            document.getElementById('display-order-number').textContent = orderNumber;
+            closeOrderModal();
+            document.getElementById('success-modal').classList.remove('hidden');
+            e.target.reset();
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isHidden = menu.classList.contains('hidden');
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                setTimeout(() => menu.classList.remove('-translate-y-10', 'opacity-0'), 10);
+            } else {
+                menu.classList.add('-translate-y-10', 'opacity-0');
+                setTimeout(() => menu.classList.add('hidden'), 300);
+            }
+        }
+    </script>
+</body>
+</html>
