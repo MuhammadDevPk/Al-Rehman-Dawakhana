@@ -154,7 +154,7 @@ function createChatUI() {
         </button>
 
         <!-- Chat Window -->
-        <div id="chat-window" class="hidden absolute bottom-20 right-0 w-[350px] md:w-[400px] max-h-[550px] h-[70vh] bg-stone-50 rounded-3xl shadow-2xl flex flex-col border border-emerald-900/10 overflow-hidden transform origin-bottom-right transition-all duration-300 scale-95 opacity-0">
+        <div id="chat-window" class="hidden fixed md:absolute bottom-[90px] md:bottom-24 right-4 md:right-0 w-[calc(100vw-2rem)] md:w-[400px] max-h-[calc(100vh-120px)] md:max-h-[600px] h-[70vh] md:h-[600px] bg-stone-50 rounded-3xl shadow-2xl flex flex-col border border-emerald-900/10 overflow-hidden transform origin-bottom-right transition-all duration-300 scale-95 opacity-0 shadow-emerald-900/20">
             <!-- Header -->
             <div class="bg-emerald-900 p-6 flex justify-between items-center relative overflow-hidden">
                 <div class="flex items-center space-x-3 relative z-10">
