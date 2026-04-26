@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -82,21 +82,30 @@
 <body class="bg-cream font-sans text-stone-800 antialiased overflow-x-hidden">
 
     <!-- Navbar -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-4 glass-nav shadow-lg">
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-2 group">
-                <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
-                    <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
-                </div>
-                <span class="text-xl lg:text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
-            </a>
+            <div class="flex items-center space-x-8">
+                <a href="index.html" class="flex items-center space-x-2 group">
+                    <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
+                        <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                    </div>
+                    <span class="text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
+                </a>
 
-            <!-- Desktop Menu -->
+                <!-- Language Switcher (Desktop) -->
+                <div class="hidden lg:flex items-center bg-white/10 rounded-full p-1 border border-white/10">
+                    <button onclick="setLanguage('en'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">EN</button>
+                    <button onclick="setLanguage('ur'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">اردو</button>
+                    <button onclick="setLanguage('roman'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">ROMAN</button>
+                </div>
+            </div>
+
             <div class="hidden md:flex items-center space-x-10">
-                <a href="index.html" class="text-white/90 hover:text-gold font-medium transition-colors">Home</a>
-                <a href="index.html#about" class="text-white/90 hover:text-gold font-medium transition-colors">About</a>
-                <a href="medicines.html" class="text-gold font-bold transition-colors">Medicines</a>
-                <a href="index.html#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <a href="index.html#specialties" data-i18n="nav_specialties" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Specialties</a>
+                <a href="index.html#about" data-i18n="nav_about" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">About Hakeem</a>
+                <a href="medicines.html" data-i18n="nav_medicines" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors border-b-2 border-gold">Medicines</a>
+                <a href="javascript:void(0)" onclick="openTrackModal()" data-i18n="nav_track" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Track Order</a>
+                <a href="index.html#contact" data-i18n="nav_consult" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Consult Now
                 </a>
             </div>
@@ -109,11 +118,17 @@
 
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
-            <a href="index.html" class="text-white text-xl font-serif">Home</a>
-            <a href="index.html#about" class="text-white text-xl font-serif">About Hakeem</a>
-            <a href="medicines.html" class="text-white text-xl font-serif">Medicines</a>
-            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" class="text-white text-xl font-serif">Track Order</a>
-            <a href="index.html#contact" onclick="toggleMenu()" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
+            <!-- Language Switcher (Mobile) -->
+            <div class="flex items-center bg-white/5 rounded-full p-1 border border-white/10 mb-4">
+                <button onclick="setLanguage('en'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">EN</button>
+                <button onclick="setLanguage('ur'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">اردو</button>
+                <button onclick="setLanguage('roman'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">ROMAN</button>
+            </div>
+            <a href="index.html#specialties" data-i18n="nav_specialties" class="text-white text-xl font-serif" onclick="toggleMenu()">Specialties</a>
+            <a href="index.html#about" data-i18n="nav_about" class="text-white text-xl font-serif" onclick="toggleMenu()">About Hakeem</a>
+            <a href="medicines.html" data-i18n="nav_medicines" class="text-white text-xl font-serif">Medicines</a>
+            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" data-i18n="nav_track" class="text-white text-xl font-serif">Track Order</a>
+            <a href="index.html#contact" onclick="toggleMenu()" data-i18n="nav_book_consultation" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
         </div>
     </nav>
 
@@ -121,8 +136,8 @@
     <header class="pt-40 pb-20 bg-primary relative overflow-hidden">
         <div class="absolute inset-0 gold-pattern opacity-10"></div>
         <div class="container mx-auto px-6 relative z-10 text-center">
-            <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-6">Our Full Medicinal Range</h1>
-            <p class="text-stone-300 text-lg md:text-xl max-w-3xl mx-auto font-light leading-relaxed">
+            <h1 data-i18n="med_header_title" class="text-4xl md:text-6xl font-serif font-bold text-white mb-6">Our Full Medicinal Range</h1>
+            <p data-i18n="med_header_desc" class="text-stone-300 text-lg md:text-xl max-w-3xl mx-auto font-light leading-relaxed">
                 Every formulation is crafted using authentic Unani methods, sourced from pure organic ingredients to ensure maximum healing potency.
             </p>
         </div>
@@ -136,14 +151,15 @@
             <div class="flex flex-col lg:flex-row gap-8 justify-between items-center mb-16 bg-white p-6 lg:p-10 rounded-[2.5rem] shadow-sm border border-stone-100">
                 <div class="w-full lg:w-1/3 relative">
                     <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5"></i>
-                    <input type="text" id="search-input" oninput="filterProducts()" placeholder="Search by name or category..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 pl-14 pr-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                    <input type="text" id="search-input" oninput="filterProducts()" data-i18n="med_search_placeholder" placeholder="Search by name or category..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 pl-14 pr-6 focus:ring-2 focus:ring-gold outline-none transition-all">
                 </div>
                 
                 <div class="flex flex-wrap gap-3 justify-center">
-                    <button onclick="setCategory('All')" class="category-btn active px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 bg-primary text-white">All Remedies</button>
-                    <button onclick="setCategory('Weight Care')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Weight Care</button>
-                    <button onclick="setCategory('Vitality')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Vitality</button>
-                    <button onclick="setCategory('Renal Health')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Renal Health</button>
+                    <button onclick="setCategory('All')" data-i18n="filter_all" class="category-btn active px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 bg-primary text-white">All Remedies</button>
+                    <button onclick="setCategory('Weight Care')" data-i18n="filter_weight" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Weight Care</button>
+                    <button onclick="setCategory('Vitality')" data-i18n="filter_vitality" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Vitality</button>
+                    <button onclick="setCategory('Respiratory')" data-i18n="filter_respiratory" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Respiratory</button>
+                    <button onclick="setCategory('Digestive')" data-i18n="filter_digestive" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Digestive</button>
                 </div>
             </div>
 
@@ -173,7 +189,7 @@
                         </div>
                         <span class="text-2xl font-serif font-bold text-white">Al Rehman <span class="text-gold">Dawakhana</span></span>
                     </a>
-                    <p class="text-stone-400 leading-relaxed mb-8">
+                    <p data-i18n="footer_branding_desc" class="text-stone-400 leading-relaxed mb-8">
                         Preserving the wisdom of traditional healing to provide modern solutions for your wellbeing. Natural, pure, and effective.
                     </p>
                     <div class="flex space-x-4">
@@ -185,18 +201,18 @@
 
                 <!-- Links -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
+                    <h5 data-i18n="footer_links_title" class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
                     <ul class="space-y-4 text-stone-400">
-                        <li><a href="index.html#specialties" class="hover:text-white transition-colors">Specialties</a></li>
-                        <li><a href="medicines.html" class="hover:text-white transition-colors">Our Products</a></li>
-                        <li><a href="index.html#contact" class="hover:text-white transition-colors">Consultation</a></li>
-                        <li><a href="index.html#about" class="hover:text-white transition-colors">About Hakeem</a></li>
+                        <li><a href="index.html#specialties" data-i18n="nav_specialties" class="hover:text-white transition-colors">Specialties</a></li>
+                        <li><a href="medicines.html" data-i18n="nav_medicines" class="hover:text-white transition-colors">Our Products</a></li>
+                        <li><a href="index.html#contact" data-i18n="nav_consult" class="hover:text-white transition-colors">Consultation</a></li>
+                        <li><a href="index.html#about" data-i18n="nav_about" class="hover:text-white transition-colors">About Hakeem</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
+                    <h5 data-i18n="footer_visit_title" class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
                     <ul class="space-y-6 text-stone-400">
                         <li class="flex items-start">
                             <i data-lucide="map-pin" class="w-5 h-5 text-gold mr-4 shrink-0"></i>
@@ -215,10 +231,10 @@
 
                 <!-- Newsletter -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
-                    <p class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
+                    <h5 data-i18n="footer_newsletter_title" class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
+                    <p data-i18n="footer_newsletter_desc" class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
                     <form class="relative">
-                        <input type="email" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
+                        <input type="email" data-i18n="footer_newsletter_placeholder" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
                         <button class="absolute right-2 top-2 bottom-2 bg-gold hover:bg-gold-dark text-primary px-4 rounded-lg font-bold transition-colors">
                             <i data-lucide="send" class="w-5 h-5"></i>
                         </button>
@@ -227,7 +243,7 @@
             </div>
 
             <div class="pt-8 border-t border-white/5 text-center text-stone-500 text-sm">
-                <p>&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
+                <p data-i18n="footer_rights">&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
             </div>
         </div>
     </footer>
@@ -304,13 +320,13 @@
             <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8">
                 <i data-lucide="check" class="text-primary w-8 h-8 lg:w-12 lg:h-12 stroke-[3]"></i>
             </div>
-            <h3 class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <h3 data-i18n="success_modal_title" class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
             <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
-                <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Tracking ID</p>
+                <p data-i18n="success_modal_id_tag" class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Your Tracking ID</p>
                 <p id="display-order-number" class="text-xl font-bold text-primary tracking-wider"></p>
             </div>
-            <p class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Usman will verify your order and contact you shortly.</p>
-            <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl">Back to Healing</button>
+            <p data-i18n="success_modal_desc" class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Usman will verify your order and contact you shortly. Please save this ID to track your status.</p>
+            <button onclick="closeSuccessModal()" data-i18n="success_modal_btn" class="w-full py-4 bg-primary text-white font-bold rounded-2xl">Back to Healing</button>
         </div>
     </div>
 
@@ -319,26 +335,24 @@
         <div class="absolute inset-0 bg-primary/95" onclick="closeTrackModal()"></div>
         <div class="bg-white rounded-[3rem] p-10 w-full max-w-md relative z-10 shadow-2xl">
             <div class="flex justify-between items-center mb-8">
-                <h3 class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
-                <button onclick="closeTrackModal()" class="p-2 hover:bg-stone-100 rounded-full">
+                <h3 data-i18n="track_modal_title" class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
+                <button onclick="closeTrackModal()" class="text-stone-400 hover:text-primary transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
-            <div id="track-search-area">
-                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARD-1234) to see the current status of your herbal medicine.</p>
+            <div id="track-search-area" class="space-y-6">
+                <p data-i18n="track_modal_desc" class="text-stone-500 text-sm leading-relaxed">Enter your Order ID (e.g. ARD-1234) to see the current status of your herbal medicine.</p>
                 <div class="space-y-4">
-                    <input type="text" id="track-input" placeholder="ARD-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
+                    <input type="text" id="track-input" data-i18n="track_modal_placeholder" placeholder="ARD-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
                     <button onclick="handleTrackOrder()" id="track-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center space-x-3">
                         <i data-lucide="search" class="w-5 h-5"></i>
-                        <span>Find My Order</span>
+                        <span data-i18n="track_modal_btn">Find My Order</span>
                     </button>
                 </div>
             </div>
 
             <!-- Tracking Result -->
-            <div id="track-result" class="hidden space-y-8">
-                <div class="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
                     <div class="flex justify-between items-start mb-6">
                         <div>
                             <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Status</p>
@@ -625,6 +639,19 @@
         }
     </script>
     <!-- Al-Rehman AI Chat Assistant -->
+    <!-- Al-Rehman AI Chat Assistant -->
     <script src="chat-ai.js"></script>
+    <!-- Language Support -->
+    <script src="translations.js"></script>
+    <script>
+        function updateLangUI(btn) {
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.remove('bg-gold', 'text-primary');
+                b.classList.add('text-white/70');
+            });
+            btn.classList.add('bg-gold', 'text-primary');
+            btn.classList.remove('text-white/70');
+        }
+    </script>
 </body>
 </html>

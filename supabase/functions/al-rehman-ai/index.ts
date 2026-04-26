@@ -11,7 +11,8 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { messages, productContext } = await req.json()
+    const { messages, productContext, language } = await req.json()
+    const currentLang = language || 'en';
 
     // --- 1. CONTEXT SLIMMING ---
     const lastUserMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
@@ -38,9 +39,17 @@ serve(async (req: Request) => {
     const OPENROUTER_KEY = Deno.env.get('OPENROUTER_API_KEY');
     const SILICON_KEY = Deno.env.get('SILICON_API_KEY');
 
+    const languageInstruction = {
+        en: "You MUST respond only in English.",
+        ur: "You MUST respond only in Urdu (Urdu script).",
+        roman: "You MUST respond only in Roman Urdu (Urdu spoken in English letters)."
+    }[currentLang] || "You MUST respond in English.";
+
     const systemInstructions = `
 You are the AI Assistant for Al-Rehman Dawakhana, acting as the digital representative for Hakeem Usman in Sargodha.
 Your persona is: Helpful, polite, empathetic, and deeply knowledgeable in Unani/Herbal medicine.
+
+${languageInstruction}
 
 KNOWLEDGE BASE (Available Products):
 ${relevantProducts}

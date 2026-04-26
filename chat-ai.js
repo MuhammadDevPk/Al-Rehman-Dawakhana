@@ -86,9 +86,15 @@ async function askAlRehmanAI(userMessage) {
 
         chatHistory.push({ role: 'user', content: userMessage });
 
+        const currentLang = localStorage.getItem('preferred_lang') || 'en';
+
         // D. Call Edge Function
         const { data, error } = await supabaseClient.functions.invoke('al-rehman-ai', {
-            body: { messages: chatHistory, productContext: productContext }
+            body: { 
+                messages: chatHistory, 
+                productContext: productContext,
+                language: currentLang
+            }
         });
 
         if (error) throw error;

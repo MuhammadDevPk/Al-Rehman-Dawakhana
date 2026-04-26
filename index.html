@@ -9,7 +9,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -112,19 +112,28 @@
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6">
         <div class="container mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2 group">
-                <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
-                    <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+            <div class="flex items-center space-x-8">
+                <a href="#" class="flex items-center space-x-2 group">
+                    <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
+                        <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                    </div>
+                    <span class="text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
+                </a>
+                
+                <!-- Language Switcher (Desktop) -->
+                <div class="hidden lg:flex items-center bg-white/10 rounded-full p-1 border border-white/10">
+                    <button onclick="setLanguage('en'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">EN</button>
+                    <button onclick="setLanguage('ur'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">اردو</button>
+                    <button onclick="setLanguage('roman'); updateLangUI(this)" class="lang-btn px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full transition-all text-white/70 hover:text-white">ROMAN</button>
                 </div>
-                <span class="text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
-            </a>
+            </div>
 
             <div class="hidden md:flex items-center space-x-10">
-                <a href="#specialties" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Specialties</a>
-                <a href="#about" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">About Hakeem</a>
-                <a href="medicines.html" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Medicines</a>
-                <a href="javascript:void(0)" onclick="openTrackModal()" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Track Order</a>
-                <a href="#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <a href="#specialties" data-i18n="nav_specialties" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Specialties</a>
+                <a href="#about" data-i18n="nav_about" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">About Hakeem</a>
+                <a href="medicines.html" data-i18n="nav_medicines" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Medicines</a>
+                <a href="javascript:void(0)" onclick="openTrackModal()" data-i18n="nav_track" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Track Order</a>
+                <a href="#contact" data-i18n="nav_consult" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Consult Now
                 </a>
             </div>
@@ -136,11 +145,17 @@
         </div>
 
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
-            <a href="#specialties" class="text-white text-xl font-serif" onclick="toggleMenu()">Specialties</a>
-            <a href="#about" class="text-white text-xl font-serif" onclick="toggleMenu()">About Hakeem</a>
-            <a href="medicines.html" class="text-white text-xl font-serif">Medicines</a>
-            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" class="text-white text-xl font-serif">Track Order</a>
-            <a href="#contact" onclick="toggleMenu()" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
+            <!-- Language Switcher (Mobile) -->
+            <div class="flex items-center bg-white/5 rounded-full p-1 border border-white/10 mb-4">
+                <button onclick="setLanguage('en'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">EN</button>
+                <button onclick="setLanguage('ur'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">اردو</button>
+                <button onclick="setLanguage('roman'); updateLangUI(this)" class="lang-btn px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-full transition-all text-white/70">ROMAN</button>
+            </div>
+            <a href="#specialties" data-i18n="nav_specialties" class="text-white text-xl font-serif" onclick="toggleMenu()">Specialties</a>
+            <a href="#about" data-i18n="nav_about" class="text-white text-xl font-serif" onclick="toggleMenu()">About Hakeem</a>
+            <a href="medicines.html" data-i18n="nav_medicines" class="text-white text-xl font-serif">Medicines</a>
+            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" data-i18n="nav_track" class="text-white text-xl font-serif">Track Order</a>
+            <a href="#contact" onclick="toggleMenu()" data-i18n="nav_book_consultation" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
         </div>
     </nav>
 
@@ -159,18 +174,18 @@
 
         <div class="container mx-auto px-6 relative z-10 text-center text-white">
             <h1 class="text-5xl md:text-8xl font-serif font-bold mb-6 opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;">
-                Ancient Wisdom <br>
-                <span class="text-gold italic">for Modern Healing</span>
+                <span data-i18n="hero_title">Ancient Wisdom</span> <br>
+                <span class="text-gold italic" data-i18n="hero_title_span">for Modern Healing</span>
             </h1>
-            <p class="text-lg md:text-2xl text-stone-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed opacity-0 animate-fade-in-up" style="animation-delay: 0.4s;">
+            <p data-i18n="hero_subtitle" class="text-lg md:text-2xl text-stone-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed opacity-0 animate-fade-in-up" style="animation-delay: 0.4s;">
                 Experience the pure essence of nature through our time-honored traditional remedies, crafted with heritage and scientific precision.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 opacity-0 animate-fade-in-up" style="animation-delay: 0.6s;">
                 <a href="#contact" class="px-8 py-4 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl text-lg flex items-center group">
-                    Book a Consultation
+                    <span data-i18n="btn_book">Book a Consultation</span>
                     <i data-lucide="arrow-right" class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                 </a>
-                <a href="medicines.html" class="px-8 py-4 border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-medium rounded-full transition-all duration-300 text-lg">
+                <a href="medicines.html" data-i18n="btn_explore" class="px-8 py-4 border-2 border-white/30 hover:border-white hover:bg-white/10 text-white font-medium rounded-full transition-all duration-300 text-lg">
                     Explore Medicines
                 </a>
             </div>
@@ -186,8 +201,8 @@
     <section id="specialties" class="py-24 bg-cream">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16 reveal-on-scroll">
-                <span class="text-gold font-bold tracking-widest uppercase text-sm">Our Expertise</span>
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Nurturing Your Health Naturally</h2>
+                <span data-i18n="specialties_tag" class="text-gold font-bold tracking-widest uppercase text-sm">Our Expertise</span>
+                <h2 data-i18n="specialties_title" class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Nurturing Your Health Naturally</h2>
                 <div class="w-24 h-1 bg-gold mx-auto mt-4 rounded-full"></div>
             </div>
 
@@ -197,8 +212,8 @@
                     <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="wind" class="text-primary w-8 h-8"></i>
                     </div>
-                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Respiratory Health</h3>
-                    <p class="text-stone-600 leading-relaxed">Effective herbal treatments for chronic cough, asthma, and seasonal allergies using traditional lung-cleansing tonics.</p>
+                    <h3 data-i18n="cat_respiratory" class="text-2xl font-serif font-bold text-primary mb-4">Respiratory Health</h3>
+                    <p data-i18n="cat_respiratory_desc" class="text-stone-500 leading-relaxed">Specialized herbal treatments for asthma, allergies, and chronic respiratory wellness.</p>
                 </div>
                 
                 <!-- Card 2 -->
@@ -206,8 +221,8 @@
                     <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="droplets" class="text-primary w-8 h-8"></i>
                     </div>
-                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Digestive Care</h3>
-                    <p class="text-stone-600 leading-relaxed">Restore your gut balance with our signature fermented extracts and bitter tonics designed for modern lifestyles.</p>
+                    <h3 data-i18n="cat_digestive" class="text-2xl font-serif font-bold text-primary mb-4">Digestive Wellness</h3>
+                    <p data-i18n="cat_digestive_desc" class="text-stone-500 leading-relaxed">Natural solutions for metabolic balance, stomach health, and holistic digestion.</p>
                 </div>
 
                 <!-- Card 3 -->
@@ -215,8 +230,8 @@
                     <div class="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center mb-6">
                         <i data-lucide="sparkles" class="text-primary w-8 h-8"></i>
                     </div>
-                    <h3 class="text-2xl font-serif font-bold text-primary mb-4">Natural Tonics</h3>
-                    <p class="text-stone-600 leading-relaxed">Revitalize your energy and immunity with our premium range of multi-herbal rejuvenators and adaptogens.</p>
+                    <h3 data-i18n="cat_vitality" class="text-2xl font-serif font-bold text-primary mb-4">Vitality & Strength</h3>
+                    <p data-i18n="cat_vitality_desc" class="text-stone-500 leading-relaxed">Traditional tonics to boost immunity, energy, and overall physical endurance.</p>
                 </div>
             </div>
         </div>
@@ -240,23 +255,23 @@
                 </div>
 
                 <div class="lg:w-1/2 reveal-on-scroll">
-                    <span class="text-gold font-bold tracking-widest uppercase text-sm">The Heritage</span>
-                    <h2 class="text-4xl md:text-6xl font-serif font-bold text-white mt-2 mb-8">Legacy of Healing <br><span class="italic text-gold">Hakeem Usman</span></h2>
-                    <p class="text-stone-300 text-lg leading-relaxed mb-6">
+                    <span data-i18n="about_tag" class="text-gold font-bold tracking-widest uppercase text-sm">The Heritage</span>
+                    <h2 class="text-4xl md:text-6xl font-serif font-bold text-white mt-2 mb-8">Legacy of Healing <br><span class="italic text-gold" data-i18n="hakeem_name">Hakeem Usman</span></h2>
+                    <p data-i18n="about_text_1" class="text-stone-300 text-lg leading-relaxed mb-6">
                         With over four decades of dedicated service, Hakeem Usman has preserved the sacred art of traditional medicine while adapting it for contemporary health challenges.
                     </p>
-                    <p class="text-stone-300 text-lg leading-relaxed mb-10">
+                    <p data-i18n="about_text_2" class="text-stone-300 text-lg leading-relaxed mb-10">
                         Our Dawakhana is built on the philosophy that every individual possesses a unique temperament (Mizaj), and true healing comes from restoring this natural equilibrium.
                     </p>
                     
                     <div class="grid grid-cols-2 gap-8 border-t border-white/10 pt-8">
                         <div>
                             <p class="text-3xl font-serif font-bold text-gold">40+</p>
-                            <p class="text-stone-400 text-sm uppercase tracking-wide">Years of Experience</p>
+                            <p data-i18n="about_stat_1" class="text-stone-400 text-sm uppercase tracking-wide">Years of Experience</p>
                         </div>
                         <div>
                             <p class="text-3xl font-serif font-bold text-gold">50k+</p>
-                            <p class="text-stone-400 text-sm uppercase tracking-wide">Healed Patients</p>
+                            <p data-i18n="about_stat_2" class="text-stone-400 text-sm uppercase tracking-wide">Healed Patients</p>
                         </div>
                     </div>
                 </div>
@@ -269,10 +284,10 @@
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal-on-scroll">
                 <div>
-                    <span class="text-gold font-bold tracking-widest uppercase text-sm">Featured Remedies</span>
-                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Organic Formulations</h2>
+                    <span data-i18n="products_tag" class="text-gold font-bold tracking-widest uppercase text-sm">Featured Remedies</span>
+                    <h2 data-i18n="products_title" class="text-4xl md:text-5xl font-serif font-bold text-primary mt-2">Organic Formulations</h2>
                 </div>
-                <a href="medicines.html" class="mt-6 md:mt-0 text-primary font-bold flex items-center group">
+                <a href="medicines.html" data-i18n="products_view_all" class="mt-6 md:mt-0 text-primary font-bold flex items-center group">
                     View Full Catalog
                     <i data-lucide="move-right" class="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
                 </a>
@@ -303,9 +318,9 @@
             <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
                 <!-- Left Content: Educational -->
                 <div class="lg:w-3/5 reveal-on-scroll">
-                    <span class="text-gold font-bold tracking-[0.2em] uppercase text-xs mb-4 block">Exclusive Opportunity</span>
+                    <span data-i18n="consult_top_tag" class="text-gold font-bold tracking-[0.2em] uppercase text-xs mb-4 block">Exclusive Opportunity</span>
                     <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-8 leading-tight">
-                        Personalized Healing through <br><span class="text-gold italic">Expert Consultation</span>
+                        <span data-i18n="consult_main_title">Personalized Healing through</span> <br><span data-i18n="consult_main_span" class="text-gold italic">Expert Consultation</span>
                     </h2>
                     
                     <div class="space-y-10">
@@ -314,8 +329,8 @@
                                 <i data-lucide="microscope" class="text-gold w-7 h-7"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Root Cause Analysis</h3>
-                                <p class="text-stone-400 leading-relaxed text-lg">We don't just treat symptoms; we find the cause. Our diagnostic approach delves deep into your biological history to ensure lasting recovery.</p>
+                                <h3 data-i18n="consult_point_1_title" class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Root Cause Analysis</h3>
+                                <p data-i18n="consult_point_1_desc" class="text-stone-400 leading-relaxed text-lg">We don't just treat symptoms; we find the cause. Our diagnostic approach delves deep into your biological history to ensure lasting recovery.</p>
                             </div>
                         </div>
 
@@ -324,8 +339,8 @@
                                 <i data-lucide="book-open" class="text-gold w-7 h-7"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Traditional Wisdom</h3>
-                                <p class="text-stone-400 leading-relaxed text-lg">Benefit from Hakeem Usman's years of herbal expertise. Experience the culmination of generations of Unani healing knowledge.</p>
+                                <h3 data-i18n="consult_point_2_title" class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Traditional Wisdom</h3>
+                                <p data-i18n="consult_point_2_desc" class="text-stone-400 leading-relaxed text-lg">Benefit from Hakeem Usman's years of herbal expertise. Experience the culmination of generations of Unani healing knowledge.</p>
                             </div>
                         </div>
 
@@ -334,8 +349,8 @@
                                 <i data-lucide="scroll" class="text-gold w-7 h-7"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Tailored Remedies</h3>
-                                <p class="text-stone-400 leading-relaxed text-lg">Get a custom prescription made specifically for your body type (Mizaj). No generic treatments, only what your body truly needs.</p>
+                                <h3 data-i18n="consult_point_3_title" class="text-xl sm:text-2xl font-serif font-bold text-white mb-2">Tailored Remedies</h3>
+                                <p data-i18n="consult_point_3_desc" class="text-stone-400 leading-relaxed text-lg">Get a custom prescription made specifically for your body type (Mizaj). No generic treatments, only what your body truly needs.</p>
                             </div>
                         </div>
                     </div>
@@ -348,21 +363,21 @@
                         <div class="flex justify-between items-center mb-8">
                             <div class="bg-emerald-900/10 px-4 py-2 rounded-full flex items-center space-x-2">
                                 <div class="w-2 h-2 bg-emerald-600 rounded-full animate-pulse"></div>
-                                <span class="text-emerald-900 text-xs font-bold uppercase tracking-widest">Available Now</span>
+                                <span data-i18n="consult_tag" class="text-emerald-900 text-xs font-bold uppercase tracking-widest">Available Now</span>
                             </div>
                             <div class="p-3 bg-stone-50 rounded-2xl">
                                 <i data-lucide="video" class="text-emerald-900 w-8 h-8"></i>
                             </div>
                         </div>
 
-                        <h3 class="text-3xl font-serif font-bold text-primary mb-2">WhatsApp Video Consultation</h3>
-                        <p class="text-stone-500 mb-8 font-medium">Direct face-to-face session with Hakeem Usman</p>
+                        <h3 data-i18n="consult_title" class="text-3xl font-serif font-bold text-primary mb-2">WhatsApp Video Consultation</h3>
+                        <p data-i18n="consult_subtitle" class="text-stone-500 mb-8 font-medium">Direct face-to-face session with Hakeem Usman</p>
 
                         <div class="mb-10 bg-cream p-6 sm:p-8 rounded-3xl border border-stone-100 flex flex-col items-center justify-center">
-                            <span class="text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-2">Special Price</span>
+                            <span data-i18n="consult_price_tag" class="text-stone-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-2">Special Price</span>
                             <div class="flex flex-col sm:flex-row items-center sm:items-baseline sm:space-x-2">
-                                <span class="text-4xl sm:text-6xl font-serif font-bold text-gold">Rs. 999</span>
-                                <span class="text-stone-400 text-xs sm:text-sm font-medium uppercase tracking-widest mt-1 sm:mt-0">/ Session</span>
+                                <span data-i18n="consult_price" class="text-4xl sm:text-6xl font-serif font-bold text-gold">Rs. 999</span>
+                                <span data-i18n="consult_session" class="text-stone-400 text-xs sm:text-sm font-medium uppercase tracking-widest mt-1 sm:mt-0">/ Session</span>
                             </div>
                         </div>
 
@@ -371,31 +386,31 @@
                                 <div class="w-8 h-8 bg-emerald-50 rounded-full flex items-center justify-center">
                                     <i data-lucide="clock" class="text-emerald-600 w-4 h-4"></i>
                                 </div>
-                                <span class="font-medium">30 Minute Dedicated Session</span>
+                                <span data-i18n="consult_feat_1" class="font-medium">30 Minute Dedicated Session</span>
                             </li>
                             <li class="flex items-center space-x-4 text-stone-600">
                                 <div class="w-8 h-8 bg-emerald-50 rounded-full flex items-center justify-center">
                                     <i data-lucide="shield-check" class="text-emerald-600 w-4 h-4"></i>
                                 </div>
-                                <span class="font-medium">Private & Confidential Video Call</span>
+                                <span data-i18n="consult_feat_2" class="font-medium">Private & Confidential Video Call</span>
                             </li>
                             <li class="flex items-center space-x-4 text-stone-600">
                                 <div class="w-8 h-8 bg-emerald-50 rounded-full flex items-center justify-center">
                                     <i data-lucide="check-circle-2" class="text-emerald-600 w-4 h-4"></i>
                                 </div>
-                                <span class="font-medium">Digital Prescription & Guidance</span>
+                                <span data-i18n="consult_feat_3" class="font-medium">Digital Prescription & Guidance</span>
                             </li>
                         </ul>
 
                         <a href="https://wa.me/923006047058?text=Assalam-o-Alaikum%20Hakeem%20Sahab,%20I%20would%20like%20to%20book%20a%20consultation%20session%20to%20discuss%20my%20health." 
                            target="_blank"
                            class="block w-full py-4 sm:py-6 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl text-center shadow-xl transition-all transform hover:-translate-y-1 uppercase tracking-[0.1em] text-base sm:text-lg">
-                            Book Video Consultation
+                            <span data-i18n="btn_book_video">Book Video Consultation</span>
                         </a>
 
                         <div class="mt-8 pt-8 border-t border-stone-100 flex items-center justify-center space-x-3 opacity-60">
                             <i data-lucide="lock" class="w-4 h-4 text-stone-400"></i>
-                            <span class="text-xs font-bold uppercase tracking-widest text-stone-400">100% Secure & Private</span>
+                            <span data-i18n="consult_secure" class="text-xs font-bold uppercase tracking-widest text-stone-400">100% Secure & Private</span>
                         </div>
 
                         <!-- Decoration -->
@@ -411,7 +426,7 @@
         <div class="container mx-auto px-6">
             <div class="text-center mb-16 reveal-on-scroll">
                 <i data-lucide="quote" class="w-12 h-12 text-gold mx-auto mb-6 opacity-30"></i>
-                <h2 class="text-4xl font-serif font-bold text-primary">Voices of Healing</h2>
+                <h2 data-i18n="testimonials_title" class="text-4xl font-serif font-bold text-primary">Voices of Healing</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -423,12 +438,12 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-stone-600 italic mb-6">"After years of struggling with respiratory issues, the customized herbal course from Al Rehman Dawakhana changed my life. I can finally breathe freely again."</p>
+                    <p data-i18n="testi_1" class="text-stone-600 italic mb-6">"After years of struggling with respiratory issues, the customized herbal course from Al Rehman Dawakhana changed my life. I can finally breathe freely again."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center font-bold text-primary">MA</div>
                         <div class="ml-4">
                             <p class="font-bold text-primary">Muhammad Ali</p>
-                            <p class="text-xs text-stone-400">Verified Patient</p>
+                            <p data-i18n="testi_verified" class="text-xs text-stone-400">Verified Patient</p>
                         </div>
                     </div>
                 </div>
@@ -441,12 +456,12 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-stone-200 italic mb-6">"The Hakeem's deep knowledge and compassionate approach are truly rare. Their medicines are pure and highly effective. Highly recommended for natural care."</p>
+                    <p data-i18n="testi_2" class="text-stone-200 italic mb-6">"The Hakeem's deep knowledge and compassionate approach are truly rare. Their medicines are pure and highly effective. Highly recommended for natural care."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center font-bold text-white">SK</div>
                         <div class="ml-4">
                             <p class="font-bold text-white">Sana Khan</p>
-                            <p class="text-xs text-stone-400">Verified Patient</p>
+                            <p data-i18n="testi_verified" class="text-xs text-stone-400">Verified Patient</p>
                         </div>
                     </div>
                 </div>
@@ -459,12 +474,12 @@
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                         <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                     </div>
-                    <p class="text-stone-600 italic mb-6">"Authentic Unani medicine at its best. The digestive tonics worked wonders for me when modern medicine couldn't provide a lasting solution."</p>
+                    <p data-i18n="testi_3" class="text-stone-600 italic mb-6">"Authentic Unani medicine at its best. The digestive tonics worked wonders for me when modern medicine couldn't provide a lasting solution."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center font-bold text-primary">RZ</div>
                         <div class="ml-4">
                             <p class="font-bold text-primary">Raza Zafar</p>
-                            <p class="text-xs text-stone-400">Verified Patient</p>
+                            <p data-i18n="testi_verified" class="text-xs text-stone-400">Verified Patient</p>
                         </div>
                     </div>
                 </div>
@@ -484,7 +499,7 @@
                         </div>
                         <span class="text-2xl font-serif font-bold text-white">Al Rehman <span class="text-gold">Dawakhana</span></span>
                     </a>
-                    <p class="text-stone-400 leading-relaxed mb-8">
+                    <p data-i18n="footer_branding_desc" class="text-stone-400 leading-relaxed mb-8">
                         Preserving the wisdom of traditional healing to provide modern solutions for your wellbeing. Natural, pure, and effective.
                     </p>
                     <div class="flex space-x-4">
@@ -496,22 +511,22 @@
 
                 <!-- Links -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
+                    <h5 data-i18n="footer_links_title" class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
                     <ul class="space-y-4 text-stone-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Specialties</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Our Products</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Consultation</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">About Hakeem</a></li>
+                        <li><a href="#specialties" data-i18n="nav_specialties" class="hover:text-white transition-colors">Specialties</a></li>
+                        <li><a href="medicines.html" data-i18n="nav_medicines" class="hover:text-white transition-colors">Our Products</a></li>
+                        <li><a href="#contact" data-i18n="nav_consult" class="hover:text-white transition-colors">Consultation</a></li>
+                        <li><a href="#about" data-i18n="nav_about" class="hover:text-white transition-colors">About Hakeem</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
+                    <h5 data-i18n="footer_visit_title" class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
                     <ul class="space-y-6 text-stone-400">
                         <li class="flex items-start">
                             <i data-lucide="map-pin" class="w-5 h-5 text-gold mr-4 shrink-0"></i>
-                            <span>Near Canal Park, Main Road Model Town, Al Rehaman Dawakhana, Sargodha, Punjab, Pakistan</span>
+                            <span data-i18n="footer_address">Near Canal Park, Main Road Model Town, Al Rehaman Dawakhana, Sargodha, Punjab, Pakistan</span>
                         </li>
                         <li class="flex items-center">
                             <i data-lucide="phone" class="w-5 h-5 text-gold mr-4"></i>
@@ -526,10 +541,10 @@
 
                 <!-- Newsletter -->
                 <div>
-                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
-                    <p class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
+                    <h5 data-i18n="footer_newsletter_title" class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
+                    <p data-i18n="footer_newsletter_desc" class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
                     <form class="relative">
-                        <input type="email" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
+                        <input type="email" data-i18n="footer_newsletter_placeholder" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
                         <button class="absolute right-2 top-2 bottom-2 bg-gold hover:bg-gold-dark text-primary px-4 rounded-lg font-bold transition-colors">
                             <i data-lucide="send" class="w-5 h-5"></i>
                         </button>
@@ -538,7 +553,7 @@
             </div>
 
             <div class="pt-8 border-t border-white/5 text-center text-stone-500 text-sm">
-                <p>&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
+                <p data-i18n="footer_rights">&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
             </div>
         </div>
     </footer>
@@ -550,8 +565,8 @@
             <div class="bg-primary p-6 lg:p-8 text-white flex justify-between items-center relative">
                 <div class="absolute inset-0 gold-pattern opacity-20"></div>
                 <div class="relative z-10">
-                    <h3 class="text-2xl lg:text-3xl font-serif font-bold">Secure Order</h3>
-                    <p class="text-white/40 text-[10px] lg:text-sm">Traditional healing delivered to your door</p>
+                    <h3 data-i18n="order_modal_title" class="text-2xl lg:text-3xl font-serif font-bold">Secure Order</h3>
+                    <p data-i18n="order_modal_desc" class="text-white/40 text-[10px] lg:text-sm">Traditional healing delivered to your door</p>
                 </div>
                 <button onclick="closeOrderModal()" class="relative z-10 hover:bg-white/10 p-2 rounded-full transition-colors">
                     <i data-lucide="x" class="w-5 h-5 lg:w-6 h-6"></i>
@@ -563,22 +578,22 @@
                     <!-- Product Info (Read Only) -->
                     <div class="grid grid-cols-2 gap-4 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
                         <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Medicinal Product</label>
+                            <label data-i18n="order_form_prod_name" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Medicinal Product</label>
                             <input type="text" id="modal-product-name" readonly class="w-full bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0">
                         </div>
                         <div class="text-right">
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Unit Price</label>
+                            <label data-i18n="order_form_prod_price" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Unit Price</label>
                             <div id="modal-product-price-display" class="text-primary font-bold text-lg">Rs. 0</div>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Quantity</label>
+                            <label data-i18n="order_form_qty" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Quantity</label>
                             <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Total Amount</label>
+                            <label data-i18n="order_form_total" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Total Amount</label>
                             <div id="modal-total" class="w-full py-4 px-2 text-gold font-bold text-2xl">Rs. 0</div>
                         </div>
                     </div>
@@ -587,28 +602,28 @@
                     <div class="space-y-4 pt-4 border-t border-stone-100">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Name</label>
+                                <label data-i18n="order_form_name" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Name</label>
                                 <input type="text" id="user-name" required placeholder="Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
                             </div>
                             <div class="space-y-2">
-                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Phone (WhatsApp)</label>
+                                <label data-i18n="order_form_phone" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Phone (WhatsApp)</label>
                                 <input type="tel" id="user-phone" required placeholder="0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Delivery Address</label>
+                            <label data-i18n="order_form_address" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Delivery Address</label>
                             <textarea id="user-address" required rows="2" placeholder="House #, Street, City..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
                         </div>
                     </div>
 
                     <!-- Payment Method -->
                     <div class="space-y-4 pt-4 border-t border-stone-100">
-                        <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Payment Method</label>
+                        <label data-i18n="order_form_payment" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Payment Method</label>
                         <div class="grid grid-cols-3 gap-3">
                             <label class="cursor-pointer group">
                                 <input type="radio" name="payment_method" value="COD" checked class="hidden peer" onchange="togglePaymentProof(false)">
                                 <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
-                                    <p class="text-xs font-bold">Cash on Delivery</p>
+                                    <p data-i18n="pay_cod" class="text-xs font-bold">Cash on Delivery</p>
                                 </div>
                             </label>
                             <label class="cursor-pointer group">
@@ -629,14 +644,14 @@
                         <div id="payment-proof-section" class="hidden space-y-4 p-6 bg-amber-50 rounded-3xl border border-amber-100 animate-fade-in">
                             <div class="flex items-start space-x-3">
                                 <i data-lucide="info" class="w-5 h-5 text-gold shrink-0"></i>
-                                <p class="text-xs text-amber-900 leading-relaxed">
+                                <p data-i18n="pay_proof_desc" class="text-xs text-amber-900 leading-relaxed">
                                     Please transfer the total amount to: <br>
                                     <span class="font-bold text-base">0300-6047058 (Hakeem Usman)</span> <br>
                                     And upload the transfer screenshot below.
                                 </p>
                             </div>
                             <div class="space-y-2">
-                                <label class="block text-[10px] uppercase tracking-widest text-amber-600 font-bold ml-1">Payment Screenshot</label>
+                                <label data-i18n="pay_proof_label" class="block text-[10px] uppercase tracking-widest text-amber-600 font-bold ml-1">Payment Screenshot</label>
                                 <input type="file" id="payment-screenshot" accept="image/*" class="w-full text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:bg-emerald-900 cursor-pointer">
                             </div>
                         </div>
@@ -644,9 +659,9 @@
 
                     <button type="submit" id="order-submit-btn" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
                         <i data-lucide="shield-check" class="w-6 h-6"></i>
-                        <span>Confirm Order</span>
+                        <span data-i18n="btn_confirm_order">Confirm Order</span>
                     </button>
-                    <p class="text-center text-stone-400 text-[10px] uppercase tracking-tighter">Your data is encrypted and handled by Hakeem Usman personally</p>
+                    <p data-i18n="order_form_disclaimer" class="text-center text-stone-400 text-[10px] uppercase tracking-tighter">Your data is encrypted and handled by Hakeem Usman personally</p>
                 </form>
             </div>
         </div>
@@ -659,13 +674,13 @@
             <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 shadow-xl shadow-gold/20">
                 <i data-lucide="check" class="text-primary w-8 h-8 lg:w-12 lg:h-12 stroke-[3]"></i>
             </div>
-            <h3 class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <h3 data-i18n="success_modal_title" class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
             <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
-                <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Your Tracking ID</p>
+                <p data-i18n="success_modal_id_tag" class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Your Tracking ID</p>
                 <p id="display-order-number" class="text-xl lg:text-2xl font-bold text-primary tracking-wider"></p>
             </div>
-            <p class="text-stone-500 mb-8 lg:mb-10 leading-relaxed text-xs lg:text-sm">Hakeem Usman will verify your order and contact you shortly. Please save this ID to track your status.</p>
-            <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-colors">
+            <p data-i18n="success_modal_desc" class="text-stone-500 mb-8 lg:mb-10 leading-relaxed text-xs lg:text-sm">Hakeem Usman will verify your order and contact you shortly. Please save this ID to track your status.</p>
+            <button onclick="closeSuccessModal()" data-i18n="success_modal_btn" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-colors">
                 Back to Healing
             </button>
         </div>
@@ -676,19 +691,19 @@
         <div class="absolute inset-0 bg-primary/95" onclick="closeTrackModal()"></div>
         <div class="bg-white rounded-[3rem] p-10 w-full max-w-md relative z-10 shadow-2xl animate-fade-in">
             <div class="flex justify-between items-center mb-8">
-                <h3 class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
-                <button onclick="closeTrackModal()" class="p-2 hover:bg-stone-100 rounded-full">
+                <h3 data-i18n="track_modal_title" class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
+                <button onclick="closeTrackModal()" class="text-stone-400 hover:text-primary transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
-            <div id="track-search-area">
-                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARD-1234) to see the current status of your herbal medicine.</p>
+            <div id="track-search-area" class="space-y-6">
+                <p data-i18n="track_modal_desc" class="text-stone-500 text-sm leading-relaxed">Enter your Order ID (e.g. ARD-1234) to see the current status of your herbal medicine.</p>
                 <div class="space-y-4">
-                    <input type="text" id="track-input" placeholder="ARD-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
+                    <input type="text" id="track-input" data-i18n="track_modal_placeholder" placeholder="ARD-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
                     <button onclick="handleTrackOrder()" id="track-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center space-x-3">
                         <i data-lucide="search" class="w-5 h-5"></i>
-                        <span>Find My Order</span>
+                        <span data-i18n="track_modal_btn">Find My Order</span>
                     </button>
                 </div>
             </div>
@@ -1039,5 +1054,17 @@
     </script>
     <!-- Al-Rehman AI Chat Assistant -->
     <script src="chat-ai.js"></script>
+    <!-- Language Support -->
+    <script src="translations.js"></script>
+    <script>
+        function updateLangUI(btn) {
+            document.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.remove('bg-gold', 'text-primary');
+                b.classList.add('text-white/70');
+            });
+            btn.classList.add('bg-gold', 'text-primary');
+            btn.classList.remove('text-white/70');
+        }
+    </script>
 </body>
 </html>
