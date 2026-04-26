@@ -101,10 +101,22 @@ async function askAlRehmanAI(userMessage) {
             try {
                 const orderTrigger = JSON.parse(orderJson);
                 if (orderTrigger.action === 'CREATE_ORDER' && orderTrigger.order_details) {
-                    const result = await finalizeOrder(orderTrigger.order_details);
-                    aiResponse = aiResponse.replace(orderJson, '').trim();
-                    if (aiResponse) aiResponse += '\n\n';
-                    aiResponse += result;
+                    // CLIENT-SIDE SAFEGUARD: Only finalize if user's last message was a confirmation
+                    const lastUserMsg = userMessage.trim().toLowerCase();
+                    const isConfirmation = ['yes', 'haan', 'ha', 'confirm', 'ok', 'ji', 'ji haan', 'yes please', 'confirmed'].some(w => lastUserMsg.includes(w));
+                    
+                    if (isConfirmation) {
+                        const result = await finalizeOrder(orderTrigger.order_details);
+                        aiResponse = aiResponse.replace(orderJson, '').trim();
+                        if (aiResponse) aiResponse += '\n\n';
+                        aiResponse += result;
+                    } else {
+                        // AI emitted JSON prematurely — strip it and ask for confirmation
+                        aiResponse = aiResponse.replace(orderJson, '').trim();
+                        if (!aiResponse) {
+                            aiResponse = "Please confirm by replying **YES** to finalize your order.";
+                        }
+                    }
                 }
             } catch (e) { console.error("Parsing Error:", e); }
         } else {
@@ -138,23 +150,46 @@ function extractOrderJson(text) {
 
 async function finalizeOrder(details) {
     try {
-        const { data: product } = await supabaseClient
+        // Try multiple search strategies to find the product
+        let product = null;
+        
+        // Strategy 1: Exact ilike match
+        const { data: exactMatch } = await supabaseClient
             .from('products')
-            .select('id, price')
+            .select('id, price, name')
             .ilike('name', `%${details.product_name}%`)
             .limit(1)
             .maybeSingle();
+        
+        if (exactMatch) {
+            product = exactMatch;
+        } else {
+            // Strategy 2: Try individual words from the product name
+            const words = details.product_name.split(/[\s-]+/).filter(w => w.length > 3);
+            for (const word of words) {
+                const { data: wordMatch } = await supabaseClient
+                    .from('products')
+                    .select('id, price, name')
+                    .ilike('name', `%${word}%`)
+                    .limit(1)
+                    .maybeSingle();
+                if (wordMatch) { product = wordMatch; break; }
+            }
+        }
 
-        const totalPrice = (product?.price || 0) * (details.quantity || 1);
+        // Use AI-provided price as fallback, then DB price, then 0
+        const unitPrice = product?.price || details.price || 0;
+        const quantity = details.quantity || 1;
+        const totalPrice = unitPrice * quantity;
         const orderNumber = 'ARD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
         
         const orderData = {
             customer_name: details.customer_name,
             customer_phone: details.customer_phone,
             customer_address: details.customer_address,
-            product_name: details.product_name,
+            product_name: product?.name || details.product_name,
             product_id: product?.id || null,
-            quantity: details.quantity || 1,
+            quantity: quantity,
             total_price: totalPrice,
             payment_method: details.payment_method,
             payment_screenshot_url: currentScreenshotUrl || null,
@@ -166,7 +201,7 @@ async function finalizeOrder(details) {
         if (error) throw error;
 
         currentScreenshotUrl = null;
-        return `✅ **Order Placed!**\n\n📦 Order Number: **${orderNumber}**\n💰 Total: Rs. ${totalPrice}\n\nHakeem Usman will contact you on WhatsApp shortly.`;
+        return `✅ **Order Placed!**\n\n📦 Order Number: **${orderNumber}**\n💰 Total: Rs. ${totalPrice.toLocaleString()}\n\nHakeem Usman will contact you on WhatsApp shortly.`;
     } catch (err) {
         console.error("Order Error:", err);
         return "❌ Problem saving your order. Please WhatsApp Hakeem Usman at +92 300 6047058.";
