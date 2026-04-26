@@ -347,8 +347,11 @@ function createChatUI() {
         `;
         msgArea.appendChild(wrapper);
         msgArea.scrollTop = msgArea.scrollHeight;
-        if (!isUser && (text.toLowerCase().includes('upload') || text.toLowerCase().includes('screenshot') || text.toLowerCase().includes('proof'))) {
+        const lowerText = text.toLowerCase();
+        if (!isUser && (lowerText.includes('upload') || lowerText.includes('screenshot') || lowerText.includes('proof') || lowerText.includes('jazzcash') || lowerText.includes('easypaisa'))) {
             helperArea.classList.remove('hidden');
+        } else if (!isUser && lowerText.includes('cod')) {
+            helperArea.classList.add('hidden');
         } else if (isUser) {
             helperArea.classList.add('hidden');
         }
