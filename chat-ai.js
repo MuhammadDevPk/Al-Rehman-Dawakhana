@@ -248,14 +248,14 @@ function createChatUI() {
             </div>
 
             <div id="chat-helpers" class="hidden px-6 py-3 bg-amber-50 border-t border-amber-100 animate-fade-in">
-                <div class="flex items-center justify-between">
+                <div id="upload-controls" class="flex items-center justify-between">
                     <span class="text-[10px] font-bold text-amber-800 uppercase">Upload Payment Proof</span>
                     <label class="cursor-pointer bg-emerald-700 text-white px-3 py-1 rounded-full text-[10px] hover:bg-emerald-800 transition-colors">
                         Choose File
                         <input type="file" id="screenshot-upload" class="hidden" accept="image/*">
                     </label>
                 </div>
-                <div id="upload-status" class="text-[9px] text-amber-600 mt-1 hidden italic">Uploading...</div>
+                <div id="upload-status" class="text-[9px] text-amber-600 mt-1 hidden italic font-bold"></div>
             </div>
 
             <div id="typing-indicator" class="hidden px-6 py-2">
@@ -293,6 +293,7 @@ function createChatUI() {
     const helperArea = document.getElementById('chat-helpers');
     const screenshotInput = document.getElementById('screenshot-upload');
     const uploadStatus = document.getElementById('upload-status');
+    const uploadControls = document.getElementById('upload-controls');
 
     bubble.addEventListener('click', () => {
         isChatOpen = !isChatOpen;
@@ -328,9 +329,17 @@ function createChatUI() {
             if (error) throw error;
             const { data: publicUrl } = supabaseClient.storage.from('payment-screenshots').getPublicUrl(filePath);
             currentScreenshotUrl = publicUrl.publicUrl;
-            uploadStatus.innerText = "✅ Receipt received! Please confirm your order.";
+            
+            // Hide controls and show clean success message
+            uploadControls.classList.add('hidden');
+            uploadStatus.classList.remove('hidden');
+            uploadStatus.innerHTML = "✅ Receipt received! Please confirm your order.";
+            
             handleSend("I have uploaded the payment screenshot proof.");
-        } catch (err) { uploadStatus.innerText = "❌ Upload failed."; }
+        } catch (err) { 
+            uploadStatus.classList.remove('hidden');
+            uploadStatus.innerText = "❌ Upload failed."; 
+        }
     });
 
     const addMessage = (text, isUser = false) => {
@@ -348,9 +357,14 @@ function createChatUI() {
         msgArea.appendChild(wrapper);
         msgArea.scrollTop = msgArea.scrollHeight;
         const lowerText = text.toLowerCase();
-        if (!isUser && (lowerText.includes('upload') || lowerText.includes('screenshot') || lowerText.includes('proof') || lowerText.includes('jazzcash') || lowerText.includes('easypaisa'))) {
+        if (!isUser && (lowerText.includes('upload') || lowerText.includes('screenshot') || lowerText.includes('proof'))) {
             helperArea.classList.remove('hidden');
-        } else if (!isUser && lowerText.includes('cod')) {
+            // Reset controls visibility if AI is asking again
+            if (!currentScreenshotUrl) {
+                uploadControls.classList.remove('hidden');
+                uploadStatus.classList.add('hidden');
+            }
+        } else if (!isUser && (lowerText.includes('cod') || lowerText.includes('payment method'))) {
             helperArea.classList.add('hidden');
         } else if (isUser) {
             helperArea.classList.add('hidden');
