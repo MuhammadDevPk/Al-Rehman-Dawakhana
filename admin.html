@@ -359,7 +359,7 @@
                     <textarea name="description" rows="3" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="Describe the medicine's benefits..."></textarea>
                 </div>
 
-                <button type="submit" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-all flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
+                <button type="submit" id="submit-product-btn" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-all flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
                     <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     <span>Register Product</span>
                 </button>
@@ -515,9 +515,16 @@
 
                 document.getElementById('display-current-price').textContent = `Rs. ${product.price.toLocaleString()}`;
                 document.getElementById('input-new-price').value = product.price;
-
-                renderProducts();
+            } else {
+                // Clear the UI if no product is found/selected
+                document.getElementById('active-edit-img').src = "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop";
+                document.getElementById('active-edit-title').textContent = "Select a Product";
+                document.getElementById('active-edit-desc').textContent = "Select a product from the inventory to manage its pricing and details.";
+                document.getElementById('active-edit-components').innerHTML = '';
+                document.getElementById('display-current-price').textContent = "Rs. 0";
+                document.getElementById('input-new-price').value = "";
             }
+            renderProducts();
         }
 
         async function updatePrice() {
@@ -529,25 +536,47 @@
                 return;
             }
 
-            const { error } = await supabaseClient
+            const btn = document.getElementById('btn-update-price');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Updating...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const { data, error } = await supabaseClient
                 .from('products')
                 .update({ price: newPrice })
-                .eq('id', selectedProductId);
+                .eq('id', selectedProductId)
+                .select();
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
 
             if (error) {
                 showToast("Failed to update price", "error");
                 return;
             }
 
-            await fetchProducts();
+            // Update local state instead of re-fetching everything
+            const index = products.findIndex(p => p.id === selectedProductId);
+            if (index !== -1) {
+                products[index] = data[0];
+            }
+            
+            renderProducts();
             selectProduct(selectedProductId);
             showToast("Price Updated Successfully");
         }
 
         async function handleProductSubmit(e) {
             e.preventDefault();
+            const btn = document.getElementById('submit-product-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Registering...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
             const formData = new FormData(e.target);
-            
             const newProduct = {
                 name: formData.get('name'),
                 category: formData.get('category'),
@@ -559,16 +588,24 @@
                 components: ["Natural Herbs", "Organic Extracts"]
             };
 
-            const { error } = await supabaseClient
+            const { data, error } = await supabaseClient
                 .from('products')
-                .insert([newProduct]);
+                .insert([newProduct])
+                .select();
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
 
             if (error) {
                 showToast("Failed to add product", "error");
                 return;
             }
 
-            await fetchProducts();
+            // Add to local state and re-render
+            products.unshift(data[0]);
+            renderProducts();
+            
             toggleModal('add-product-modal', false);
             e.target.reset();
             showToast("New Product Registered");
@@ -587,8 +624,14 @@
                 return;
             }
 
-            if (selectedProductId === id) selectedProductId = null;
-            await fetchProducts();
+            // Update local state
+            products = products.filter(p => p.id !== id);
+            if (selectedProductId === id) {
+                selectedProductId = products.length > 0 ? products[0].id : null;
+                if (selectedProductId) selectProduct(selectedProductId);
+            }
+            
+            renderProducts();
             showToast("Product Deleted");
         }
 
