@@ -124,6 +124,7 @@
                 <a href="#specialties" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Specialties</a>
                 <a href="#about" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">About Hakeem</a>
                 <a href="#products" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Products</a>
+                <a href="javascript:void(0)" onclick="openTrackModal()" class="text-white/90 hover:text-gold gold-underline font-medium transition-colors">Track Order</a>
                 <a href="#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Consult Now
                 </a>
@@ -544,11 +545,67 @@
             <div class="w-24 h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce shadow-xl shadow-gold/20">
                 <i data-lucide="check" class="text-primary w-12 h-12 stroke-[3]"></i>
             </div>
-            <h3 class="text-3xl font-serif font-bold text-primary mb-4">Order Received</h3>
-            <p class="text-stone-500 mb-10 leading-relaxed">Your healing journey has begun. Hakeem Rehman will verify your order and contact you shortly.</p>
+            <h3 class="text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
+                <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Your Tracking ID</p>
+                <p id="display-order-number" class="text-2xl font-bold text-primary tracking-wider"></p>
+            </div>
+            <p class="text-stone-500 mb-10 leading-relaxed text-sm">Please save this ID. You can use it to track your order status anytime from our website.</p>
             <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-colors">
                 Back to Healing
             </button>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="track-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/80 backdrop-blur-md" onclick="closeTrackModal()"></div>
+        <div class="bg-white rounded-[3rem] p-10 w-full max-w-md relative z-10 shadow-2xl animate-fade-in">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
+                <button onclick="closeTrackModal()" class="p-2 hover:bg-stone-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="track-search-area">
+                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARB-1234) to see the current status of your herbal medicine.</p>
+                <div class="space-y-4">
+                    <input type="text" id="track-input" placeholder="ARB-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
+                    <button onclick="handleTrackOrder()" id="track-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center space-x-3">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                        <span>Find My Order</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tracking Result -->
+            <div id="track-result" class="hidden space-y-8 animate-fade-in">
+                <div class="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Status</p>
+                            <h4 id="track-status-text" class="text-3xl font-serif font-bold text-primary">PENDING</h4>
+                        </div>
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                            <i id="track-status-icon" data-lucide="clock" class="w-6 h-6 text-gold"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2 border-t border-emerald-100 pt-4">
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-stone-400">Customer</span>
+                            <span id="track-customer" class="text-primary"></span>
+                        </div>
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-stone-400">Product</span>
+                            <span id="track-product" class="text-primary"></span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="resetTrackModal()" class="w-full py-4 text-stone-400 hover:text-primary font-bold transition-colors">
+                    Search Another Order
+                </button>
+            </div>
         </div>
     </div>
 
@@ -749,9 +806,11 @@
             }
 
             // 2. Save Order to Database
+            const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
             const { error: orderError } = await supabaseClient
                 .from('orders')
                 .insert([{
+                    order_number: orderNumber,
                     customer_name: name,
                     customer_phone: phone,
                     customer_address: address,
@@ -773,6 +832,7 @@
             }
 
             // 3. Success!
+            document.getElementById('display-order-number').textContent = orderNumber;
             closeOrderModal();
             document.getElementById('success-modal').classList.remove('hidden');
             e.target.reset();
@@ -783,6 +843,67 @@
 
         function closeSuccessModal() {
             document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // --- Tracking Logic ---
+        function openTrackModal() {
+            document.getElementById('track-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeTrackModal() {
+            document.getElementById('track-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            resetTrackModal();
+        }
+
+        async function handleTrackOrder() {
+            const trackId = document.getElementById('track-input').value.trim().toUpperCase();
+            if (!trackId) return;
+
+            const btn = document.getElementById('track-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Searching...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .eq('order_number', trackId)
+                .single();
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+
+            if (error || !data) {
+                alert("Order not found. Please check your Tracking ID.");
+                return;
+            }
+
+            // Show Result
+            document.getElementById('track-search-area').classList.add('hidden');
+            document.getElementById('track-result').classList.remove('hidden');
+            
+            document.getElementById('track-status-text').textContent = data.order_status.toUpperCase();
+            document.getElementById('track-customer').textContent = data.customer_name;
+            document.getElementById('track-product').textContent = data.product_name;
+
+            const iconEl = document.getElementById('track-status-icon');
+            if (data.order_status === 'Shipped') iconEl.setAttribute('data-lucide', 'truck');
+            else if (data.order_status === 'Delivered') iconEl.setAttribute('data-lucide', 'check-circle');
+            else if (data.order_status === 'Cancelled') iconEl.setAttribute('data-lucide', 'x-circle');
+            else iconEl.setAttribute('data-lucide', 'clock');
+            
+            lucide.createIcons();
+        }
+
+        function resetTrackModal() {
+            document.getElementById('track-search-area').classList.remove('hidden');
+            document.getElementById('track-result').classList.add('hidden');
+            document.getElementById('track-input').value = '';
         }
 
         // Reveal on Scroll
