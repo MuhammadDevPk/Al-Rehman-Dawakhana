@@ -102,9 +102,18 @@
             </div>
 
             <!-- Mobile Toggle -->
-            <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2" onclick="toggleMenu()">
                 <i data-lucide="menu" id="menu-icon" class="w-8 h-8"></i>
             </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
+            <a href="index.html" class="text-white text-xl font-serif">Home</a>
+            <a href="index.html#about" class="text-white text-xl font-serif">About Hakeem</a>
+            <a href="medicines.html" class="text-white text-xl font-serif">Medicines</a>
+            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" class="text-white text-xl font-serif">Track Order</a>
+            <a href="index.html#contact" onclick="toggleMenu()" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
         </div>
     </nav>
 
@@ -195,7 +204,7 @@
                         </li>
                         <li class="flex items-center">
                             <i data-lucide="phone" class="w-5 h-5 text-gold mr-4"></i>
-                            <span>+92 300 6047058</span>
+                            <a href="https://wa.me/923006047058" target="_blank" class="hover:text-gold transition-colors">+92 03006047058</a>
                         </li>
                         <li class="flex items-center">
                             <i data-lucide="mail" class="w-5 h-5 text-gold mr-4"></i>
@@ -372,6 +381,28 @@
             fetchProducts();
             lucide.createIcons();
         });
+
+        // Mobile Menu Logic
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            const isHidden = menu.classList.contains('hidden');
+            
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                setTimeout(() => {
+                    menu.classList.remove('-translate-y-10', 'opacity-0');
+                }, 10);
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                menu.classList.add('-translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    menu.classList.add('hidden');
+                }, 300);
+                icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
 
         async function fetchProducts() {
             const { data, error } = await supabaseClient

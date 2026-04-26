@@ -136,10 +136,11 @@
         </div>
 
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-xl border-t border-white/10 py-8 px-6 space-y-6 flex flex-col items-center transform -translate-y-10 opacity-0 transition-all duration-300">
-            <a href="#specialties" class="text-white text-xl font-serif">Specialties</a>
-            <a href="#about" class="text-white text-xl font-serif">About Hakeem</a>
+            <a href="#specialties" class="text-white text-xl font-serif" onclick="toggleMenu()">Specialties</a>
+            <a href="#about" class="text-white text-xl font-serif" onclick="toggleMenu()">About Hakeem</a>
             <a href="medicines.html" class="text-white text-xl font-serif">Medicines</a>
-            <a href="#contact" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
+            <a href="javascript:void(0)" onclick="openTrackModal(); toggleMenu()" class="text-white text-xl font-serif">Track Order</a>
+            <a href="#contact" onclick="toggleMenu()" class="w-full text-center px-6 py-4 bg-gold text-primary font-bold rounded-xl">Book Consultation</a>
         </div>
     </nav>
 
@@ -399,7 +400,7 @@
                         </li>
                         <li class="flex items-center">
                             <i data-lucide="phone" class="w-5 h-5 text-gold mr-4"></i>
-                            <span>+92 03006047058</span>
+                            <a href="https://wa.me/923006047058" target="_blank" class="hover:text-gold transition-colors">+92 03006047058</a>
                         </li>
                         <li class="flex items-center">
                             <i data-lucide="mail" class="w-5 h-5 text-gold mr-4"></i>
