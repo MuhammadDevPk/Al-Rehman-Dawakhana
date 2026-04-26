@@ -271,71 +271,93 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+                <!-- Product 1: Safoof-e-Zayab -->
+                <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop" alt="Safoof-e-Zayab" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. 2,450
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Safoof-e-Zayab</h4>
+                        <p class="text-stone-500 text-sm mb-6 font-sans">Natural weight management: Effective fat burn and weight reduction (Up to 10kg/month).</p>
+                        <button onclick="openOrderModal('Safoof-e-Zayab', 2450)" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Order via WhatsApp</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2: Kulyani Shifa -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.1s;">
                     <div class="h-64 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500&auto=format&fit=crop" alt="Majoon-e-Hayat" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <img src="https://images.unsplash.com/photo-1628771065518-0d82f1110503?q=80&w=500&auto=format&fit=crop" alt="Kulyani Shifa" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
-                            Rs. 1,250
+                            Rs. 1,950
                         </div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Majoon-e-Hayat</h4>
-                        <p class="text-stone-500 text-sm mb-6">A powerful restorative tonic for overall vitality and neurological strength.</p>
-                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
-                            View Details
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Kulyani Shifa</h4>
+                        <p class="text-stone-500 text-sm mb-6 font-sans">Kidney Care: Rapid kidney stone clearance and comprehensive renal health support.</p>
+                        <button onclick="openOrderModal('Kulyani Shifa', 1950)" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Order via WhatsApp</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Product 2 -->
+                <!-- Product 3: Diabe-Cure -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.2s;">
                     <div class="h-64 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1547859292-887f86b5d720?q=80&w=500&auto=format&fit=crop" alt="Saffron Elixir" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <img src="https://images.unsplash.com/photo-1547859292-887f86b5d720?q=80&w=500&auto=format&fit=crop" alt="Diabe-Cure" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
-                            Rs. 3,500
+                            Rs. 1,650
                         </div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Saffron Elixir</h4>
-                        <p class="text-stone-500 text-sm mb-6">Premium blend of pure saffron and honey for radiant health and immunity.</p>
-                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
-                            View Details
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Diabe-Cure</h4>
+                        <p class="text-stone-500 text-sm mb-6 font-sans">Sugar Balance: Natural regulation of blood sugar levels and improved insulin sensitivity.</p>
+                        <button onclick="openOrderModal('Diabe-Cure', 1650)" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Order via WhatsApp</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Product 3 -->
+                <!-- Product 4: Hab-e-Fischar -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.3s;">
                     <div class="h-64 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1628771065518-0d82f1110503?q=80&w=500&auto=format&fit=crop" alt="Herbal Digestion" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=500&auto=format&fit=crop" alt="Hab-e-Fischar" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
-                            Rs. 850
+                            Rs. 1,450
                         </div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Pachak Shifa</h4>
-                        <p class="text-stone-500 text-sm mb-6">Traditional digestive powder for instant relief from acidity and bloating.</p>
-                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
-                            View Details
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Hab-e-Fischar</h4>
+                        <p class="text-stone-500 text-sm mb-6 font-sans">BP Support: Maintains healthy blood pressure and cardiovascular peace naturally.</p>
+                        <button onclick="openOrderModal('Hab-e-Fischar', 1450)" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Order via WhatsApp</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Product 4 -->
+                <!-- Product 5: Majoon-e-Khas -->
                 <div class="bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover reveal-on-scroll" style="transition-delay: 0.4s;">
                     <div class="h-64 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop" alt="Natural Calmer" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" alt="Majoon-e-Khas" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
                         <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-primary font-bold text-sm shadow-sm">
-                            Rs. 1,100
+                            Rs. 3,850
                         </div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Aram-e-Dil</h4>
-                        <p class="text-stone-500 text-sm mb-6">A soothing herbal infusion to calm the nerves and promote restful sleep.</p>
-                        <button class="w-full py-3 border-2 border-primary/10 hover:border-primary hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300">
-                            View Details
+                        <h4 class="text-xl font-serif font-bold text-primary mb-2">Majoon-e-Khas</h4>
+                        <p class="text-stone-500 text-sm mb-6 font-sans">Vitality Tonic: Complete herbal solution for men's health, energy, and overall vigor.</p>
+                        <button onclick="openOrderModal('Majoon-e-Khas', 3850)" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Order via WhatsApp</span>
                         </button>
                     </div>
                 </div>
@@ -480,6 +502,61 @@
         </div>
     </footer>
 
+    <!-- Order Modal -->
+    <div id="order-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeOrderModal()"></div>
+        <div class="bg-white rounded-3xl w-full max-w-lg relative z-10 overflow-hidden shadow-2xl animate-fade-in-up">
+            <div class="bg-primary p-6 text-white flex justify-between items-center">
+                <h3 class="text-2xl font-serif font-bold">Complete Your Order</h3>
+                <button onclick="closeOrderModal()" class="hover:bg-white/10 p-2 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-8">
+                <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Product</label>
+                            <input type="text" id="modal-product-name" readonly class="w-full bg-stone-50 border-none rounded-xl py-3 px-4 text-primary font-bold">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Price (Rs.)</label>
+                            <input type="text" id="modal-product-price" readonly class="w-full bg-stone-50 border-none rounded-xl py-3 px-4 text-primary font-bold">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Quantity</label>
+                            <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Total Amount</label>
+                            <div id="modal-total" class="w-full py-3 px-4 text-gold font-bold text-xl">Rs. 0</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-4 border-t border-stone-100">
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Your Full Name</label>
+                            <input type="text" id="user-name" required placeholder="e.g. Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 focus:ring-2 focus:ring-gold outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">WhatsApp / Phone Number</label>
+                            <input type="tel" id="user-phone" required placeholder="e.g. 0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 focus:ring-2 focus:ring-gold outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-200 transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="message-circle" class="w-6 h-6"></i>
+                        <span>Confirm via WhatsApp</span>
+                    </button>
+                    <p class="text-center text-stone-400 text-xs">Direct chat with Hakeem at Al Rehman Dawakhana</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
         // Initialize Lucide Icons
@@ -521,24 +598,61 @@
             lucide.createIcons();
         });
 
-        // Close mobile menu on click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                isMenuOpen = false;
-                mobileMenu.classList.add('-translate-y-10', 'opacity-0');
-                setTimeout(() => {
-                    mobileMenu.classList.add('hidden');
-                }, 300);
-                menuIcon.setAttribute('data-lucide', 'menu');
-                lucide.createIcons();
-            });
-        });
+        // Order Modal Logic
+        const orderModal = document.getElementById('order-modal');
+        const modalProductName = document.getElementById('modal-product-name');
+        const modalProductPrice = document.getElementById('modal-product-price');
+        const modalQuantity = document.getElementById('modal-quantity');
+        const modalTotal = document.getElementById('modal-total');
+        let currentPrice = 0;
+
+        function openOrderModal(name, price) {
+            currentPrice = price;
+            modalProductName.value = name;
+            modalProductPrice.value = price;
+            modalQuantity.value = 1;
+            updateTotal();
+            orderModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeOrderModal() {
+            orderModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateTotal() {
+            const total = currentPrice * modalQuantity.value;
+            modalTotal.innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        modalQuantity.addEventListener('input', updateTotal);
+
+        function handleOrderSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('user-name').value;
+            const phone = document.getElementById('user-phone').value;
+            const productName = modalProductName.value;
+            const quantity = modalQuantity.value;
+            const total = currentPrice * quantity;
+
+            const message = `*New Order from Al Rehman Dawakhana Website*\n\n` +
+                          `*Product:* ${productName}\n` +
+                          `*Quantity:* ${quantity}\n` +
+                          `*Total Price:* Rs. ${total.toLocaleString()}\n\n` +
+                          `*Customer Details:*\n` +
+                          `*Name:* ${name}\n` +
+                          `*Phone:* ${phone}\n\n` +
+                          `Please confirm my order. Thank you!`;
+
+            const whatsappUrl = `https://wa.me/923006047058?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            closeOrderModal();
+        }
 
         // Reveal on Scroll
-        const observerOptions = {
-            threshold: 0.1
-        };
-
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -547,9 +661,7 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
