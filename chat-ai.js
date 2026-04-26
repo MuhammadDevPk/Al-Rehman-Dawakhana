@@ -1,16 +1,81 @@
 /**
  * Al-Rehman Dawakhana AI Chat Assistant
- * Auto-Buy Version: Handles multi-turn orders and secure processing.
+ * Optimized Version: Semantic Caching + Rate Limiting + Context Slimming
  */
 
 let chatHistory = [];
-let pendingOrderData = null;
 let currentScreenshotUrl = null;
 
-// --- AI Logic (Calling Edge Function) ---
-async function askAlRehmanAI(userMessage) {
+// --- 1. RATE LIMITING LOGIC ---
+function checkRateLimit() {
+    const now = Date.now();
+    let msgData = JSON.parse(sessionStorage.getItem('ai_msg_data') || '{"count": 0, "startTime": 0}');
+    
+    // Reset if 2 minutes have passed
+    if (now - msgData.startTime > 120000) {
+        msgData = { count: 1, startTime: now };
+    } else {
+        msgData.count++;
+    }
+    
+    sessionStorage.setItem('ai_msg_data', JSON.stringify(msgData));
+    return msgData.count <= 5;
+}
+
+// --- 2. SEMANTIC CACHING LOGIC ---
+async function checkCache(query) {
     try {
-        // 1. Fetch products (minimal context)
+        const cleanQuery = query.toLowerCase().trim();
+        const { data, error } = await supabaseClient
+            .from('ai_cache')
+            .select('ai_response')
+            .eq('user_query', cleanQuery)
+            .maybeSingle();
+
+        if (data && !error) {
+            console.log("🚀 Cache Hit: Using saved response.");
+            return data.ai_response;
+        }
+    } catch (e) { console.error("Cache Check Failed:", e); }
+    return null;
+}
+
+async function saveToCache(query, response) {
+    try {
+        // Don't cache order-related responses (they contain JSON or purchase flow text)
+        if (response.includes('{') || response.includes('CREATE_ORDER')) return;
+        if (response.includes('Order Number') || response.includes('order')) return;
+        // Don't cache very short queries (likely transactional: "yes", "cod", etc.)
+        if (query.trim().length < 10) return;
+        await supabaseClient
+            .from('ai_cache')
+            .upsert({ user_query: query.toLowerCase().trim(), ai_response: response });
+    } catch (e) { console.error("Cache Save Failed:", e); }
+}
+
+// --- AI Logic ---
+async function askAlRehmanAI(userMessage) {
+    // A. Rate Limit Check
+    if (!checkRateLimit()) {
+        return "⚠️ Hakeem Usman's assistant needs a moment to prepare your answers. Please wait 60 seconds before asking more questions.";
+    }
+
+    // B. Cache Check — skip during active order conversations
+    const isOrderFlow = chatHistory.some(m => 
+        m.content.includes('CREATE_ORDER') || 
+        m.content.includes('Full Name') || 
+        m.content.includes('Payment Method') ||
+        m.content.includes('Order Placed')
+    );
+    const isShortInput = userMessage.trim().length < 10;
+    
+    if (!isOrderFlow && !isShortInput) {
+        const cachedResponse = await checkCache(userMessage);
+        if (cachedResponse) return cachedResponse;
+    }
+
+    try {
+        // C. Fetch products context
         const { data: products } = await supabaseClient
             .from('products')
             .select('name, description, price');
@@ -19,78 +84,60 @@ async function askAlRehmanAI(userMessage) {
             `- ${p.name}: Rs. ${p.price}.`
         ).join('\n') : "No products available.";
 
-        // 2. Prepare History
         chatHistory.push({ role: 'user', content: userMessage });
 
-        // 3. Call the Supabase Edge Function
+        // D. Call Edge Function
         const { data, error } = await supabaseClient.functions.invoke('al-rehman-ai', {
-            body: { 
-                messages: chatHistory, 
-                productContext: productContext 
-            }
+            body: { messages: chatHistory, productContext: productContext }
         });
 
         if (error) throw error;
 
         let aiResponse = data.text;
         
-        // 4. Extract nested JSON using brace-counting (regex can't handle nested {})
+        // E. Extract nested JSON
         const orderJson = extractOrderJson(aiResponse);
-        
         if (orderJson) {
             try {
                 const orderTrigger = JSON.parse(orderJson);
-                
                 if (orderTrigger.action === 'CREATE_ORDER' && orderTrigger.order_details) {
-                    console.log('ORDER DETECTED:', orderTrigger.order_details);
                     const result = await finalizeOrder(orderTrigger.order_details);
-                    // Remove the JSON from the displayed message, keep only the human text + result
                     aiResponse = aiResponse.replace(orderJson, '').trim();
                     if (aiResponse) aiResponse += '\n\n';
                     aiResponse += result;
                 }
-            } catch (e) {
-                console.error("JSON Parsing Error:", e, "Raw:", orderJson);
-            }
+            } catch (e) { console.error("Parsing Error:", e); }
+        } else {
+            // F. Save to Cache only if it's a regular message
+            saveToCache(userMessage, aiResponse);
         }
 
         chatHistory.push({ role: 'assistant', content: aiResponse });
         return aiResponse;
 
     } catch (criticalError) {
-        console.error('AI: Error:', criticalError);
-        return "Assalam-o-Alaikum. I am having trouble. Please contact Hakeem Usman on WhatsApp (+92 300 6047058).";
+        console.error('AI Error:', criticalError);
+        return "Assalam-o-Alaikum. Hakeem Usman is busy. Please WhatsApp +92 300 6047058.";
     }
 }
 
-// --- Extract nested JSON from AI response (handles nested braces properly) ---
 function extractOrderJson(text) {
     const marker = '"CREATE_ORDER"';
     const markerIndex = text.indexOf(marker);
     if (markerIndex === -1) return null;
-
-    // Walk backwards to find the opening { of this JSON object
     let start = text.lastIndexOf('{', markerIndex);
     if (start === -1) return null;
-
-    // Walk forward counting braces to find the matching closing }
     let depth = 0;
     for (let i = start; i < text.length; i++) {
         if (text[i] === '{') depth++;
         if (text[i] === '}') depth--;
-        if (depth === 0) {
-            return text.substring(start, i + 1);
-        }
+        if (depth === 0) return text.substring(start, i + 1);
     }
     return null;
 }
 
-// --- Order Finalization ---
 async function finalizeOrder(details) {
     try {
-        console.log('Finalizing order with details:', details);
-
-        // Find product price from name
         const { data: product } = await supabaseClient
             .from('products')
             .select('id, price')
@@ -101,43 +148,32 @@ async function finalizeOrder(details) {
         const totalPrice = (product?.price || 0) * (details.quantity || 1);
         const orderNumber = 'ARD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
         
-        // Column names MUST match your actual Supabase orders table
         const orderData = {
             customer_name: details.customer_name,
             customer_phone: details.customer_phone,
-            customer_address: details.delivery_address,
+            customer_address: details.customer_address,
             product_name: details.product_name,
             product_id: product?.id || null,
             quantity: details.quantity || 1,
-            total_price: totalPrice,               // your DB uses total_price, not total_amount
+            total_price: totalPrice,
             payment_method: details.payment_method,
             payment_screenshot_url: currentScreenshotUrl || null,
-            order_status: 'Pending',                // your DB uses order_status, not status
-            order_number: orderNumber               // your DB has order_number column
+            order_status: 'Pending',
+            order_number: orderNumber
         };
 
-        console.log('Inserting order:', orderData);
+        const { error } = await supabaseClient.from('orders').insert([orderData]);
+        if (error) throw error;
 
-        const { error } = await supabaseClient
-            .from('orders')
-            .insert([orderData]);
-
-        if (error) {
-            console.error("Supabase Insert Error:", JSON.stringify(error));
-            throw error;
-        }
-
-        // Clear state
         currentScreenshotUrl = null;
-        
-        return `✅ **Order Placed Successfully!**\n\n📦 Order Number: **${orderNumber}**\n💰 Total: Rs. ${totalPrice}\n\nHakeem Usman will contact you on WhatsApp shortly. JazakAllah for choosing Al-Rehman Dawakhana! 🌿`;
+        return `✅ **Order Placed!**\n\n📦 Order Number: **${orderNumber}**\n💰 Total: Rs. ${totalPrice}\n\nHakeem Usman will contact you on WhatsApp shortly.`;
     } catch (err) {
-        console.error("Order Creation Failed:", err);
-        return "❌ I'm sorry, there was a problem saving your order. Please WhatsApp Hakeem Usman at +92 300 6047058 directly.";
+        console.error("Order Error:", err);
+        return "❌ Problem saving your order. Please WhatsApp Hakeem Usman at +92 300 6047058.";
     }
 }
 
-// --- UI Components & State ---
+// --- UI Components ---
 let isChatOpen = false;
 
 function createChatUI() {
@@ -148,14 +184,11 @@ function createChatUI() {
     widget.className = 'fixed bottom-6 right-6 z-[9999] font-sans';
     
     widget.innerHTML = `
-        <!-- Chat Bubble -->
         <button id="chat-bubble" class="group relative bg-emerald-900 text-gold p-4 rounded-full shadow-2xl border-2 border-gold/30 hover:scale-110 hover:rotate-6 transition-all duration-300 flex items-center justify-center">
             <i data-lucide="message-square-plus" id="bubble-icon" class="w-8 h-8"></i>
         </button>
 
-        <!-- Chat Window -->
         <div id="chat-window" class="hidden fixed md:absolute bottom-[90px] md:bottom-24 right-4 md:right-0 w-[calc(100vw-2rem)] md:w-[400px] max-h-[calc(100vh-120px)] md:max-h-[600px] h-[70vh] md:h-[600px] bg-stone-50 rounded-3xl shadow-2xl flex flex-col border border-emerald-900/10 overflow-hidden transform origin-bottom-right transition-all duration-300 scale-95 opacity-0 shadow-emerald-900/20">
-            <!-- Header -->
             <div class="bg-emerald-900 p-6 flex justify-between items-center relative overflow-hidden">
                 <div class="flex items-center space-x-3 relative z-10">
                     <div class="w-10 h-10 bg-gold rounded-full flex items-center justify-center shadow-lg">
@@ -171,16 +204,14 @@ function createChatUI() {
                 </button>
             </div>
 
-            <!-- Messages Area -->
             <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4 custom-scrollbar bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]">
                 <div class="flex flex-col items-start">
                     <div class="max-w-[85%] bg-emerald-100 text-emerald-900 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm border border-emerald-200/50">
-                        Assalam-o-Alaikum! I am the AI assistant of Al-Rehman Dawakhana. I can help you find products and even place your order. How can I help?
+                        Assalam-o-Alaikum! I am the AI assistant of Al-Rehman Dawakhana. How can I help?
                     </div>
                 </div>
             </div>
 
-            <!-- Helper Area (Screenshot Upload) -->
             <div id="chat-helpers" class="hidden px-6 py-3 bg-amber-50 border-t border-amber-100 animate-fade-in">
                 <div class="flex items-center justify-between">
                     <span class="text-[10px] font-bold text-amber-800 uppercase">Upload Payment Proof</span>
@@ -192,7 +223,6 @@ function createChatUI() {
                 <div id="upload-status" class="text-[9px] text-amber-600 mt-1 hidden italic">Uploading...</div>
             </div>
 
-            <!-- Typing Indicator -->
             <div id="typing-indicator" class="hidden px-6 py-2">
                 <div class="flex items-center space-x-2 text-emerald-800/60 italic text-xs">
                     <div class="flex space-x-1">
@@ -204,7 +234,6 @@ function createChatUI() {
                 </div>
             </div>
 
-            <!-- Input Area -->
             <div class="p-4 bg-white border-t border-emerald-900/5">
                 <div class="flex items-center bg-stone-100 rounded-2xl px-4 py-2 border border-stone-200 focus-within:border-gold transition-colors">
                     <input type="text" id="chat-input" placeholder="Ask about health..." class="flex-1 bg-transparent border-none focus:ring-0 text-sm py-2 text-stone-800" autocomplete="off">
@@ -230,65 +259,49 @@ function createChatUI() {
     const screenshotInput = document.getElementById('screenshot-upload');
     const uploadStatus = document.getElementById('upload-status');
 
-    const toggleChat = () => {
+    bubble.addEventListener('click', () => {
         isChatOpen = !isChatOpen;
         if (isChatOpen) {
             windowEl.classList.remove('hidden');
-            setTimeout(() => {
-                windowEl.classList.add('scale-100', 'opacity-100');
-                windowEl.classList.remove('scale-95', 'opacity-0');
-            }, 10);
+            setTimeout(() => { windowEl.classList.add('scale-100', 'opacity-100'); windowEl.classList.remove('scale-95', 'opacity-0'); }, 10);
         } else {
             windowEl.classList.remove('scale-100', 'opacity-100');
             windowEl.classList.add('scale-95', 'opacity-0');
             setTimeout(() => windowEl.classList.add('hidden'), 300);
         }
-    };
+    });
 
-    bubble.addEventListener('click', toggleChat);
-    closeBtn.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', () => {
+        isChatOpen = false;
+        windowEl.classList.remove('scale-100', 'opacity-100');
+        windowEl.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => windowEl.classList.add('hidden'), 300);
+    });
 
     input.addEventListener('input', () => sendBtn.disabled = !input.value.trim());
 
-    // Screenshot Upload Handler
     screenshotInput.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
         uploadStatus.classList.remove('hidden');
         uploadStatus.innerText = "Processing receipt...";
-
         try {
             const fileExt = file.name.split('.').pop();
             const fileName = `chat-${Date.now()}.${fileExt}`;
             const filePath = `proofs/${fileName}`;
-
-            const { data, error } = await supabaseClient.storage
-                .from('payment-screenshots')
-                .upload(filePath, file);
-
+            const { data, error } = await supabaseClient.storage.from('payment-screenshots').upload(filePath, file);
             if (error) throw error;
-
-            const { data: publicUrl } = supabaseClient.storage
-                .from('payment-screenshots')
-                .getPublicUrl(filePath);
-
+            const { data: publicUrl } = supabaseClient.storage.from('payment-screenshots').getPublicUrl(filePath);
             currentScreenshotUrl = publicUrl.publicUrl;
             uploadStatus.innerText = "✅ Receipt received! Please confirm your order.";
-            
-            // Inform the AI that the screenshot is uploaded
             handleSend("I have uploaded the payment screenshot proof.");
-        } catch (err) {
-            console.error("Upload failed:", err);
-            uploadStatus.innerText = "❌ Upload failed. Please try again.";
-        }
+        } catch (err) { uploadStatus.innerText = "❌ Upload failed."; }
     });
 
     const addMessage = (text, isUser = false) => {
         const wrapper = document.createElement('div');
         wrapper.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'}`;
         const bubbleClass = isUser ? 'bg-gold text-emerald-950 rounded-tr-none' : 'bg-emerald-100 text-emerald-900 rounded-tl-none border border-emerald-200/50';
-        
         wrapper.innerHTML = `
             <div class="max-w-[85%] ${bubbleClass} p-4 rounded-2xl shadow-sm text-sm">
                 ${text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')}
@@ -299,8 +312,6 @@ function createChatUI() {
         `;
         msgArea.appendChild(wrapper);
         msgArea.scrollTop = msgArea.scrollHeight;
-
-        // Automatically show/hide helper area based on AI keywords
         if (!isUser && (text.toLowerCase().includes('upload') || text.toLowerCase().includes('screenshot') || text.toLowerCase().includes('proof'))) {
             helperArea.classList.remove('hidden');
         } else if (isUser) {
@@ -311,29 +322,20 @@ function createChatUI() {
     const handleSend = async (forcedText = null) => {
         const text = forcedText || input.value.trim();
         if (!text) return;
-
         if (!forcedText) input.value = '';
         sendBtn.disabled = true;
         addMessage(text, true);
-
         typing.classList.remove('hidden');
         msgArea.scrollTop = msgArea.scrollHeight;
-
         const aiResponse = await askAlRehmanAI(text);
-        
         typing.classList.add('hidden');
         addMessage(aiResponse, false);
+        sendBtn.disabled = !input.value.trim();
     };
 
     sendBtn.addEventListener('click', () => handleSend());
-    input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSend();
-    });
+    input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 }
 
 // Initialize
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createChatUI);
-} else {
-    createChatUI();
-}
+if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', createChatUI); } else { createChatUI(); }
