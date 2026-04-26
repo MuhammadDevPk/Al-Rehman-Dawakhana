@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Medicines | Al Rehman Dawakhana</title>
+    <meta name="description" content="Explore our full range of traditional herbal medicines and organic remedies. Pure, safe, and effective healing.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#064e3b', // emerald-950
+                        cream: '#fafaf9',   // stone-50
+                        gold: '#f59e0b',    // amber-500
+                        'gold-dark': '#d97706',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        .glass-nav {
+            background: rgba(6, 78, 59, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .gold-pattern {
+            background-image: radial-gradient(#f59e0b 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #064e3b;
+            border-radius: 10px;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-cream font-sans text-stone-800 antialiased overflow-x-hidden">
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-4 glass-nav shadow-lg">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="p-2 bg-gold rounded-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                </div>
+                <span class="text-xl lg:text-2xl font-serif font-bold text-white tracking-wide">Al Rehman <span class="text-gold">Dawakhana</span></span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="index.html" class="text-white/90 hover:text-gold font-medium transition-colors">Home</a>
+                <a href="index.html#about" class="text-white/90 hover:text-gold font-medium transition-colors">About</a>
+                <a href="medicines.html" class="text-gold font-bold transition-colors">Medicines</a>
+                <a href="index.html#contact" class="px-6 py-2.5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Consult Now
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-white p-2">
+                <i data-lucide="menu" id="menu-icon" class="w-8 h-8"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="pt-40 pb-20 bg-primary relative overflow-hidden">
+        <div class="absolute inset-0 gold-pattern opacity-10"></div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-6">Our Full Medicinal Range</h1>
+            <p class="text-stone-300 text-lg md:text-xl max-w-3xl mx-auto font-light leading-relaxed">
+                Every formulation is crafted using authentic Unani methods, sourced from pure organic ingredients to ensure maximum healing potency.
+            </p>
+        </div>
+    </header>
+
+    <!-- Product Explorer Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            
+            <!-- Filters & Search -->
+            <div class="flex flex-col lg:flex-row gap-8 justify-between items-center mb-16 bg-white p-6 lg:p-10 rounded-[2.5rem] shadow-sm border border-stone-100">
+                <div class="w-full lg:w-1/3 relative">
+                    <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 text-stone-400 w-5 h-5"></i>
+                    <input type="text" id="search-input" oninput="filterProducts()" placeholder="Search by name or category..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 pl-14 pr-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                </div>
+                
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <button onclick="setCategory('All')" class="category-btn active px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 bg-primary text-white">All Remedies</button>
+                    <button onclick="setCategory('Weight Care')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Weight Care</button>
+                    <button onclick="setCategory('Vitality')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Vitality</button>
+                    <button onclick="setCategory('Renal Health')" class="category-btn px-6 py-3 rounded-xl font-bold text-sm transition-all border border-stone-100 hover:bg-emerald-50">Renal Health</button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 animate-fade-in">
+                <!-- Loading State -->
+                <div class="col-span-full text-center py-20">
+                    <div class="animate-pulse flex flex-col items-center">
+                        <div class="w-16 h-16 bg-stone-200 rounded-full mb-4"></div>
+                        <div class="h-4 w-64 bg-stone-200 rounded mb-2"></div>
+                        <div class="h-3 w-48 bg-stone-100 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-primary text-white pt-24 pb-12 border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16">
+                <!-- Branding -->
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="index.html" class="flex items-center space-x-2 mb-8">
+                        <div class="p-2 bg-gold rounded-lg">
+                            <i data-lucide="leaf" class="text-primary w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-serif font-bold text-white">Al Rehman <span class="text-gold">Dawakhana</span></span>
+                    </a>
+                    <p class="text-stone-400 leading-relaxed mb-8">
+                        Preserving the wisdom of traditional healing to provide modern solutions for your wellbeing. Natural, pure, and effective.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-gold hover:text-primary transition-all duration-300"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Quick Links</h5>
+                    <ul class="space-y-4 text-stone-400">
+                        <li><a href="index.html#specialties" class="hover:text-white transition-colors">Specialties</a></li>
+                        <li><a href="medicines.html" class="hover:text-white transition-colors">Our Products</a></li>
+                        <li><a href="index.html#contact" class="hover:text-white transition-colors">Consultation</a></li>
+                        <li><a href="index.html#about" class="hover:text-white transition-colors">About Hakeem</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Visit Us</h5>
+                    <ul class="space-y-6 text-stone-400">
+                        <li class="flex items-start">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gold mr-4 shrink-0"></i>
+                            <span>Main Road, Block 12, <br>Sargodha, Punjab, Pakistan</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="phone" class="w-5 h-5 text-gold mr-4"></i>
+                            <span>+92 300 6047058</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 text-gold mr-4"></i>
+                            <span>info@alrehmandawakhana.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h5 class="text-lg font-serif font-bold mb-8 text-gold">Newsletter</h5>
+                    <p class="text-stone-400 text-sm mb-6">Stay updated with health tips and new arrivals.</p>
+                    <form class="relative">
+                        <input type="email" placeholder="Your email address" class="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-6 focus:outline-none focus:border-gold transition-colors text-white">
+                        <button class="absolute right-2 top-2 bottom-2 bg-gold hover:bg-gold-dark text-primary px-4 rounded-lg font-bold transition-colors">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 text-center text-stone-500 text-sm">
+                <p>&copy; 2026 Al Rehman Dawakhana. All Rights Reserved. Crafted with care for your health.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeOrderModal()"></div>
+        <div class="bg-white rounded-3xl lg:rounded-[2.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl mx-2 lg:mx-0">
+            <div class="bg-primary p-6 lg:p-8 text-white flex justify-between items-center relative">
+                <div class="absolute inset-0 gold-pattern opacity-20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-2xl lg:text-3xl font-serif font-bold">Secure Order</h3>
+                    <p class="text-white/40 text-[10px] lg:text-sm">Traditional healing delivered to your door</p>
+                </div>
+                <button onclick="closeOrderModal()" class="relative z-10 hover:bg-white/10 p-2 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 lg:w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 lg:p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Medicinal Product</label>
+                            <input type="text" id="modal-product-name" readonly class="w-full bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0">
+                        </div>
+                        <div class="text-right">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Unit Price</label>
+                            <div id="modal-product-price-display" class="text-primary font-bold text-lg">Rs. 0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Quantity</label>
+                            <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Total Amount</label>
+                            <div id="modal-total" class="w-full py-4 px-2 text-gold font-bold text-2xl">Rs. 0</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-4 border-t border-stone-100">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Name</label>
+                                <input type="text" id="user-name" required placeholder="Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Phone (WhatsApp)</label>
+                                <input type="tel" id="user-phone" required placeholder="0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Delivery Address</label>
+                            <textarea id="user-address" required rows="2" placeholder="House #, Street, City..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="order-submit-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        <span>Confirm Order</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/90 backdrop-blur-md"></div>
+        <div class="bg-white rounded-[2rem] lg:rounded-[3rem] p-8 lg:p-12 w-full max-w-sm relative z-10 text-center shadow-2xl">
+            <div class="w-16 h-16 lg:w-24 lg:h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-6 lg:mb-8 animate-bounce">
+                <i data-lucide="check" class="text-primary w-8 h-8 lg:w-12 lg:h-12 stroke-[3]"></i>
+            </div>
+            <h3 class="text-2xl lg:text-3xl font-serif font-bold text-primary mb-2">Order Received</h3>
+            <div class="bg-emerald-50 py-3 px-6 rounded-2xl mb-6 inline-block">
+                <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Tracking ID</p>
+                <p id="display-order-number" class="text-xl font-bold text-primary tracking-wider"></p>
+            </div>
+            <p class="text-stone-500 mb-8 leading-relaxed text-xs">Hakeem Rehman will verify your order and contact you shortly.</p>
+            <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl">Back to Healing</button>
+        </div>
+    </div>
+
+    <!-- Track Order Modal -->
+    <div id="track-modal" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/80 backdrop-blur-md" onclick="closeTrackModal()"></div>
+        <div class="bg-white rounded-[3rem] p-10 w-full max-w-md relative z-10 shadow-2xl">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-serif font-bold text-primary">Track Your Order</h3>
+                <button onclick="closeTrackModal()" class="p-2 hover:bg-stone-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div id="track-search-area">
+                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARB-1234) to see the current status of your herbal medicine.</p>
+                <div class="space-y-4">
+                    <input type="text" id="track-input" placeholder="ARB-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
+                    <button onclick="handleTrackOrder()" id="track-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center space-x-3">
+                        <i data-lucide="search" class="w-5 h-5"></i>
+                        <span>Find My Order</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tracking Result -->
+            <div id="track-result" class="hidden space-y-8">
+                <div class="p-6 bg-emerald-50 rounded-3xl border border-emerald-100">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest text-emerald-600 font-bold mb-1">Status</p>
+                            <h4 id="track-status-text" class="text-3xl font-serif font-bold text-primary">PENDING</h4>
+                        </div>
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                            <i id="track-status-icon" data-lucide="clock" class="w-6 h-6 text-gold"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2 border-t border-emerald-100 pt-4">
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-stone-400">Customer</span>
+                            <span id="track-customer" class="text-primary"></span>
+                        </div>
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-stone-400">Product</span>
+                            <span id="track-product" class="text-primary"></span>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="resetTrackModal()" class="w-full py-4 text-stone-400 hover:text-primary font-bold transition-colors">
+                    Search Another Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const SUPABASE_URL = 'https://vwjludvxxmsnkzsbalhx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3amx1ZHZ4eG1zbmt6c2JhbGh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNjkzOTIsImV4cCI6MjA5Mjc0NTM5Mn0.oRCNXXBiFoNQgAIjy70yIh2KrOmwFH7UAlRdSDXnDpk';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let allProducts = [];
+        let currentCategory = 'All';
+        let currentPrice = 0;
+        let currentProductId = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchProducts();
+            lucide.createIcons();
+        });
+
+        async function fetchProducts() {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .order('name', { ascending: true });
+
+            if (error) {
+                console.error('Error:', error);
+                return;
+            }
+
+            allProducts = data;
+            renderProducts(allProducts);
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-stone-400">No medicines found matching your criteria.</div>';
+                return;
+            }
+
+            products.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl overflow-hidden border border-stone-100 card-hover animate-fade-in";
+                card.style.animationDelay = `${index * 0.05}s`;
+                
+                card.innerHTML = `
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-primary font-bold text-sm shadow-sm">
+                            Rs. ${product.price.toLocaleString()}
+                        </div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="px-3 py-1 bg-primary/80 backdrop-blur text-gold text-[10px] font-bold uppercase tracking-widest rounded-lg">
+                                ${product.category || 'Herbal'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-8">
+                        <h4 class="text-2xl font-serif font-bold text-primary mb-4">${product.name}</h4>
+                        <p class="text-stone-500 text-sm mb-8 font-sans leading-relaxed line-clamp-3">${product.description}</p>
+                        <button onclick="openOrderModal('${product.name}', ${product.price}, '${product.id}')" class="w-full py-4 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-2xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                            <span>Secure Order Now</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterProducts() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            let filtered = allProducts;
+
+            if (currentCategory !== 'All') {
+                filtered = filtered.filter(p => p.category === currentCategory || p.sub_category === currentCategory);
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(searchTerm) || 
+                    (p.category && p.category.toLowerCase().includes(searchTerm)) ||
+                    p.description.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            renderProducts(filtered);
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.innerText.includes(cat)) {
+                    btn.classList.add('bg-primary', 'text-white');
+                    btn.classList.remove('hover:bg-emerald-50');
+                } else {
+                    btn.classList.remove('bg-primary', 'text-white');
+                    btn.classList.add('hover:bg-emerald-50');
+                }
+            });
+            filterProducts();
+        }
+
+        // Modal Logic
+        function openOrderModal(name, price, id) {
+            currentPrice = price;
+            currentProductId = id;
+            document.getElementById('modal-product-name').value = name;
+            document.getElementById('modal-product-price-display').innerText = `Rs. ${price.toLocaleString()}`;
+            document.getElementById('modal-quantity').value = 1;
+            updateTotal();
+            document.getElementById('order-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateTotal() {
+            const qty = document.getElementById('modal-quantity').value;
+            const total = currentPrice * qty;
+            document.getElementById('modal-total').innerText = `Rs. ${total.toLocaleString()}`;
+        }
+
+        document.getElementById('modal-quantity').addEventListener('input', updateTotal);
+
+        async function handleOrderSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('order-submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Processing...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+            const orderData = {
+                order_number: orderNumber,
+                customer_name: document.getElementById('user-name').value,
+                customer_phone: document.getElementById('user-phone').value,
+                customer_address: document.getElementById('user-address').value,
+                product_id: currentProductId,
+                product_name: document.getElementById('modal-product-name').value,
+                quantity: parseInt(document.getElementById('modal-quantity').value),
+                total_price: currentPrice * parseInt(document.getElementById('modal-quantity').value),
+                order_status: 'Pending'
+            };
+
+            const { error } = await supabaseClient.from('orders').insert([orderData]);
+
+            if (error) {
+                alert("Order failed: " + error.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+                return;
+            }
+
+            document.getElementById('display-order-number').textContent = orderNumber;
+            closeOrderModal();
+            document.getElementById('success-modal').classList.remove('hidden');
+            e.target.reset();
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // --- Tracking Logic ---
+        function openTrackModal() {
+            document.getElementById('track-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeTrackModal() {
+            document.getElementById('track-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            resetTrackModal();
+        }
+
+        async function handleTrackOrder() {
+            const trackId = document.getElementById('track-input').value.trim().toUpperCase();
+            if (!trackId) return;
+
+            const btn = document.getElementById('track-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Searching...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .eq('order_number', trackId)
+                .single();
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+
+            if (error || !data) {
+                alert("Order not found. Please check your Tracking ID.");
+                return;
+            }
+
+            document.getElementById('track-search-area').classList.add('hidden');
+            document.getElementById('track-result').classList.remove('hidden');
+            
+            document.getElementById('track-status-text').textContent = data.order_status.toUpperCase();
+            document.getElementById('track-customer').textContent = data.customer_name;
+            document.getElementById('track-product').textContent = data.product_name;
+
+            const iconEl = document.getElementById('track-status-icon');
+            if (data.order_status === 'Shipped') iconEl.setAttribute('data-lucide', 'truck');
+            else if (data.order_status === 'Delivered') iconEl.setAttribute('data-lucide', 'check-circle');
+            else if (data.order_status === 'Cancelled') iconEl.setAttribute('data-lucide', 'x-circle');
+            else iconEl.setAttribute('data-lucide', 'clock');
+            
+            lucide.createIcons();
+        }
+
+        function resetTrackModal() {
+            document.getElementById('track-search-area').classList.remove('hidden');
+            document.getElementById('track-result').classList.add('hidden');
+            document.getElementById('track-input').value = '';
+        }
+    </script>
+</body>
+</html>
