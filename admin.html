@@ -650,6 +650,8 @@
             showToast("New Product Registered");
         }
 
+        // --- Image Handling Helpers ---
+
         function previewImage(input) {
             const preview = document.getElementById('modal-image-preview');
             const container = document.getElementById('image-preview-container');
@@ -664,6 +666,33 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        // Paste Image Logic
+        window.addEventListener('paste', e => {
+            const modal = document.getElementById('add-product-modal');
+            if (modal.classList.contains('hidden')) return;
+
+            const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+            for (let index in items) {
+                const item = items[index];
+                if (item.kind === 'file' && item.type.includes('image')) {
+                    const blob = item.getAsFile();
+                    const fileInput = document.getElementById('product-image-input');
+                    
+                    // Create a file from the blob
+                    const file = new File([blob], `pasted-image-${Date.now()}.png`, { type: blob.type });
+                    
+                    // Set the file input's files
+                    const container = new DataTransfer();
+                    container.items.add(file);
+                    fileInput.files = container.files;
+                    
+                    // Trigger preview
+                    previewImage(fileInput);
+                    showToast("Image pasted from clipboard");
+                }
+            }
+        });
 
         async function deleteProduct(id) {
             if (!confirm("Are you sure you want to delete this product?")) return;
