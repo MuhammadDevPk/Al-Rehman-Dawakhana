@@ -34,19 +34,23 @@ async function askAlRehmanAI(userMessage) {
 
         let aiResponse = data.text;
         
-        // 4. Intercept JSON for Order Creation (More robust detection)
-        const orderMatch = aiResponse.match(/\{\s*"action":\s*"CREATE_ORDER"[\s\S]*?\}/);
+        // 4. Extract nested JSON using brace-counting (regex can't handle nested {})
+        const orderJson = extractOrderJson(aiResponse);
         
-        if (orderMatch) {
+        if (orderJson) {
             try {
-                const jsonStr = orderMatch[0];
-                const orderTrigger = JSON.parse(jsonStr);
+                const orderTrigger = JSON.parse(orderJson);
                 
-                // Process Order
-                const result = await finalizeOrder(orderTrigger.order_details);
-                aiResponse = aiResponse.replace(jsonStr, "").trim() + "\n\n" + result;
+                if (orderTrigger.action === 'CREATE_ORDER' && orderTrigger.order_details) {
+                    console.log('ORDER DETECTED:', orderTrigger.order_details);
+                    const result = await finalizeOrder(orderTrigger.order_details);
+                    // Remove the JSON from the displayed message, keep only the human text + result
+                    aiResponse = aiResponse.replace(orderJson, '').trim();
+                    if (aiResponse) aiResponse += '\n\n';
+                    aiResponse += result;
+                }
             } catch (e) {
-                console.error("JSON Parsing Error:", e);
+                console.error("JSON Parsing Error:", e, "Raw:", orderJson);
             }
         }
 
@@ -59,44 +63,77 @@ async function askAlRehmanAI(userMessage) {
     }
 }
 
+// --- Extract nested JSON from AI response (handles nested braces properly) ---
+function extractOrderJson(text) {
+    const marker = '"CREATE_ORDER"';
+    const markerIndex = text.indexOf(marker);
+    if (markerIndex === -1) return null;
+
+    // Walk backwards to find the opening { of this JSON object
+    let start = text.lastIndexOf('{', markerIndex);
+    if (start === -1) return null;
+
+    // Walk forward counting braces to find the matching closing }
+    let depth = 0;
+    for (let i = start; i < text.length; i++) {
+        if (text[i] === '{') depth++;
+        if (text[i] === '}') depth--;
+        if (depth === 0) {
+            return text.substring(start, i + 1);
+        }
+    }
+    return null;
+}
+
 // --- Order Finalization ---
 async function finalizeOrder(details) {
     try {
-        // Find product ID from name
+        console.log('Finalizing order with details:', details);
+
+        // Find product price from name
         const { data: product } = await supabaseClient
             .from('products')
             .select('id, price')
-            .ilike('name', `%${details.product_name.split(' ')[0]}%`) // Try matching first word if full name fails
+            .ilike('name', `%${details.product_name}%`)
             .limit(1)
-            .single();
+            .maybeSingle();
 
-        const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        const totalPrice = (product?.price || 0) * (details.quantity || 1);
+        const orderNumber = 'ARD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
         
+        // Column names MUST match your actual Supabase orders table
         const orderData = {
             customer_name: details.customer_name,
             customer_phone: details.customer_phone,
-            delivery_address: details.delivery_address,
+            customer_address: details.delivery_address,
             product_name: details.product_name,
             product_id: product?.id || null,
             quantity: details.quantity || 1,
-            total_amount: (product?.price || 0) * (details.quantity || 1),
+            total_price: totalPrice,               // your DB uses total_price, not total_amount
             payment_method: details.payment_method,
-            payment_screenshot_url: currentScreenshotUrl, // Set from global state
-            status: 'Pending',
-            order_number: orderNumber // Note: Added to migration before
+            payment_screenshot_url: currentScreenshotUrl || null,
+            order_status: 'Pending',                // your DB uses order_status, not status
+            order_number: orderNumber               // your DB has order_number column
         };
 
-        const { error } = await supabaseClient.from('orders').insert([orderData]);
+        console.log('Inserting order:', orderData);
 
-        if (error) throw error;
+        const { error } = await supabaseClient
+            .from('orders')
+            .insert([orderData]);
+
+        if (error) {
+            console.error("Supabase Insert Error:", JSON.stringify(error));
+            throw error;
+        }
 
         // Clear state
         currentScreenshotUrl = null;
         
-        return `✅ **Order Confirmed!**\n\nYour Order ID is: **${orderNumber}**.\nHakeem Usman will contact you on WhatsApp shortly to verify. JazakAllah for choosing Al-Rehman Dawakhana.`;
+        return `✅ **Order Placed Successfully!**\n\n📦 Order Number: **${orderNumber}**\n💰 Total: Rs. ${totalPrice}\n\nHakeem Usman will contact you on WhatsApp shortly. JazakAllah for choosing Al-Rehman Dawakhana! 🌿`;
     } catch (err) {
         console.error("Order Creation Failed:", err);
-        return "❌ I am sorry, I couldn't save your order. Please try again or contact us directly.";
+        return "❌ I'm sorry, there was a problem saving your order. Please WhatsApp Hakeem Usman at +92 300 6047058 directly.";
     }
 }
 
