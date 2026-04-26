@@ -6,6 +6,39 @@
 let chatHistory = [];
 let currentScreenshotUrl = null;
 
+const CHAT_STORAGE_KEY = 'al_rehman_chat_session';
+const CHAT_EXPIRY_MS = 3600000; // 1 Hour
+
+function saveChatHistory() {
+    const data = {
+        timestamp: Date.now(),
+        history: chatHistory
+    };
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadChatHistory() {
+    try {
+        const stored = localStorage.getItem(CHAT_STORAGE_KEY);
+        if (!stored) return [];
+        
+        const data = JSON.parse(stored);
+        const now = Date.now();
+        
+        // Clear if older than 1 hour
+        if (now - data.timestamp > CHAT_EXPIRY_MS) {
+            localStorage.removeItem(CHAT_STORAGE_KEY);
+            return [];
+        }
+        
+        return data.history || [];
+    } catch (e) {
+        console.error("Failed to load chat history", e);
+        return [];
+    }
+}
+
+
 // --- 1. RATE LIMITING LOGIC ---
 function checkRateLimit() {
     const now = Date.now();
@@ -85,6 +118,7 @@ async function askAlRehmanAI(userMessage) {
         ).join('\n') : "No products available.";
 
         chatHistory.push({ role: 'user', content: userMessage });
+        saveChatHistory();
 
         const currentLang = localStorage.getItem('preferred_lang') || 'en';
 
@@ -131,6 +165,7 @@ async function askAlRehmanAI(userMessage) {
         }
 
         chatHistory.push({ role: 'assistant', content: aiResponse });
+        saveChatHistory();
         return aiResponse;
 
     } catch (criticalError) {
@@ -246,12 +281,9 @@ function createChatUI() {
             </div>
 
             <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4 custom-scrollbar bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]">
-                <div class="flex flex-col items-start">
-                    <div class="max-w-[85%] bg-emerald-100 text-emerald-900 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm border border-emerald-200/50">
-                        Assalam-o-Alaikum! I am the AI assistant of Al-Rehman Dawakhana. How can I help?
-                    </div>
-                </div>
+                <!-- Messages will be populated here -->
             </div>
+
 
             <div id="chat-helpers" class="hidden px-6 py-3 bg-amber-50 border-t border-amber-100 animate-fade-in">
                 <div id="upload-controls" class="flex items-center justify-between">
@@ -393,7 +425,18 @@ function createChatUI() {
 
     sendBtn.addEventListener('click', () => handleSend());
     input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
+
+    // --- Restore Chat History ---
+    chatHistory = loadChatHistory();
+    if (chatHistory.length > 0) {
+        chatHistory.forEach(msg => {
+            addMessage(msg.content, msg.role === 'user');
+        });
+    } else {
+        addMessage("Assalam-o-Alaikum! I am the AI assistant of Al-Rehman Dawakhana. How can I help?", false);
+    }
 }
+
 
 // Initialize
 if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', createChatUI); } else { createChatUI(); }
