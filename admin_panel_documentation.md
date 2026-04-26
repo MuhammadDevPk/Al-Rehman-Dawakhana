@@ -1,72 +1,67 @@
-# Al Rehman Dawakhana | Hakeem's Portal Documentation
+# Al Rehman Dawakhana - Administrator Guide 🌿
 
-This document provides a comprehensive guide to the **Admin Panel** (Hakeem's Portal) for the Al Rehman Dawakhana project, now powered by **Supabase**.
+Welcome to the digital management portal for Al Rehman Dawakhana. This system is now fully powered by **Supabase Cloud**, providing secure authentication, a real-time database, and cloud storage for medicinal images and payment proofs.
 
-## 🏛 Overview
-The Admin Panel is a secure portal designed for the Hakeem to manage the medicinal inventory, update product pricing, and track stock levels in real-time.
+---
 
-## 🚀 Key Features
+## 🔐 1. Accessing the Portal
+*   **Admin Panel URL**: Open `admin.html` in your browser.
+*   **Security**: Access is restricted to authorized users only. If you are not logged in, you will be automatically redirected to the secure login screen.
+*   **Credentials**: Use the registered email and password provided in your project configuration.
+*   **Logout**: Always use the "Logout" button in the bottom-left corner of the sidebar when finished to secure the portal.
 
-### 1. Secure Authentication (Supabase Auth)
-- **Login Screen**: Uses Supabase Authentication to verify identity.
-- **Admin Credentials**: 
-  - **Email**: `usman@gmail.com`
-  - **Password**: `03006047058`
-- **Route Guard**: Unauthorized users are automatically redirected from `admin.html` back to the login screen if no active session is found.
+---
 
-### 2. Live Inventory Management
-- **Database Driven**: All products are fetched live from the Supabase `products` table.
-- **Dynamic Table**: Interactive rows displaying live prices, stock levels, and status.
-- **Delete Functionality**: Admins can now permanently remove products from the database using the trash icon.
+## 📦 2. Product Inventory Management
+Managed via the **Products** tab in the sidebar.
 
-### 3. Active Editing Dashboard
-- **Live Sync**: Selecting a product fetches its latest data for the editing module.
-- **Price Setting**: Updates are sent via `PATCH` requests to the Supabase database and reflected instantly on the public landing page.
+### Adding New Products
+1.  Click the **"Add Product"** button in the top header.
+2.  **Product Image**: You can click the upload area to select a photo from your computer/mobile gallery, or simply **Copy & Paste** an image directly into the window.
+3.  Fill in the Name, Category, Price, and Stock level.
+4.  The system automatically uploads the image to Supabase Storage and lists the product instantly.
 
-### 4. Dynamic Product Addition
-- **Database Insertion**: New products registered via the modal are saved directly to the cloud database.
+### Updating Prices
+1.  Select any product from the "Full Product Inventory" table.
+2.  The product details will appear in the **Active Editing** section.
+3.  Enter the new price and click **"Update Price"**. The change is saved to the cloud immediately.
 
-## 🛠 Technical Implementation
+---
 
-### Database (Supabase)
-- **Table**: `public.products`
-- **Security (RLS)**: 
-  - **Public Read**: Anyone can see products on the landing page.
-  - **Admin Access**: Only authenticated users can Create, Update, or Delete products.
+## 🛒 3. Order Management System
+Managed via the **Orders** tab in the sidebar (`orders.html`).
 
-### Environment Setup
-- **Supabase SDK**: Integrated via CDN.
-- **Initialization**: Requires `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
+### Tracking Customer Orders
+The Orders table displays:
+*   **Order ID**: The unique tracking number (e.g., `ARB-XJ92KA`).
+*   **Customer Info**: Name, Phone, and Delivery Address.
+*   **Payment Details**: Method (COD, JazzCash, EasyPaisa) and Total Amount.
+*   **Payment Verification**: For digital payments, click **"View Proof"** to see the screenshot uploaded by the customer.
 
-## 📖 Usage Instructions
+### Updating Order Status
+Use the status dropdown for each order:
+*   **Pending**: Default state for new orders.
+*   **Shipped**: Update to this once you have dispatched the medicine.
+*   **Delivered/Cancelled**: Final states for record-keeping.
+*   *Note: Updating the status here instantly updates the tracking info for the customer.*
 
-### Running Migrations
-1. Open your Supabase Dashboard.
-2. Go to the **SQL Editor**.
-3. Copy and run the contents of `supabase_migration.sql` to set up the table and RLS policies.
+---
 
-### Updating a Product Price
-1. Log in to the Admin Portal.
-2. Select the product from the inventory table.
-3. Adjust the price in the "Set New Price" field.
-4. Click **UPDATE PRICE**.
+## 🚚 4. Customer Order Tracking
+Customers can track their orders directly from the landing page (`index.html`):
+1.  Click **"Track Order"** in the top navigation.
+2.  Enter the **Order ID** provided at checkout.
+3.  View live status and product verification.
 
-### Registering a New Product
-1. Click **+ Add Product** in the header.
-2. Fill the form and submit. The product will sync to the database and appear on the landing page immediately.
+---
 
-## 🗄 Data Schema
-```sql
-CREATE TABLE products (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name TEXT NOT NULL,
-    category TEXT NOT NULL,
-    sub_category TEXT,
-    description TEXT,
-    price NUMERIC NOT NULL,
-    stock_level INT,
-    image_url TEXT,
-    components JSONB,
-    status TEXT DEFAULT 'Active'
-);
-```
+## ⚙️ 5. Technical Maintenance (Supabase)
+The system relies on three core Supabase components:
+1.  **Authentication**: Manages Hakeem's login.
+2.  **Database**: Stores `products` and `orders` tables.
+3.  **Storage**: 
+    *   `product-images`: Stores photos of medicines.
+    *   `payment-screenshots`: Stores proofs of transfer from customers.
+
+> [!IMPORTANT]
+> Ensure both storage buckets are set to **Public** in the Supabase Dashboard to allow images to be displayed correctly on the website.
