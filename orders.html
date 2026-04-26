@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management | Al Rehman Dawakhana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #064e3b; /* Deep Emerald */
+            --gold: #d4af37;
+            --gold-light: #f4e4bc;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .text-gold { color: var(--gold); }
+        .bg-gold { background-color: var(--gold); }
+        .border-gold { border-color: var(--gold); }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+        }
+        .sidebar-item.active {
+            background: var(--gold);
+            color: var(--primary);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen flex">
+
+    <!-- Login Screen (Route Guard) -->
+    <div id="login-screen" class="fixed inset-0 z-[500] bg-primary flex items-center justify-center p-6 hidden">
+        <div class="absolute inset-0 gold-pattern opacity-10"></div>
+        <div class="w-full max-w-md text-center space-y-8 relative z-10">
+            <div class="space-y-4">
+                <div class="w-20 h-20 bg-gold rounded-3xl mx-auto flex items-center justify-center shadow-2xl rotate-12">
+                    <i data-lucide="shield-check" class="w-12 h-12 text-primary"></i>
+                </div>
+                <h1 class="text-4xl font-serif font-bold text-white tracking-tight">AL REHMAN DAWAKHANA</h1>
+                <p class="text-gold tracking-[0.2em] font-medium mt-2 uppercase text-xs">Access Restricted</p>
+            </div>
+            <div class="bg-white/5 backdrop-blur-xl border border-white/10 p-10 rounded-[2.5rem] shadow-2xl text-left">
+                <p class="text-white/60 text-sm mb-6">Please authenticate to manage orders.</p>
+                <button onclick="window.location.href='admin.html'" class="w-full py-4 bg-gold text-primary font-bold rounded-2xl hover:scale-105 transition-all">
+                    Go to Admin Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-80 bg-primary text-white flex flex-col h-screen sticky top-0 hidden">
+        <div class="p-8 border-b border-white/5">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-gold rounded-2xl flex items-center justify-center shadow-lg rotate-3">
+                    <i data-lucide="scroll" class="text-primary w-7 h-7"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-serif font-bold tracking-tight block">Al Rehman</span>
+                    <span class="text-[10px] uppercase tracking-widest text-gold/60">Admin Portal</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-2 py-8">
+            <a href="admin.html" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                <i data-lucide="package" class="w-5 h-5"></i>
+                <span class="font-medium text-sm">Products Inventory</span>
+            </a>
+            <a href="orders.html" class="sidebar-item active flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                <span class="font-medium text-sm">Customer Orders</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                <span class="font-medium text-sm">Performance</span>
+            </a>
+            <a href="#" class="sidebar-item flex items-center space-x-4 px-6 py-4 rounded-2xl transition-all">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                <span class="font-medium text-sm">Settings</span>
+            </a>
+        </nav>
+
+        <div class="p-6 border-t border-white/5">
+            <div class="bg-white/5 rounded-2xl p-4 flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center text-gold font-bold">HR</div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-bold truncate">Hakeem Rehman</p>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest">Administrator</p>
+                </div>
+                <button onclick="logout()" class="text-white/40 hover:text-white transition-colors">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="dashboard" class="flex-1 overflow-y-auto bg-stone-50 hidden">
+        <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200 px-10 py-6 flex justify-between items-center shadow-sm">
+            <div>
+                <h1 class="text-3xl font-serif font-bold text-primary">Customer Orders</h1>
+                <p class="text-stone-400 text-sm">Track and manage medicinal shipments</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="fetchOrders()" class="p-3 bg-stone-100 rounded-xl text-stone-500 hover:bg-stone-200 transition-colors">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-10 space-y-8 animate-fade-in">
+            <!-- Stats Row -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    <p class="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">Total Orders</p>
+                    <h2 id="stat-total" class="text-3xl font-bold text-primary">0</h2>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-2">Pending</p>
+                    <h2 id="stat-pending" class="text-3xl font-bold text-amber-600">0</h2>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    <p class="text-xs font-bold text-green-500 uppercase tracking-widest mb-2">Shipped</p>
+                    <h2 id="stat-shipped" class="text-3xl font-bold text-green-600">0</h2>
+                </div>
+                <div class="bg-white p-8 rounded-3xl border border-stone-100 shadow-sm">
+                    <p class="text-xs font-bold text-primary uppercase tracking-widest mb-2">Revenue</p>
+                    <h2 id="stat-revenue" class="text-3xl font-bold text-primary">Rs. 0</h2>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="bg-white rounded-[2.5rem] border border-stone-100 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-stone-50/50">
+                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Order Info</th>
+                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Customer</th>
+                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Total</th>
+                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b">Payment</th>
+                                <th class="py-6 px-4 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-center">Status</th>
+                                <th class="py-6 px-8 text-xs font-bold uppercase tracking-widest text-stone-400 border-b text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody" class="divide-y divide-stone-100">
+                            <!-- Orders will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Proof Modal -->
+    <div id="proof-modal" class="fixed inset-0 z-[600] hidden flex items-center justify-center p-6 bg-primary/90 backdrop-blur-md">
+        <div class="bg-white rounded-[3rem] w-full max-w-2xl overflow-hidden relative animate-fade-in">
+            <div class="p-8 border-b flex justify-between items-center">
+                <h3 class="text-2xl font-serif font-bold text-primary">Payment Proof</h3>
+                <button onclick="closeProofModal()" class="p-2 hover:bg-stone-100 rounded-full">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-8 bg-stone-100 flex items-center justify-center min-h-[400px]">
+                <img id="proof-img" src="" class="max-w-full max-h-[70vh] rounded-2xl shadow-2xl">
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- Supabase Configuration ---
+        const SUPABASE_URL = 'https://vwjludvxxmsnkzsbalhx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3amx1ZHZ4eG1zbmt6c2JhbGh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNjkzOTIsImV4cCI6MjA5Mjc0NTM5Mn0.oRCNXXBiFoNQgAIjy70yIh2KrOmwFH7UAlRdSDXnDpk';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let orders = [];
+
+        // --- Initialization & Route Guard ---
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkSession();
+        });
+
+        async function checkSession() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const loginScreen = document.getElementById('login-screen');
+            const sidebar = document.getElementById('sidebar');
+            const dashboard = document.getElementById('dashboard');
+
+            if (session) {
+                loginScreen.classList.add('hidden');
+                sidebar.classList.remove('hidden');
+                dashboard.classList.remove('hidden');
+                await fetchOrders();
+            } else {
+                loginScreen.classList.remove('hidden');
+                sidebar.classList.add('hidden');
+                dashboard.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
+        async function fetchOrders() {
+            const { data, error } = await supabaseClient
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Error fetching orders:', error);
+                return;
+            }
+
+            orders = data;
+            renderOrders();
+            updateStats();
+        }
+
+        function renderOrders() {
+            const tbody = document.getElementById('orders-tbody');
+            tbody.innerHTML = '';
+
+            orders.forEach(order => {
+                const date = new Date(order.created_at).toLocaleDateString('en-US', {
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                });
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-stone-50 transition-colors group";
+                
+                row.innerHTML = `
+                    <td class="py-6 px-8">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-primary">
+                                <i data-lucide="package" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-primary">${order.product_name}</p>
+                                <p class="text-[10px] text-stone-400 uppercase tracking-widest">${date}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-6 px-4">
+                        <p class="font-semibold text-sm">${order.customer_name}</p>
+                        <p class="text-xs text-stone-400">${order.customer_phone}</p>
+                    </td>
+                    <td class="py-6 px-4">
+                        <p class="font-bold text-primary">Rs. ${order.total_price.toLocaleString()}</p>
+                        <p class="text-[10px] text-stone-400 uppercase">${order.quantity} x Units</p>
+                    </td>
+                    <td class="py-6 px-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-stone-600">${order.payment_method}</span>
+                        ${order.payment_screenshot_url ? `
+                            <button onclick="viewProof('${order.payment_screenshot_url}')" class="ml-2 text-gold hover:underline text-[10px] font-bold block">View Proof</button>
+                        ` : ''}
+                    </td>
+                    <td class="py-6 px-4 text-center">
+                        <select onchange="updateStatus('${order.id}', this.value)" class="bg-stone-50 border-none text-[10px] font-bold uppercase tracking-widest rounded-full px-4 py-2 cursor-pointer focus:ring-1 focus:ring-gold ${getStatusClass(order.order_status)}">
+                            <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Shipped" ${order.order_status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="Delivered" ${order.order_status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                    <td class="py-6 px-8 text-right">
+                        <button onclick="viewOrderDetails('${order.id}')" class="p-2 text-stone-300 hover:text-primary transition-colors">
+                            <i data-lucide="eye" class="w-5 h-5"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            lucide.createIcons();
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Pending': return 'text-amber-600 bg-amber-50';
+                case 'Shipped': return 'text-blue-600 bg-blue-50';
+                case 'Delivered': return 'text-green-600 bg-green-50';
+                case 'Cancelled': return 'text-red-600 bg-red-50';
+                default: return 'text-stone-600 bg-stone-50';
+            }
+        }
+
+        async function updateStatus(orderId, newStatus) {
+            const { error } = await supabaseClient
+                .from('orders')
+                .update({ order_status: newStatus })
+                .eq('id', orderId);
+
+            if (error) {
+                alert("Failed to update status: " + error.message);
+                return;
+            }
+
+            // Update local state
+            const order = orders.find(o => o.id === orderId);
+            if (order) order.order_status = newStatus;
+            
+            updateStats();
+            renderOrders();
+        }
+
+        function updateStats() {
+            const total = orders.length;
+            const pending = orders.filter(o => o.order_status === 'Pending').length;
+            const shipped = orders.filter(o => o.order_status === 'Shipped').length;
+            const revenue = orders
+                .filter(o => o.order_status !== 'Cancelled')
+                .reduce((acc, curr) => acc + curr.total_price, 0);
+
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-pending').innerText = pending;
+            document.getElementById('stat-shipped').innerText = shipped;
+            document.getElementById('stat-revenue').innerText = `Rs. ${revenue.toLocaleString()}`;
+        }
+
+        function viewProof(url) {
+            document.getElementById('proof-img').src = url;
+            document.getElementById('proof-modal').classList.remove('hidden');
+        }
+
+        function closeProofModal() {
+            document.getElementById('proof-modal').classList.add('hidden');
+        }
+
+        function viewOrderDetails(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                alert(`Order Details:\n\nCustomer: ${order.customer_name}\nAddress: ${order.customer_address}\nPhone: ${order.customer_phone}\nProduct: ${order.product_name}\nMethod: ${order.payment_method}`);
+            }
+        }
+
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+</html>
