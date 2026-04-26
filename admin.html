@@ -350,8 +350,17 @@
                 </div>
                 
                 <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Image URL (Optional)</label>
-                    <input type="url" name="image" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="https://images.unsplash.com/...">
+                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Product Image (Disk/Gallery)</label>
+                    <div class="relative group">
+                        <input type="file" name="image_file" accept="image/*" class="hidden" id="product-image-input" onchange="previewImage(this)">
+                        <label for="product-image-input" class="w-full flex items-center justify-center space-x-3 bg-stone-50 border-2 border-dashed border-stone-200 rounded-xl p-8 cursor-pointer group-hover:border-gold transition-all">
+                            <div class="text-center" id="image-preview-container">
+                                <i data-lucide="image-plus" class="w-10 h-10 text-stone-300 mx-auto mb-2"></i>
+                                <p class="text-stone-400 text-sm">Click to upload from Disk or Gallery</p>
+                            </div>
+                            <img id="modal-image-preview" class="hidden h-32 w-32 object-cover rounded-xl shadow-lg">
+                        </label>
+                    </div>
                 </div>
 
                 <div class="space-y-2">
@@ -572,18 +581,44 @@
             e.preventDefault();
             const btn = document.getElementById('submit-product-btn');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Registering...</span>';
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Uploading & Registering...</span>';
             btn.disabled = true;
             lucide.createIcons();
 
             const formData = new FormData(e.target);
+            const imageFile = formData.get('image_file');
+            let imageUrl = "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop";
+
+            // 1. Upload image if provided
+            if (imageFile && imageFile.size > 0) {
+                const fileExt = imageFile.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+                const filePath = `products/${fileName}`;
+
+                const { data: uploadData, error: uploadError } = await supabaseClient
+                    .storage
+                    .from('product-images')
+                    .upload(filePath, imageFile);
+
+                if (uploadError) {
+                    console.error('Upload error:', uploadError);
+                    showToast("Image upload failed. Using default.", "error");
+                } else {
+                    const { data: publicData } = supabaseClient
+                        .storage
+                        .from('product-images')
+                        .getPublicUrl(filePath);
+                    imageUrl = publicData.publicUrl;
+                }
+            }
+            
             const newProduct = {
                 name: formData.get('name'),
                 category: formData.get('category'),
                 sub_category: formData.get('category'),
                 price: parseInt(formData.get('price')),
                 stock_level: parseInt(formData.get('stock')),
-                image_url: formData.get('image') || "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop",
+                image_url: imageUrl,
                 description: formData.get('description') || "Newly added herbal medicine.",
                 components: ["Natural Herbs", "Organic Extracts"]
             };
@@ -608,7 +643,26 @@
             
             toggleModal('add-product-modal', false);
             e.target.reset();
+            // Reset preview
+            document.getElementById('modal-image-preview').classList.add('hidden');
+            document.getElementById('image-preview-container').classList.remove('hidden');
+            
             showToast("New Product Registered");
+        }
+
+        function previewImage(input) {
+            const preview = document.getElementById('modal-image-preview');
+            const container = document.getElementById('image-preview-container');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    container.classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         async function deleteProduct(id) {
