@@ -326,9 +326,9 @@
             </div>
             
             <div id="track-search-area">
-                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARB-1234) to see the current status of your herbal medicine.</p>
+                <p class="text-stone-500 text-sm mb-6">Enter your Order ID (e.g. ARD-1234) to see the current status of your herbal medicine.</p>
                 <div class="space-y-4">
-                    <input type="text" id="track-input" placeholder="ARB-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
+                    <input type="text" id="track-input" placeholder="ARD-XXXXXX" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-5 px-6 text-xl font-bold text-primary tracking-widest focus:ring-2 focus:ring-gold outline-none uppercase">
                     <button onclick="handleTrackOrder()" id="track-btn" class="w-full py-5 bg-gold text-primary font-bold rounded-2xl shadow-xl hover:bg-gold-dark transition-all flex items-center justify-center space-x-3">
                         <i data-lucide="search" class="w-5 h-5"></i>
                         <span>Find My Order</span>
@@ -528,7 +528,7 @@
             btn.disabled = true;
             lucide.createIcons();
 
-            const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+            const orderNumber = `ARD-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
             const orderData = {
                 order_number: orderNumber,
                 customer_name: document.getElementById('user-name').value,
