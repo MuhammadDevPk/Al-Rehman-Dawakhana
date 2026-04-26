@@ -147,9 +147,13 @@
     <!-- Hero Section -->
     <section class="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=2000&auto=format&fit=crop" 
-                 alt="Traditional Herbs" 
-                 class="w-full h-full object-cover">
+            <picture>
+                <source media="(max-width: 768px)" srcset="images/her-sec-mbl.png">
+                <source media="(min-width: 769px)" srcset="images/her-sec-desktop.png">
+                <img src="images/her-sec-desktop.png" 
+                     alt="Al Rehman Dawakhana Traditional Healing" 
+                     class="w-full h-full object-cover">
+            </picture>
             <div class="absolute inset-0 hero-gradient"></div>
         </div>
 
@@ -427,55 +431,124 @@
     <!-- Order Modal -->
     <div id="order-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-primary/60 backdrop-blur-sm" onclick="closeOrderModal()"></div>
-        <div class="bg-white rounded-3xl w-full max-w-lg relative z-10 overflow-hidden shadow-2xl animate-fade-in-up">
-            <div class="bg-primary p-6 text-white flex justify-between items-center">
-                <h3 class="text-2xl font-serif font-bold">Complete Your Order</h3>
-                <button onclick="closeOrderModal()" class="hover:bg-white/10 p-2 rounded-full transition-colors">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-xl relative z-10 overflow-hidden shadow-2xl animate-fade-in-up">
+            <div class="bg-primary p-8 text-white flex justify-between items-center relative">
+                <div class="absolute inset-0 gold-pattern opacity-20"></div>
+                <div class="relative z-10">
+                    <h3 class="text-3xl font-serif font-bold">Secure Order</h3>
+                    <p class="text-white/40 text-sm">Traditional healing delivered to your door</p>
+                </div>
+                <button onclick="closeOrderModal()" class="relative z-10 hover:bg-white/10 p-2 rounded-full transition-colors">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
-            <div class="p-8">
+            
+            <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
                 <form id="order-form" onsubmit="handleOrderSubmit(event)" class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-2 sm:col-span-1">
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Product</label>
-                            <input type="text" id="modal-product-name" readonly class="w-full bg-stone-50 border-none rounded-xl py-3 px-4 text-primary font-bold">
+                    <!-- Product Info (Read Only) -->
+                    <div class="grid grid-cols-2 gap-4 bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Medicinal Product</label>
+                            <input type="text" id="modal-product-name" readonly class="w-full bg-transparent border-none p-0 text-primary font-bold text-lg focus:ring-0">
                         </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Price (Rs.)</label>
-                            <input type="text" id="modal-product-price" readonly class="w-full bg-stone-50 border-none rounded-xl py-3 px-4 text-primary font-bold">
+                        <div class="text-right">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold mb-1">Unit Price</label>
+                            <div id="modal-product-price-display" class="text-primary font-bold text-lg">Rs. 0</div>
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-2 sm:col-span-1">
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Quantity</label>
-                            <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Quantity</label>
+                            <input type="number" id="modal-quantity" value="1" min="1" required class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
                         </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Total Amount</label>
-                            <div id="modal-total" class="w-full py-3 px-4 text-gold font-bold text-xl">Rs. 0</div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Total Amount</label>
+                            <div id="modal-total" class="w-full py-4 px-2 text-gold font-bold text-2xl">Rs. 0</div>
                         </div>
                     </div>
 
+                    <!-- Customer Info -->
                     <div class="space-y-4 pt-4 border-t border-stone-100">
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">Your Full Name</label>
-                            <input type="text" id="user-name" required placeholder="e.g. Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 focus:ring-2 focus:ring-gold outline-none transition-all">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Name</label>
+                                <input type="text" id="user-name" required placeholder="Muhammad Ahmed" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Phone (WhatsApp)</label>
+                                <input type="tel" id="user-phone" required placeholder="0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-xs uppercase tracking-widest text-stone-400 font-bold mb-2">WhatsApp / Phone Number</label>
-                            <input type="tel" id="user-phone" required placeholder="e.g. 0300 1234567" class="w-full bg-stone-50 border border-stone-100 rounded-xl py-3 px-4 focus:ring-2 focus:ring-gold outline-none transition-all">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Full Delivery Address</label>
+                            <textarea id="user-address" required rows="2" placeholder="House #, Street, City..." class="w-full bg-stone-50 border border-stone-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-200 transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
-                        <i data-lucide="message-circle" class="w-6 h-6"></i>
-                        <span>Confirm via WhatsApp</span>
+                    <!-- Payment Method -->
+                    <div class="space-y-4 pt-4 border-t border-stone-100">
+                        <label class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Payment Method</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="payment_method" value="COD" checked class="hidden peer" onchange="togglePaymentProof(false)">
+                                <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
+                                    <p class="text-xs font-bold">Cash on Delivery</p>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="payment_method" value="JazzCash" class="hidden peer" onchange="togglePaymentProof(true)">
+                                <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
+                                    <p class="text-xs font-bold">JazzCash</p>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer group">
+                                <input type="radio" name="payment_method" value="EasyPaisa" class="hidden peer" onchange="togglePaymentProof(true)">
+                                <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
+                                    <p class="text-xs font-bold">EasyPaisa</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Payment Proof Section (Conditional) -->
+                        <div id="payment-proof-section" class="hidden space-y-4 p-6 bg-amber-50 rounded-3xl border border-amber-100 animate-fade-in">
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="info" class="w-5 h-5 text-gold shrink-0"></i>
+                                <p class="text-xs text-amber-900 leading-relaxed">
+                                    Please transfer the total amount to: <br>
+                                    <span class="font-bold text-base">0300-6047058 (Muhammad Usman)</span> <br>
+                                    And upload the transfer screenshot below.
+                                </p>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-[10px] uppercase tracking-widest text-amber-600 font-bold ml-1">Payment Screenshot</label>
+                                <input type="file" id="payment-screenshot" accept="image/*" class="w-full text-xs text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:bg-emerald-900 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="order-submit-btn" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl shadow-xl transition-all transform hover:-translate-y-1 flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        <span>Confirm Order</span>
                     </button>
-                    <p class="text-center text-stone-400 text-xs">Direct chat with Hakeem at Al Rehman Dawakhana</p>
+                    <p class="text-center text-stone-400 text-[10px] uppercase tracking-tighter">Your data is encrypted and handled by Hakeem Rehman personally</p>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-primary/90 backdrop-blur-md"></div>
+        <div class="bg-white rounded-[3rem] p-12 w-full max-w-sm relative z-10 text-center shadow-2xl animate-fade-in">
+            <div class="w-24 h-24 bg-gold rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce shadow-xl shadow-gold/20">
+                <i data-lucide="check" class="text-primary w-12 h-12 stroke-[3]"></i>
+            </div>
+            <h3 class="text-3xl font-serif font-bold text-primary mb-4">Order Received</h3>
+            <p class="text-stone-500 mb-10 leading-relaxed">Your healing journey has begun. Hakeem Rehman will verify your order and contact you shortly.</p>
+            <button onclick="closeSuccessModal()" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-colors">
+                Back to Healing
+            </button>
         </div>
     </div>
 
@@ -564,9 +637,9 @@
                     <div class="p-6">
                         <h4 class="text-xl font-serif font-bold text-primary mb-2">${product.name}</h4>
                         <p class="text-stone-500 text-sm mb-6 font-sans line-clamp-2">${product.description}</p>
-                        <button onclick="openOrderModal('${product.name}', ${product.price})" class="w-full py-3 bg-emerald-50 hover:bg-primary hover:text-white text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
-                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                            <span>Order via WhatsApp</span>
+                        <button onclick="openOrderModal('${product.name}', ${product.price}, '${product.id}')" class="w-full py-3 bg-gold/10 hover:bg-gold text-primary font-bold rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            <span>Secure Order Now</span>
                         </button>
                     </div>
                 `;
@@ -582,15 +655,17 @@
         // --- Order Modal Logic ---
         const orderModal = document.getElementById('order-modal');
         const modalProductName = document.getElementById('modal-product-name');
-        const modalProductPrice = document.getElementById('modal-product-price');
+        const modalProductPriceDisplay = document.getElementById('modal-product-price-display');
         const modalQuantity = document.getElementById('modal-quantity');
         const modalTotal = document.getElementById('modal-total');
         let currentPrice = 0;
+        let currentProductId = null;
 
-        function openOrderModal(name, price) {
+        function openOrderModal(name, price, id) {
             currentPrice = price;
+            currentProductId = id;
             modalProductName.value = name;
-            modalProductPrice.value = price;
+            modalProductPriceDisplay.innerText = `Rs. ${price.toLocaleString()}`;
             modalQuantity.value = 1;
             updateTotal();
             orderModal.classList.remove('hidden');
@@ -608,28 +683,106 @@
             modalTotal.innerText = `Rs. ${total.toLocaleString()}`;
         }
 
+        function togglePaymentProof(show) {
+            const section = document.getElementById('payment-proof-section');
+            if (show) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+            lucide.createIcons();
+        }
+
         modalQuantity.addEventListener('input', updateTotal);
 
-        function handleOrderSubmit(e) {
+        async function handleOrderSubmit(e) {
             e.preventDefault();
+            const btn = document.getElementById('order-submit-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i><span>Processing...</span>';
+            btn.disabled = true;
+            lucide.createIcons();
+
             const name = document.getElementById('user-name').value;
             const phone = document.getElementById('user-phone').value;
-            const productName = modalProductName.value;
-            const quantity = modalQuantity.value;
-            const total = currentPrice * quantity;
+            const address = document.getElementById('user-address').value;
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+            const quantity = parseInt(modalQuantity.value);
+            const totalAmount = currentPrice * quantity;
+            
+            let screenshotUrl = null;
 
-            const message = `*New Order from Al Rehman Dawakhana Website*\n\n` +
-                          `*Product:* ${productName}\n` +
-                          `*Quantity:* ${quantity}\n` +
-                          `*Total Price:* Rs. ${total.toLocaleString()}\n\n` +
-                          `*Customer Details:*\n` +
-                          `*Name:* ${name}\n` +
-                          `*Phone:* ${phone}\n\n` +
-                          `Please confirm my order. Thank you!`;
+            // 1. Handle Screenshot Upload if needed
+            if (paymentMethod !== 'COD') {
+                const screenshotFile = document.getElementById('payment-screenshot').files[0];
+                if (!screenshotFile) {
+                    alert("Please upload your payment screenshot proof.");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                    return;
+                }
 
-            const whatsappUrl = `https://wa.me/923006047058?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
+                const fileExt = screenshotFile.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+                const filePath = `proofs/${fileName}`;
+
+                const { data: uploadData, error: uploadError } = await supabaseClient
+                    .storage
+                    .from('payment-screenshots')
+                    .upload(filePath, screenshotFile);
+
+                if (uploadError) {
+                    alert("Upload failed: " + uploadError.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                    return;
+                }
+
+                const { data: publicData } = supabaseClient
+                    .storage
+                    .from('payment-screenshots')
+                    .getPublicUrl(filePath);
+                
+                screenshotUrl = publicData.publicUrl;
+            }
+
+            // 2. Save Order to Database
+            const { error: orderError } = await supabaseClient
+                .from('orders')
+                .insert([{
+                    customer_name: name,
+                    customer_phone: phone,
+                    delivery_address: address,
+                    product_id: currentProductId,
+                    product_name: modalProductName.value,
+                    quantity: quantity,
+                    total_amount: totalAmount,
+                    payment_method: paymentMethod,
+                    payment_screenshot_url: screenshotUrl,
+                    status: 'Pending'
+                }]);
+
+            if (orderError) {
+                alert("Order failed to save: " + orderError.message);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                lucide.createIcons();
+                return;
+            }
+
+            // 3. Success!
             closeOrderModal();
+            document.getElementById('success-modal').classList.remove('hidden');
+            e.target.reset();
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            lucide.createIcons();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
         }
 
         // Reveal on Scroll
