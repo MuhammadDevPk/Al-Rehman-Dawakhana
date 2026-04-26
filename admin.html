@@ -316,59 +316,59 @@
     <!-- Add Product Modal -->
     <div id="add-product-modal" class="fixed inset-0 z-[300] bg-primary/80 backdrop-blur-sm hidden items-center justify-center p-6">
         <div class="bg-white rounded-[2.5rem] w-full max-w-2xl overflow-hidden shadow-2xl animate-fade-in">
-            <div class="bg-primary p-8 text-white relative">
+            <div class="bg-primary p-6 lg:p-8 text-white relative">
                 <div class="absolute inset-0 gold-pattern"></div>
                 <div class="relative z-10 flex justify-between items-center">
                     <div>
-                        <h2 class="text-2xl font-serif font-bold">Add New Medicinal Product</h2>
-                        <p class="text-white/40 text-sm">Expand the Al Rehman inventory</p>
+                        <h2 class="text-xl lg:text-2xl font-serif font-bold">Add New Product</h2>
+                        <p class="text-white/40 text-xs lg:text-sm">Expand the Al Rehman inventory</p>
                     </div>
                     <button onclick="toggleModal('add-product-modal', false)" class="p-2 hover:bg-white/10 rounded-full transition-colors">
-                        <i data-lucide="x" class="w-6 h-6"></i>
+                        <i data-lucide="x" class="w-5 h-5 lg:w-6 h-6"></i>
                     </button>
                 </div>
             </div>
             
-            <form id="add-product-form" onsubmit="handleProductSubmit(event)" class="p-10 space-y-6">
-                <div class="grid grid-cols-2 gap-6">
+            <form id="add-product-form" onsubmit="handleProductSubmit(event)" class="p-6 lg:p-10 space-y-4 lg:space-y-6 overflow-y-auto max-h-[80vh]">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                     <div class="space-y-2">
-                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Product Name</label>
-                        <input type="text" name="name" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="e.g. Husn-e-Yousaf">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Product Name</label>
+                        <input type="text" name="name" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 lg:p-4 outline-none focus:border-gold transition-all text-sm lg:text-base" placeholder="e.g. Husn-e-Yousaf">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Category</label>
-                        <input type="text" name="category" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="e.g. Skin Care">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Category</label>
+                        <input type="text" name="category" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 lg:p-4 outline-none focus:border-gold transition-all text-sm lg:text-base" placeholder="e.g. Skin Care">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Price (Rs.)</label>
-                        <input type="number" name="price" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="2500">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Price (Rs.)</label>
+                        <input type="number" name="price" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 lg:p-4 outline-none focus:border-gold transition-all text-sm lg:text-base" placeholder="2500">
                     </div>
                     <div class="space-y-2">
-                        <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Initial Stock</label>
-                        <input type="number" name="stock" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="100">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Initial Stock</label>
+                        <input type="number" name="stock" required class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 lg:p-4 outline-none focus:border-gold transition-all text-sm lg:text-base" placeholder="100">
                     </div>
                 </div>
                 
                 <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Product Image (Disk/Gallery)</label>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Product Image (Disk/Gallery)</label>
                     <div class="relative group">
                         <input type="file" name="image_file" accept="image/*" class="hidden" id="product-image-input" onchange="previewImage(this)">
-                        <label for="product-image-input" class="w-full flex items-center justify-center space-x-3 bg-stone-50 border-2 border-dashed border-stone-200 rounded-xl p-8 cursor-pointer group-hover:border-gold transition-all">
+                        <label for="product-image-input" class="w-full flex items-center justify-center space-x-3 bg-stone-50 border-2 border-dashed border-stone-200 rounded-xl p-6 lg:p-8 cursor-pointer group-hover:border-gold transition-all">
                             <div class="text-center" id="image-preview-container">
-                                <i data-lucide="image-plus" class="w-10 h-10 text-stone-300 mx-auto mb-2"></i>
-                                <p class="text-stone-400 text-sm">Click to upload from Disk or Gallery</p>
+                                <i data-lucide="image-plus" class="w-8 h-8 lg:w-10 lg:h-10 text-stone-300 mx-auto mb-2"></i>
+                                <p class="text-stone-400 text-xs lg:text-sm">Click to upload or Paste here</p>
                             </div>
-                            <img id="modal-image-preview" class="hidden h-32 w-32 object-cover rounded-xl shadow-lg">
+                            <img id="modal-image-preview" class="hidden h-24 lg:h-32 w-24 lg:w-32 object-cover rounded-xl shadow-lg">
                         </label>
                     </div>
                 </div>
 
                 <div class="space-y-2">
-                    <label class="text-xs font-bold uppercase tracking-widest text-stone-400">Description</label>
-                    <textarea name="description" rows="3" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-4 outline-none focus:border-gold transition-all" placeholder="Describe the medicine's benefits..."></textarea>
+                    <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400">Description</label>
+                    <textarea name="description" rows="2" class="w-full bg-stone-50 border border-stone-200 rounded-xl p-3 lg:p-4 outline-none focus:border-gold transition-all text-sm lg:text-base" placeholder="Benefits..."></textarea>
                 </div>
 
-                <button type="submit" id="submit-product-btn" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-all flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
+                <button type="submit" id="submit-product-btn" class="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-emerald-900 transition-all flex items-center justify-center space-x-3 text-base lg:text-lg uppercase tracking-widest">
                     <i data-lucide="plus-circle" class="w-5 h-5"></i>
                     <span>Register Product</span>
                 </button>
