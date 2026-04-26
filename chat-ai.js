@@ -34,17 +34,17 @@ async function askAlRehmanAI(userMessage) {
 
         let aiResponse = data.text;
         
-        // 4. Intercept JSON for Order Creation
-        if (aiResponse.includes('{"action": "CREATE_ORDER"')) {
+        // 4. Intercept JSON for Order Creation (More robust detection)
+        const orderMatch = aiResponse.match(/\{\s*"action":\s*"CREATE_ORDER"[\s\S]*?\}/);
+        
+        if (orderMatch) {
             try {
-                const jsonStart = aiResponse.indexOf('{');
-                const jsonEnd = aiResponse.lastIndexOf('}') + 1;
-                const jsonStr = aiResponse.substring(jsonStart, jsonEnd);
+                const jsonStr = orderMatch[0];
                 const orderTrigger = JSON.parse(jsonStr);
                 
                 // Process Order
                 const result = await finalizeOrder(orderTrigger.order_details);
-                aiResponse = aiResponse.substring(0, jsonStart).trim() + "\n\n" + result;
+                aiResponse = aiResponse.replace(jsonStr, "").trim() + "\n\n" + result;
             } catch (e) {
                 console.error("JSON Parsing Error:", e);
             }
@@ -66,7 +66,8 @@ async function finalizeOrder(details) {
         const { data: product } = await supabaseClient
             .from('products')
             .select('id, price')
-            .ilike('name', `%${details.product_name}%`)
+            .ilike('name', `%${details.product_name.split(' ')[0]}%`) // Try matching first word if full name fails
+            .limit(1)
             .single();
 
         const orderNumber = `ARB-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
