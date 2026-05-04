@@ -226,13 +226,25 @@
                                     <p class="text-[10px] text-stone-400 text-center uppercase tracking-widest">Click to change photo</p>
                                 </div>
                                 <div class="flex-1 space-y-6">
-                                    <div>
-                                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Product Name</label>
-                                        <input type="text" id="edit-name" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-xl font-serif font-bold text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Product Name</label>
+                                            <input type="text" id="edit-name" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-lg font-serif font-bold text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                                        </div>
+                                        <div>
+                                            <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Category</label>
+                                            <input type="text" id="edit-category" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-lg font-serif font-bold text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
+                                        <div>
+                                            <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Initial Stock Level</label>
+                                            <input type="number" id="edit-stock" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-lg font-serif font-bold text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                                        </div>
                                     </div>
                                     <div>
                                         <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Description</label>
-                                        <textarea id="edit-desc" rows="4" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-stone-500 leading-relaxed text-sm focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
+                                        <textarea id="edit-desc" rows="3" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-stone-500 leading-relaxed text-sm focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -520,6 +532,8 @@
             if (product) {
                 document.getElementById('active-edit-img').src = product.image_url;
                 document.getElementById('edit-name').value = product.name;
+                document.getElementById('edit-category').value = product.category;
+                document.getElementById('edit-stock').value = product.stock_level;
                 document.getElementById('edit-desc').value = product.description;
                 document.getElementById('display-current-price').textContent = `Rs. ${product.price.toLocaleString()}`;
                 document.getElementById('input-new-price').value = product.price;
@@ -527,6 +541,8 @@
                 // Clear the UI
                 document.getElementById('active-edit-img').src = "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop";
                 document.getElementById('edit-name').value = "";
+                document.getElementById('edit-category').value = "";
+                document.getElementById('edit-stock').value = "";
                 document.getElementById('edit-desc').value = "";
                 document.getElementById('display-current-price').textContent = "Rs. 0";
                 document.getElementById('input-new-price').value = "";
@@ -538,11 +554,13 @@
             if (!selectedProductId) return;
 
             const newName = document.getElementById('edit-name').value;
+            const newCategory = document.getElementById('edit-category').value;
+            const newStock = parseInt(document.getElementById('edit-stock').value);
             const newDesc = document.getElementById('edit-desc').value;
             const newPrice = parseInt(document.getElementById('input-new-price').value);
             const imageInput = document.getElementById('edit-image-input');
 
-            if (!newName || !newDesc || isNaN(newPrice)) {
+            if (!newName || !newCategory || isNaN(newStock) || !newDesc || isNaN(newPrice)) {
                 showToast("Please fill in all fields correctly", "error");
                 return;
             }
@@ -581,6 +599,9 @@
                 .from('products')
                 .update({ 
                     name: newName,
+                    category: newCategory,
+                    sub_category: newCategory,
+                    stock_level: newStock,
                     description: newDesc,
                     price: newPrice,
                     image_url: imageUrl
