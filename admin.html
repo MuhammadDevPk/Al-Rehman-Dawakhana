@@ -207,71 +207,66 @@
                 <!-- Active Editing Section -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
                     <div class="lg:col-span-2">
-                        <div class="glass-card rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-10 relative overflow-hidden">
+                        <div class="glass-card rounded-3xl lg:rounded-[2.5rem] p-6 lg:p-10 relative overflow-hidden h-full">
                             <div class="absolute top-0 right-0 p-4 lg:p-8">
-                                <span class="bg-gold/10 text-gold text-[10px] lg:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-gold/20">Active Editing</span>
+                                <span class="bg-gold/10 text-gold text-[10px] lg:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-gold/20">Edit Product</span>
                             </div>
 
                             <div class="flex flex-col md:flex-row gap-6 lg:gap-10">
-                                <div class="w-full md:w-64 h-64 bg-stone-100 rounded-3xl overflow-hidden border border-stone-200">
-                                    <img id="active-edit-img" src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover">
+                                <div class="w-full md:w-64 space-y-4">
+                                    <div class="w-full h-64 bg-stone-100 rounded-3xl overflow-hidden border border-stone-200 relative group">
+                                        <img id="active-edit-img" src="https://images.unsplash.com/photo-1611080626919-7cf5a9dcab5b?q=80&w=500&auto=format&fit=crop" class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <label for="edit-image-input" class="cursor-pointer bg-white text-primary px-4 py-2 rounded-xl font-bold text-xs shadow-xl">
+                                                Change Image
+                                            </label>
+                                        </div>
+                                        <input type="file" id="edit-image-input" accept="image/*" class="hidden" onchange="previewEditImage(this)">
+                                    </div>
+                                    <p class="text-[10px] text-stone-400 text-center uppercase tracking-widest">Click to change photo</p>
                                 </div>
-                                <div class="flex-1">
-                                    <h3 id="active-edit-title" class="text-3xl font-serif font-bold text-primary mb-2">Majoon-e-Khas (Vitality Tonic)</h3>
-                                    <p id="active-edit-desc" class="text-stone-500 mb-8 leading-relaxed">A premium herbal formulation designed for deep cellular restoration, hormonal balance, and vitality. Preserved from the 14th-century Unani scrolls.</p>
-                                    
-                                    <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-stone-400 mb-4">Herbal Components</h4>
-                                    <div id="active-edit-components" class="flex flex-wrap gap-3">
-                                        <div class="flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100">
-                                            <i data-lucide="leaf" class="w-4 h-4"></i>
-                                            <span>Ashwagandha Root</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100">
-                                            <i data-lucide="mountain" class="w-4 h-4"></i>
-                                            <span>Pure Shilajit</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100">
-                                            <i data-lucide="sparkles" class="w-4 h-4"></i>
-                                            <span>Saffron Stigmas</span>
-                                        </div>
-                                        <div class="flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100">
-                                            <i data-lucide="droplets" class="w-4 h-4"></i>
-                                            <span>Honey Base</span>
-                                        </div>
+                                <div class="flex-1 space-y-6">
+                                    <div>
+                                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Product Name</label>
+                                        <input type="text" id="edit-name" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-xl font-serif font-bold text-primary focus:ring-2 focus:ring-gold outline-none transition-all">
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] font-bold uppercase tracking-widest text-stone-400 block mb-2">Description</label>
+                                        <textarea id="edit-desc" rows="4" class="w-full bg-stone-50 border border-stone-200 rounded-2xl py-3 px-6 text-stone-500 leading-relaxed text-sm focus:ring-2 focus:ring-gold outline-none transition-all"></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Price Setting Card -->
+                    <!-- Action Card -->
                     <div class="lg:col-span-1">
-                        <div class="bg-primary rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden h-full">
+                        <div class="bg-primary rounded-[2.5rem] p-8 lg:p-10 text-white shadow-2xl relative overflow-hidden h-full">
                             <div class="absolute inset-0 gold-pattern"></div>
                             <div class="relative z-10 flex flex-col h-full">
                                 <div class="mb-8">
-                                    <h3 class="text-2xl font-serif font-bold mb-1">Product Price Setting</h3>
-                                    <p class="text-white/40 text-sm italic">Adjust value based on ingredient market rates</p>
+                                    <h3 class="text-2xl font-serif font-bold mb-1">Pricing & Save</h3>
+                                    <p class="text-white/40 text-sm italic">Update records in real-time</p>
                                 </div>
 
                                 <div class="flex-1 space-y-8">
                                     <div>
-                                        <p class="text-white/40 text-xs uppercase tracking-widest font-bold mb-2">Current Price</p>
-                                        <p id="display-current-price" class="text-5xl font-serif font-bold text-gold">Rs. 3,850</p>
+                                        <p class="text-white/40 text-xs uppercase tracking-widest font-bold mb-2">Current Displayed Price</p>
+                                        <p id="display-current-price" class="text-4xl lg:text-5xl font-serif font-bold text-gold">Rs. 0</p>
                                     </div>
 
                                     <div class="space-y-4">
-                                        <label class="block text-white/40 text-xs uppercase tracking-widest font-bold">Set New Price</label>
+                                        <label class="block text-white/40 text-xs uppercase tracking-widest font-bold">New Price (Rs.)</label>
                                         <div class="relative">
                                             <span class="absolute left-6 top-1/2 -translate-y-1/2 text-2xl font-serif font-bold text-gold">Rs.</span>
-                                            <input type="number" id="input-new-price" value="3850" class="w-full bg-white/10 border border-white/20 rounded-2xl py-6 pl-16 pr-6 text-2xl font-serif font-bold text-white focus:bg-white/20 transition-all outline-none">
+                                            <input type="number" id="input-new-price" class="w-full bg-white/10 border border-white/20 rounded-2xl py-6 pl-16 pr-6 text-2xl font-serif font-bold text-white focus:bg-white/20 transition-all outline-none">
                                         </div>
                                     </div>
                                 </div>
 
-                                <button id="btn-update-price" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl transition-all transform hover:-translate-y-1 mt-8 shadow-xl shadow-black/20 flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
-                                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                                    <span>Update Price</span>
+                                <button id="btn-save-product" class="w-full py-5 bg-gold hover:bg-gold-dark text-primary font-bold rounded-2xl transition-all transform hover:-translate-y-1 mt-8 shadow-xl shadow-black/20 flex items-center justify-center space-x-3 text-lg uppercase tracking-widest">
+                                    <i data-lucide="save" class="w-5 h-5"></i>
+                                    <span>Save All Changes</span>
                                 </button>
                             </div>
                         </div>
@@ -452,8 +447,8 @@
                 toggleModal('add-product-modal', true);
             });
 
-            // Setup Update Price Button
-            document.getElementById('btn-update-price').addEventListener('click', updatePrice);
+            // Setup Save Product Button
+            document.getElementById('btn-save-product').addEventListener('click', saveProductChanges);
         }
 
         // --- Core Functions ---
@@ -524,51 +519,72 @@
             
             if (product) {
                 document.getElementById('active-edit-img').src = product.image_url;
-                document.getElementById('active-edit-title').textContent = `${product.name} (${product.category})`;
-                document.getElementById('active-edit-desc').textContent = product.description;
-                
-                const compContainer = document.getElementById('active-edit-components');
-                compContainer.innerHTML = '';
-                const components = Array.isArray(product.components) ? product.components : [];
-                components.forEach(comp => {
-                    const pill = document.createElement('div');
-                    pill.className = "flex items-center space-x-2 bg-emerald-50 text-primary px-4 py-2 rounded-full text-sm font-medium border border-emerald-100";
-                    pill.innerHTML = `<i data-lucide="leaf" class="w-4 h-4"></i><span>${comp}</span>`;
-                    compContainer.appendChild(pill);
-                });
-
+                document.getElementById('edit-name').value = product.name;
+                document.getElementById('edit-desc').value = product.description;
                 document.getElementById('display-current-price').textContent = `Rs. ${product.price.toLocaleString()}`;
                 document.getElementById('input-new-price').value = product.price;
             } else {
-                // Clear the UI if no product is found/selected
+                // Clear the UI
                 document.getElementById('active-edit-img').src = "https://images.unsplash.com/photo-1512428813824-f7139cb0939b?q=80&w=500&auto=format&fit=crop";
-                document.getElementById('active-edit-title').textContent = "Select a Product";
-                document.getElementById('active-edit-desc').textContent = "Select a product from the inventory to manage its pricing and details.";
-                document.getElementById('active-edit-components').innerHTML = '';
+                document.getElementById('edit-name').value = "";
+                document.getElementById('edit-desc').value = "";
                 document.getElementById('display-current-price').textContent = "Rs. 0";
                 document.getElementById('input-new-price').value = "";
             }
             renderProducts();
         }
 
-        async function updatePrice() {
+        async function saveProductChanges() {
             if (!selectedProductId) return;
 
+            const newName = document.getElementById('edit-name').value;
+            const newDesc = document.getElementById('edit-desc').value;
             const newPrice = parseInt(document.getElementById('input-new-price').value);
-            if (isNaN(newPrice) || newPrice <= 0) {
-                showToast("Please enter a valid price", "error");
+            const imageInput = document.getElementById('edit-image-input');
+
+            if (!newName || !newDesc || isNaN(newPrice)) {
+                showToast("Please fill in all fields correctly", "error");
                 return;
             }
 
-            const btn = document.getElementById('btn-update-price');
+            const btn = document.getElementById('btn-save-product');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Updating...</span>';
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>Saving...</span>';
             btn.disabled = true;
             lucide.createIcons();
 
+            let imageUrl = products.find(p => p.id === selectedProductId).image_url;
+
+            // 1. Upload new image if provided
+            if (imageInput.files && imageInput.files[0]) {
+                const file = imageInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+                const filePath = `products/${fileName}`;
+
+                const { data: uploadData, error: uploadError } = await supabaseClient
+                    .storage
+                    .from('product-images')
+                    .upload(filePath, file);
+
+                if (!uploadError) {
+                    const { data: publicData } = supabaseClient
+                        .storage
+                        .from('product-images')
+                        .getPublicUrl(filePath);
+                    imageUrl = publicData.publicUrl;
+                }
+            }
+
+            // 2. Update Database
             const { data, error } = await supabaseClient
                 .from('products')
-                .update({ price: newPrice })
+                .update({ 
+                    name: newName,
+                    description: newDesc,
+                    price: newPrice,
+                    image_url: imageUrl
+                })
                 .eq('id', selectedProductId)
                 .select();
 
@@ -577,11 +593,11 @@
             lucide.createIcons();
 
             if (error) {
-                showToast("Failed to update price", "error");
+                showToast("Failed to save changes", "error");
                 return;
             }
 
-            // Update local state instead of re-fetching everything
+            // Update local state
             const index = products.findIndex(p => p.id === selectedProductId);
             if (index !== -1) {
                 products[index] = data[0];
@@ -589,7 +605,17 @@
             
             renderProducts();
             selectProduct(selectedProductId);
-            showToast("Price Updated Successfully");
+            showToast("Product Updated Successfully");
+        }
+
+        function previewEditImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('active-edit-img').src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         async function handleProductSubmit(e) {
