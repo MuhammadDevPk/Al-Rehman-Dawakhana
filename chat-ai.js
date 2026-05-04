@@ -120,7 +120,7 @@ async function askAlRehmanAI(userMessage) {
         chatHistory.push({ role: 'user', content: userMessage });
         saveChatHistory();
 
-        const currentLang = localStorage.getItem('preferred_lang') || 'en';
+        const currentLang = localStorage.getItem('preferred_lang') || 'roman';
 
         // D. Call Edge Function
         const { data, error } = await supabaseClient.functions.invoke('al-rehman-ai', {

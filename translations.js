@@ -372,12 +372,13 @@ function setLanguage(lang) {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferred_lang') || 'en';
+    const savedLang = localStorage.getItem('preferred_lang') || 'roman';
     setLanguage(savedLang);
     
     // Update active state of language buttons if any
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        if (btn.getAttribute('onclick').includes(savedLang)) {
+        const onClickAttr = btn.getAttribute('onclick');
+        if (onClickAttr && onClickAttr.includes(`'${savedLang}'`)) {
             btn.classList.add('bg-gold', 'text-primary');
             btn.classList.remove('text-white/70');
         } else {
