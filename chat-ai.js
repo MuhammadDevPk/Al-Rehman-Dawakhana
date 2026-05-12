@@ -146,10 +146,15 @@ async function askAlRehmanAI(userMessage) {
                     const isConfirmation = ['yes', 'haan', 'ha', 'confirm', 'ok', 'ji', 'ji haan', 'yes please', 'confirmed'].some(w => lastUserMsg.includes(w));
                     
                     if (isConfirmation) {
-                        const result = await finalizeOrder(orderTrigger.order_details);
-                        aiResponse = aiResponse.replace(orderJson, '').trim();
-                        if (aiResponse) aiResponse += '\n\n';
-                        aiResponse += result;
+                        if (!currentScreenshotUrl) {
+                            // User confirmed but hasn't uploaded the screenshot
+                            aiResponse = "Please **upload** the payment **screenshot** first so I can confirm your order.";
+                        } else {
+                            const result = await finalizeOrder(orderTrigger.order_details);
+                            aiResponse = aiResponse.replace(orderJson, '').trim();
+                            if (aiResponse) aiResponse += '\n\n';
+                            aiResponse += result;
+                        }
                     } else {
                         // AI emitted JSON prematurely — strip it and ask for confirmation
                         aiResponse = aiResponse.replace(orderJson, '').trim();

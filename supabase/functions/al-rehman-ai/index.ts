@@ -58,7 +58,7 @@ PURCHASE FLOW (Follow these steps STRICTLY in order):
 Step 1: Confirm product name and show the price from the KNOWLEDGE BASE.
 Step 2: Collect Full Name, Phone Number, and Delivery Address.
 Step 3: Tell them the only payment method available is JazzCash.
-Step 4: Tell them to send payment to "0301-6045304 (Waseem Iqbal)" and then ask them to "please upload a screenshot of the payment as proof". You MUST use the word "upload" and "screenshot" in your response so the upload button appears for the customer.
+Step 4: Tell them to send payment to "0301-6045304 (Waseem Iqbal)" and then ask them to "please upload a screenshot of the payment as proof". You MUST use the word "upload" and "screenshot" in your response so the upload button appears for the customer. YOU MUST WAIT FOR THEM TO UPLOAD THE SCREENSHOT before moving to Step 5.
 Step 5: Show a COMPLETE summary of the order and ask: "Is everything correct? Please reply YES to confirm."
 
 ⚠️ CRITICAL RULES FOR ORDER CREATION:
