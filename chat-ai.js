@@ -21,16 +21,16 @@ function loadChatHistory() {
     try {
         const stored = localStorage.getItem(CHAT_STORAGE_KEY);
         if (!stored) return [];
-        
+
         const data = JSON.parse(stored);
         const now = Date.now();
-        
+
         // Clear if older than 1 hour
         if (now - data.timestamp > CHAT_EXPIRY_MS) {
             localStorage.removeItem(CHAT_STORAGE_KEY);
             return [];
         }
-        
+
         return data.history || [];
     } catch (e) {
         console.error("Failed to load chat history", e);
@@ -43,14 +43,14 @@ function loadChatHistory() {
 function checkRateLimit() {
     const now = Date.now();
     let msgData = JSON.parse(sessionStorage.getItem('ai_msg_data') || '{"count": 0, "startTime": 0}');
-    
+
     // Reset if 2 minutes have passed
     if (now - msgData.startTime > 120000) {
         msgData = { count: 1, startTime: now };
     } else {
         msgData.count++;
     }
-    
+
     sessionStorage.setItem('ai_msg_data', JSON.stringify(msgData));
     return msgData.count <= 5;
 }
@@ -94,14 +94,14 @@ async function askAlRehmanAI(userMessage) {
     }
 
     // B. Cache Check — skip during active order conversations
-    const isOrderFlow = chatHistory.some(m => 
-        m.content.includes('CREATE_ORDER') || 
-        m.content.includes('Full Name') || 
+    const isOrderFlow = chatHistory.some(m =>
+        m.content.includes('CREATE_ORDER') ||
+        m.content.includes('Full Name') ||
         m.content.includes('Payment Method') ||
         m.content.includes('Order Placed')
     );
     const isShortInput = userMessage.trim().length < 10;
-    
+
     if (!isOrderFlow && !isShortInput) {
         const cachedResponse = await checkCache(userMessage);
         if (cachedResponse) return cachedResponse;
@@ -113,19 +113,19 @@ async function askAlRehmanAI(userMessage) {
             .from('products')
             .select('name, description, price');
 
-        const productContext = products ? products.map(p => 
+        const productContext = products ? products.map(p =>
             `- ${p.name}: Rs. ${p.price}.`
         ).join('\n') : "No products available.";
 
         chatHistory.push({ role: 'user', content: userMessage });
         saveChatHistory();
 
-        const currentLang = localStorage.getItem('preferred_lang') || 'roman';
+        const currentLang = localStorage.getItem('preferred_lang') || 'en';
 
         // D. Call Edge Function
         const { data, error } = await supabaseClient.functions.invoke('al-rehman-ai', {
-            body: { 
-                messages: chatHistory, 
+            body: {
+                messages: chatHistory,
                 productContext: productContext,
                 language: currentLang
             }
@@ -134,7 +134,7 @@ async function askAlRehmanAI(userMessage) {
         if (error) throw error;
 
         let aiResponse = data.text;
-        
+
         // E. Extract nested JSON
         const orderJson = extractOrderJson(aiResponse);
         if (orderJson) {
@@ -144,7 +144,7 @@ async function askAlRehmanAI(userMessage) {
                     // CLIENT-SIDE SAFEGUARD: Only finalize if user's last message was a confirmation
                     const lastUserMsg = userMessage.trim().toLowerCase();
                     const isConfirmation = ['yes', 'haan', 'ha', 'confirm', 'ok', 'ji', 'ji haan', 'yes please', 'confirmed'].some(w => lastUserMsg.includes(w));
-                    
+
                     if (isConfirmation) {
                         if (!currentScreenshotUrl) {
                             // User confirmed but hasn't uploaded the screenshot
@@ -198,7 +198,7 @@ async function finalizeOrder(details) {
     try {
         // Try multiple search strategies to find the product
         let product = null;
-        
+
         // Strategy 1: Exact ilike match
         const { data: exactMatch } = await supabaseClient
             .from('products')
@@ -206,7 +206,7 @@ async function finalizeOrder(details) {
             .ilike('name', `%${details.product_name}%`)
             .limit(1)
             .maybeSingle();
-        
+
         if (exactMatch) {
             product = exactMatch;
         } else {
@@ -228,7 +228,7 @@ async function finalizeOrder(details) {
         const quantity = details.quantity || 1;
         const totalPrice = unitPrice * quantity;
         const orderNumber = 'ARD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
-        
+
         const orderData = {
             customer_name: details.customer_name,
             customer_phone: details.customer_phone,
@@ -263,7 +263,7 @@ function createChatUI() {
     const widget = document.createElement('div');
     widget.id = 'al-rehman-chat-widget';
     widget.className = 'fixed bottom-6 right-6 z-[9999] font-sans';
-    
+
     widget.innerHTML = `
         <button id="chat-bubble" class="group relative bg-emerald-900 text-gold p-4 rounded-full shadow-2xl border-2 border-gold/30 hover:scale-110 hover:rotate-6 transition-all duration-300 flex items-center justify-center">
             <i data-lucide="message-square-plus" id="bubble-icon" class="w-8 h-8"></i>
@@ -372,16 +372,16 @@ function createChatUI() {
             if (error) throw error;
             const { data: publicUrl } = supabaseClient.storage.from('payment-screenshots').getPublicUrl(filePath);
             currentScreenshotUrl = publicUrl.publicUrl;
-            
+
             // Hide controls and show clean success message
             uploadControls.classList.add('hidden');
             uploadStatus.classList.remove('hidden');
             uploadStatus.innerHTML = "✅ Receipt received! Please confirm your order.";
-            
+
             handleSend("I have uploaded the payment screenshot proof.");
-        } catch (err) { 
+        } catch (err) {
             uploadStatus.classList.remove('hidden');
-            uploadStatus.innerText = "❌ Upload failed."; 
+            uploadStatus.innerText = "❌ Upload failed.";
         }
     });
 

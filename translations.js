@@ -372,7 +372,7 @@ function setLanguage(lang) {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('preferred_lang') || 'roman';
+    const savedLang = localStorage.getItem('preferred_lang') || 'en';
     setLanguage(savedLang);
 
     // Update active state of language buttons if any

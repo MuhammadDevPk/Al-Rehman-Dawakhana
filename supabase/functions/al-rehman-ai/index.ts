@@ -12,7 +12,7 @@ serve(async (req: Request) => {
 
   try {
     const { messages, productContext, language } = await req.json()
-    const currentLang = language || 'roman';
+    const currentLang = language || 'en';
 
     // --- 1. CONTEXT SLIMMING ---
     const lastUserMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
