@@ -81,7 +81,7 @@ const i18n = {
         order_form_address: "Full Delivery Address",
         order_form_payment: "Payment Method",
         pay_cod: "Cash on Delivery",
-        pay_proof_desc: "Please transfer the total amount to: 0300-6047058 (Hakeem Usman) And upload the transfer screenshot below.",
+        pay_proof_desc: "Please transfer the total amount to: 0301-6045304 (Waseem Iqbal) (Hakeem Usman) And upload the transfer screenshot below.",
         pay_proof_label: "Payment Screenshot",
         btn_confirm_order: "Confirm Order",
         order_form_disclaimer: "Your data is encrypted and handled by Hakeem Usman personally",
@@ -193,7 +193,7 @@ const i18n = {
         order_form_address: "ڈیلیوری کا مکمل پتہ",
         order_form_payment: "ادائیگی کا طریقہ",
         pay_cod: "کیش آن ڈیلیوری",
-        pay_proof_desc: "براہ کرم کل رقم اس نمبر پر منتقل کریں: 0300-6047058 (حکیم عثمان) اور نیچے ٹرانسفر کا اسکرین شاٹ اپ لوڈ کریں۔",
+        pay_proof_desc: "براہ کرم کل رقم اس نمبر پر منتقل کریں: 0301-6045304 (Waseem Iqbal) اور نیچے ٹرانسفر کا اسکرین شاٹ اپ لوڈ کریں۔",
         pay_proof_label: "ادائیگی کا اسکرین شاٹ",
         btn_confirm_order: "آرڈر کی تصدیق کریں",
         order_form_disclaimer: "آپ کا ڈیٹا خفیہ رکھا جاتا ہے اور حکیم عثمان خود اسے سنبھالتے ہیں",
@@ -305,7 +305,7 @@ const i18n = {
         order_form_address: "Delivery ka Mukammal Pata",
         order_form_payment: "Adaigi ka Tariqa",
         pay_cod: "Cash on Delivery",
-        pay_proof_desc: "Barah-e-karam kul raqam is number par muntaqil karein: 0300-6047058 (Hakeem Usman) Aur neeche transfer ka screenshot upload karein.",
+        pay_proof_desc: "Barah-e-karam kul raqam is number par muntaqil karein: 0301-6045304 (Waseem Iqbal) Aur neeche transfer ka screenshot upload karein.",
         pay_proof_label: "Adaigi ka Screenshot",
         btn_confirm_order: "Order ki Tasdeeq Karein",
         order_form_disclaimer: "Aap ka data khufia rakha jata hai aur Hakeem Usman khud isay sambhaltay hain",
@@ -356,7 +356,7 @@ function setLanguage(lang) {
     // 2. Update Layout Direction
     document.documentElement.dir = translation.direction;
     document.documentElement.lang = lang;
-    
+
     // 3. Update Font Family for Urdu
     if (lang === 'ur') {
         document.body.style.fontFamily = "'Noto Nastaliq Urdu', serif";
@@ -374,7 +374,7 @@ function setLanguage(lang) {
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('preferred_lang') || 'roman';
     setLanguage(savedLang);
-    
+
     // Update active state of language buttons if any
     document.querySelectorAll('.lang-btn').forEach(btn => {
         const onClickAttr = btn.getAttribute('onclick');

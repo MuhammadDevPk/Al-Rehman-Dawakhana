@@ -625,25 +625,29 @@
                     <!-- Payment Method -->
                     <div class="space-y-4 pt-4 border-t border-stone-100">
                         <label data-i18n="order_form_payment" class="block text-[10px] uppercase tracking-widest text-stone-400 font-bold ml-1">Payment Method</label>
-                        <div class="grid grid-cols-3 gap-3">
+                        <div class="grid grid-cols-1 gap-3">
+                            <!-- 
                             <label class="cursor-pointer group">
-                                <input type="radio" name="payment_method" value="COD" checked class="hidden peer" onchange="togglePaymentProof(false)">
+                                <input type="radio" name="payment_method" value="COD" class="hidden peer" onchange="togglePaymentProof(false)">
                                 <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
                                     <p data-i18n="pay_cod" class="text-xs font-bold">Cash on Delivery</p>
                                 </div>
                             </label>
+                            -->
                             <label class="cursor-pointer group">
-                                <input type="radio" name="payment_method" value="JazzCash" class="hidden peer" onchange="togglePaymentProof(true)">
+                                <input type="radio" name="payment_method" value="JazzCash" checked class="hidden peer" onchange="togglePaymentProof(true)">
                                 <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
                                     <p class="text-xs font-bold">JazzCash</p>
                                 </div>
                             </label>
+                            <!-- 
                             <label class="cursor-pointer group">
                                 <input type="radio" name="payment_method" value="EasyPaisa" class="hidden peer" onchange="togglePaymentProof(true)">
                                 <div class="p-4 border border-stone-100 rounded-2xl bg-stone-50 peer-checked:bg-primary peer-checked:text-white transition-all text-center">
                                     <p class="text-xs font-bold">EasyPaisa</p>
                                 </div>
                             </label>
+                            -->
                         </div>
 
                         <!-- Payment Proof Section (Conditional) -->
@@ -652,7 +656,7 @@
                                 <i data-lucide="info" class="w-5 h-5 text-gold shrink-0"></i>
                                 <p data-i18n="pay_proof_desc" class="text-xs text-amber-900 leading-relaxed">
                                     Please transfer the total amount to: <br>
-                                    <span class="font-bold text-base">0300-6047058 (Hakeem Usman)</span> <br>
+                                    <span class="font-bold text-base">0301-6045304 (Waseem Iqbal)</span> <br>
                                     And upload the transfer screenshot below.
                                 </p>
                             </div>
@@ -862,6 +866,7 @@
             modalProductPriceDisplay.innerText = `Rs. ${price.toLocaleString()}`;
             modalQuantity.value = 1;
             updateTotal();
+            togglePaymentProof(true); // Default to true since JazzCash is the only option
             orderModal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             lucide.createIcons();
